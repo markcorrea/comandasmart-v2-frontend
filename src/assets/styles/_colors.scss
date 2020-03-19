@@ -1,0 +1,57 @@
+// Basic:
+$black: #333333;
+$white: #fafafa;
+
+// Primary:
+$darkestBlue: #4a90e2;
+$darkBlue: #7fb3f0;
+$lightBlue: #e2efff;
+$lightestBlue: #f4f8ff;
+
+// Secondary:
+$darkestGray: #727272;
+$darkGray: #9b9b9b;
+$lightGray: #d8d8d8;
+$lightestGray: #ebebeb;
+
+// Others:
+$sulu: #bbf282;
+$lima: #75c41e;
+$saffron: #f9cd31;
+$buttercup: #f5a623;
+$crusta: #ff8729;
+$coralRed: #ff4444;
+$guardsmanRed: #cc0000;
+$blueBell: #8587cb;
+$silverChalice: #a9a9a9;
+$darkSilver: #bcbcbc;
+$silver: #c9c9c9;
+$gallery: #eaeaea;
+$alabaster: #f7f7f7;
+
+// Exports variables to be used in JS theme definition at assets/themes.
+:export {
+  black: $black;
+  white: $white;
+  darkestBlue: $darkestBlue;
+  darkBlue: $darkBlue;
+  lightBlue: $lightBlue;
+  lightestBlue: $lightestBlue;
+  darkestGray: $darkestGray;
+  darkGray: $darkGray;
+  lightGray: $lightGray;
+  lightestGray: $lightestGray;
+  sulu: $sulu;
+  lima: $lima;
+  saffron: $saffron;
+  buttercup: $buttercup;
+  crusta: $crusta;
+  coralRed: $coralRed;
+  guardsmanRed: $guardsmanRed;
+  blueBell: $blueBell;
+  silverChalice: $silverChalice;
+  darkSilver: $darkSilver;
+  silver: $silver;
+  gallery: $gallery;
+  alabaster: $alabaster;
+}

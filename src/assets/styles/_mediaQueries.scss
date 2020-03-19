@@ -1,0 +1,39 @@
+$mediaQueryMedium: 769px;
+$mediaQueryLarge: 996px;
+$mediaQueryExLarge: 1100px;
+
+:export {
+  mediaQueryMedium: $mediaQueryMedium;
+  mediaQueryLarge: $mediaQueryLarge;
+  mediaQueryExLarge: $mediaQueryExLarge;
+}
+
+@mixin for-ipad-portrait-and-landscape {
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+    @content;
+  }
+}
+
+@mixin for-ipad-portrait {
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) {
+    @content;
+  }
+}
+
+@mixin for-ipad-landscape {
+  @media only screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: landscape) {
+    @content;
+  }
+}
+
+@mixin for-desktop {
+  @media only screen and (min-device-width: 1440px) and (max-device-width: 1440px) {
+    @content;
+  }
+}
+
+@mixin for-laptop {
+  @media only screen and (min-device-width: 1024px) and (max-device-width: 1024px) {
+    @content;
+  }
+}

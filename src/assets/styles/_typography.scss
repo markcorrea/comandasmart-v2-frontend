@@ -1,0 +1,69 @@
+// Variable declarations
+
+$defaultFontFamily: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
+  'Helvetica Neue', sans-serif;
+
+$RobotoFontFamily: Roboto;
+$RobotoBoldFontFamily: Roboto-bold;
+
+$bigFontSize: 1.25rem; //25px
+$defaultFontSize: 20px; //20px
+$smallFontSize: 0.8rem; //16px
+$smallestFontSize: 0.65rem; //13px
+
+$h1FontSize: 2rem; //40px
+$titleFontWeight: 300;
+$titleLineHeight: 120%;
+$titleLetterSpacing: 1px;
+
+$h2FontSize: 1.6rem; //32px
+$h3FontSize: 1rem; //20px
+
+// Font definitions
+html,
+body,
+p {
+  font-family: $defaultFontFamily;
+  font-size: $defaultFontSize;
+}
+
+h1 {
+  font-size: $h1FontSize;
+  font-weight: $titleFontWeight;
+  line-height: $titleLineHeight;
+  letter-spacing: $titleLetterSpacing;
+  margin-top: 70px;
+}
+
+h2 {
+  font-size: $h2FontSize;
+  font-weight: $titleFontWeight;
+  line-height: $titleLineHeight;
+  letter-spacing: $titleLetterSpacing;
+}
+
+h3 {
+  font-size: $h3FontSize;
+  font-weight: normal;
+  line-height: 120%;
+  letter-spacing: $titleLetterSpacing;
+}
+
+small {
+  font-size: $smallFontSize;
+}
+
+// Exports variables to be used in JS theme definition at assets/themes.
+:export {
+  defaultFontFamily: $defaultFontFamily;
+  bigFontSize: $bigFontSize;
+  defaultFontSize: $defaultFontSize;
+  smallFontSize: $smallFontSize;
+  smallestFontSize: $smallestFontSize;
+  h1FontSize: $h1FontSize;
+  h2FontSize: $h2FontSize;
+  h3FontSize: $h3FontSize;
+  titleFontWeight: $titleLineHeight;
+  titleLineHeight: $titleLineHeight;
+  titleLetterSpacing: $titleLetterSpacing;
+}

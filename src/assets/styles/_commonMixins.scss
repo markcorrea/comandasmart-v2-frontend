@@ -1,0 +1,15 @@
+@mixin with-header-height {
+  height: calc(100% - 80px);
+}
+
+@mixin with-header-height-scroll {
+  height: calc(100% - 80px);
+  overflow: auto;
+  overflow-x: hidden;
+}
+
+@mixin with-header-min-height-scroll {
+  min-height: calc(100% - 80px);
+  overflow: auto;
+  overflow-x: hidden;
+}
