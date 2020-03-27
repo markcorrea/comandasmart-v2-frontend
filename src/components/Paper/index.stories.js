@@ -6,9 +6,20 @@ export default {
   component: Paper,
 }
 
-export const Basic = () => (
+export const Outset = () => (
   <div style={{padding: '0 10px', backgroundColor: '#F3F3F3'}}>
     <h2>Paper:</h2>
-    <Paper>My paper content</Paper>
+    <Paper>
+      <div style={{padding: '20px'}}>My paper content</div>
+    </Paper>
+  </div>
+)
+
+export const Inset = () => (
+  <div style={{padding: '0 10px', backgroundColor: '#F3F3F3'}}>
+    <h2>Paper:</h2>
+    <Paper inset>
+      <div style={{padding: '20px'}}>My paper content</div>
+    </Paper>
   </div>
 )
