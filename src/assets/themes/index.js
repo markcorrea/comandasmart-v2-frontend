@@ -1,6 +1,6 @@
 import {createMuiTheme} from '@material-ui/core/styles'
 
-import {mediaQueryMedium, mediaQueryLarge, mediaQueryExLarge, elPaso} from 'assets/styles/main.module.scss'
+import {mediaQueryMedium, mediaQueryLarge, mediaQueryExLarge} from 'assets/styles/main.module.scss'
 
 const theme = createMuiTheme(theme => ({
   breakpoints: {
