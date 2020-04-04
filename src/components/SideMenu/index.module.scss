@@ -1,0 +1,51 @@
+@import '~assets/styles/_colors.scss';
+@import '~assets/styles/_typography.scss';
+
+.container {
+  width: 280px;
+  height: 100%;
+  background-color: $saffron;
+}
+
+.title {
+  font-family: $robotoBoldFontFamily;
+  font-size: $bigFontSize;
+  color: $darkGray;
+  padding: 25px 22px;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  li {
+    width: 100%;
+    height: 60px;
+    a {
+      padding: 0 30px;
+      display: block;
+      width: 100%;
+      height: 100%;
+      border-bottom: solid thin $goldTips;
+      text-decoration: none;
+      color: $darkGray;
+      cursor: pointer;
+      &:hover {
+        background-color: $tulipTree;
+      }
+      i,
+      span {
+        line-height: 60px;
+        vertical-align: middle;
+        font-family: $robotoBoldFontFamily;
+      }
+      i {
+        margin-right: 15px;
+        font-size: $defaultFontSize;
+      }
+      span {
+        font-size: $mediumFontSize;
+      }
+    }
+  }
+}
