@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import styles from './index.module.scss'
 
@@ -20,6 +21,10 @@ const SideMenu = ({items}) => {
       </ul>
     </div>
   )
+}
+
+SideMenu.propTypes = {
+  items: PropTypes.array.isRequired,
 }
 
 export default SideMenu
