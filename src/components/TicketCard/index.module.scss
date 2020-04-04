@@ -1,0 +1,33 @@
+@import '~assets/styles/_colors.scss';
+@import '~assets/styles/_typography.scss';
+
+.container {
+  padding: 20px;
+}
+
+.ticketNumber {
+  font-family: $robotoBoldFontFamily;
+  font-size: $h2FontSize;
+}
+
+.userName {
+  font-size: $bigFontSize;
+  color: $mediumGray;
+  line-height: 50px;
+}
+
+.price {
+  font-family: $defaultFontFamily;
+  font-size: $h2FontSize;
+}
+
+.timer {
+  text-align: center;
+
+  .clock {
+    background-color: blue;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+  }
+}
