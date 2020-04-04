@@ -4,13 +4,13 @@ import PropTypes from 'prop-types'
 import UIButton from '@material-ui/core/Button'
 import {makeStyles} from '@material-ui/core/styles'
 
-import {ronchi, elPaso, smallFontSize, robotoBoldFontFamily} from 'assets/styles/main.module.scss'
+import {ronchi, darkGray, smallFontSize, robotoBoldFontFamily} from 'assets/styles/main.module.scss'
 
 const Button = ({children, classes, onClick}) => {
   const useStyles = makeStyles(() => ({
     root: {
       backgroundColor: ronchi,
-      color: elPaso,
+      color: darkGray,
       fontSize: smallFontSize,
       borderRadius: '10px',
       padding: '10px 20px 8px',

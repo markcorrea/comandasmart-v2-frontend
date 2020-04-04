@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="276px" height="31px" viewBox="0 0 276 31" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 64 (93537) - https://sketch.com -->
+    <title>Group 2</title>
+    <desc>Created with Sketch.</desc>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Header-Logged-" transform="translate(-20.000000, -16.000000)" fill="#FFFFFF">
+            <g id="Group">
+                <g id="Group-2" transform="translate(20.000000, 16.000000)">
+                    <g id="Logo-Square-White">
+                        <path d="M49.6411,25.7147 C50.5509,25.7147 51.2895,24.9761 51.2895,24.0663 C51.2895,23.1566 50.5509,22.418 49.6411,22.4179 L15.1004,22.4179 C11.3401,22.3463 8.3091,19.2717 8.3091,15.4947 C8.3091,11.7178 11.3401,8.6432 15.1004,8.5728 L56.6962,8.5715 L56.6962,13.8464 L15.2323,13.8464 L15.2323,17.1431 L49.773,17.1431 C53.5333,17.2148 56.5643,20.2894 56.5643,24.0663 C56.5643,27.8433 53.5333,30.9178 49.773,30.9883 L15.1004,30.9895 C6.7306,30.7773 -7.10542736e-14,23.9169 -7.10542736e-14,15.497 C-7.10542736e-14,7.077 6.7306,0.2167 15.1004,0.0072 L15.1004,8.8817842e-15 L56.6962,8.8817842e-15 L56.6962,5.2748 L15.2323,5.2748 L15.2323,5.2803 C9.7128,5.4198 5.2748,9.9442 5.2748,15.497 C5.2748,21.0498 9.7128,25.5742 15.2323,25.7136 L49.6411,25.7147 Z M15.2323,13.8464 C14.3225,13.8464 13.5839,14.585 13.5839,15.4947 C13.5839,16.4045 14.3225,17.1431 15.2323,17.1431 L15.2323,13.8464 Z" id="Fill-1"></path>
+                    </g>
+                    <text id="COMANDASMART" font-family="Galvji" font-size="24" font-weight="normal">
+                        <tspan x="67" y="24">COMANDA</tspan>
+                        <tspan x="188.464844" y="24" font-family="Galvji-Bold, Galvji" font-weight="bold">SMART</tspan>
+                    </text>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -5,6 +5,7 @@ import {MuiThemeProvider} from '@material-ui/core/styles'
 import {StylesProvider} from '@material-ui/styles'
 
 import Theme from '../src/assets/themes/index'
+import 'assets/fontawesome/fa.css'
 
 const StylesDecorator = storyFn => (
   <StylesProvider injectFirst>

@@ -1,8 +1,12 @@
-$elPaso: #3f3a2d;
-$ronchi: #F5C94C;
+$darkestGray: #1a1919;
+$darkGray: #2a2a2a;
+$gray: #979797;
+$ronchi: #f5c94c;
 
 // Exports variables to be used in JS theme definition at assets/themes.
 :export {
-  elPaso: $elPaso;
+  darkestGray: $darkestGray;
+  darkGray: $darkGray;
+  gray: $gray;
   ronchi: $ronchi;
 }

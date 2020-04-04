@@ -1,0 +1,73 @@
+@import '~assets/styles/_colors.scss';
+@import '~assets/styles/_typography.scss';
+
+.container {
+  width: 100%;
+  height: 62px;
+  background-color: $darkGray;
+  border: solid thin $gray;
+  position: relative;
+
+  .logo {
+    height: 31px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 20px;
+    margin: auto;
+  }
+}
+
+.pageName {
+  border: solid thin yellow;
+}
+
+.button {
+  border-left: solid thin $darkestGray;
+  float: right;
+  height: 100%;
+  padding: 0 20px;
+  span {
+    color: white;
+    text-transform: uppercase;
+    font-size: $smallFontSize;
+    font-family: $defaultFontFamily;
+    line-height: 62px;
+    vertical-align: middle;
+  }
+}
+
+.loggedUserInfo {
+  float: right;
+  height: 100%;
+  span {
+    color: white;
+    line-height: 62px;
+    vertical-align: middle;
+
+    &.userName {
+      font-family: $robotoBoldFontFamily;
+    }
+  }
+  .userImage {
+    display: inline-block;
+    width: 45px;
+    height: 45px;
+    margin: 0 10px;
+    vertical-align: middle;
+    background-position: center;
+    border-radius: 50%;
+    text-align: center;
+    i {
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      border: solid thin white;
+      display: inline-block;
+      vertical-align: middle;
+      line-height: 45px;
+      font-size: 20px;
+      color: white;
+    }
+  }
+}
