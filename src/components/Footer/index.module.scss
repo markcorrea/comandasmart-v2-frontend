@@ -9,11 +9,12 @@
   position: relative;
   padding: 30px 40px;
   display: flex;
-  a, span {
+  div, span {
     color: white;
     font-size: $smallestFontSize;
     display: block;
     text-decoration: none;
+    cursor: pointer;
   }
 }
 

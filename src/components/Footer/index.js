@@ -9,11 +9,11 @@ const Footer = () => {
   return (
     <div className={styles.container}>
       <div className={styles.flexItem}>
-        <a href='http://www.google.com.br'>Sobre nós</a>
-        <a href='http://www.google.com.br'>Contato</a>
-        <a href='http://www.google.com.br'>Suporte</a>
-        <a href='http://www.google.com.br'>Seja um revendedor</a>
-        <a href='http://www.google.com.br'>Termos de uso e Privacidade</a>
+        <div onClick={() => console.log('Sobre nós')}>Sobre nós</div>
+        <div onClick={() => console.log('Sobre nós')}>Contato</div>
+        <div onClick={() => console.log('Sobre nós')}>Suporte</div>
+        <div onClick={() => console.log('Sobre nós')}>Seja um revendedor</div>
+        <div onClick={() => console.log('Sobre nós')}>Termos de uso e Privacidade</div>
       </div>
       <div className={clsx(styles.flexItem, styles.right)}>
         <img alt='logo' src={logo} className={styles.logo} />
