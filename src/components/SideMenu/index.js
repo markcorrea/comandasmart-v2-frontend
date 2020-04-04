@@ -11,10 +11,10 @@ const SideMenu = ({items}) => {
         {items.map((item, index) => {
           return (
             <li key={`menu_item_${index}`}>
-              <a onClick={item.onClick}>
+              <div onClick={item.onClick}>
                 <i className={`fa ${item.icon}`} />
                 <span>{item.label}</span>
-              </a>
+              </div>
             </li>
           )
         })}
