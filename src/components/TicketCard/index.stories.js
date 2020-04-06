@@ -6,8 +6,15 @@ export default {
   component: TicketCard,
 }
 
+const ticket = {
+  number: 1,
+  userName: 'Daniela Maria',
+  price: 'R$92,80',
+  lastOrder: '00:40',
+}
+
 export const Basic = () => (
   <div style={{padding: '10px'}}>
-    <TicketCard />
+    <TicketCard ticket={ticket} />
   </div>
 )

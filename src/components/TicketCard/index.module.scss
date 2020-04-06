@@ -23,11 +23,19 @@
 
 .timer {
   text-align: center;
+  float: right;
 
   .clock {
-    background-color: blue;
+    background-color: lightgreen;
     border-radius: 50%;
-    width: 25px;
-    height: 25px;
+    width: 27px;
+    height: 27px;
+    margin: 0 auto 7px;
+    i {
+      font-size: 17px;
+    }
+  }
+  span {
+    color: $mediumGray;
   }
 }
