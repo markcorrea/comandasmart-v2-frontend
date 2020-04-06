@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 
 import logo from 'assets/images/logo_login_menu.svg'
 
@@ -27,6 +28,10 @@ const LoginMenu = ({items}) => {
       </div>
     </div>
   )
+}
+
+LoginMenu.propTypes = {
+  items: PropTypes.array.isRequired,
 }
 
 export default LoginMenu
