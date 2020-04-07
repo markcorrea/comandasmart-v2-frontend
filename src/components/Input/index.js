@@ -2,12 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import {makeStyles} from '@material-ui/core/styles'
-import UIInputLabel from '@material-ui/core/InputLabel'
-import UIInput from '@material-ui/core/Input'
-import UIFormControl from '@material-ui/core/FormControl'
+import TextField from '@material-ui/core/TextField'
 import UIInputAdornment from '@material-ui/core/InputAdornment'
 
-import {lightGray, gray} from 'assets/styles/main.module.scss'
+import {lightGray} from 'assets/styles/main.module.scss'
 
 const useStyles = makeStyles(() => ({
   inputRoot: {
@@ -25,10 +23,14 @@ const useStyles = makeStyles(() => ({
     },
   },
   labelRoot: {
+    marginLeft: '15px',
     textTransform: 'uppercase',
+    '&&+.MuiInput-formControl': {
+      marginTop: '25px',
+    },
   },
   adornmentRoot: {
-    color: gray,
+    color: 'rgba(0, 0, 0, 0.54)',
   },
 }))
 
@@ -45,19 +47,21 @@ const Input = ({label, startIcon, endIcon, ...rest}) => {
 
   return (
     <div>
-      <UIFormControl fullWidth variant='outlined'>
-        {label && (
-          <UIInputLabel shrink classes={{root: classes.labelRoot}}>
-            {label}
-          </UIInputLabel>
-        )}
-        <UIInput
-          classes={{root: classes.inputRoot, underline: classes.inputUnderline}}
-          startAdornment={startIcon ? setAdornment(startIcon, 'start') : null}
-          endAdornment={endIcon ? setAdornment(endIcon, 'end') : null}
-          {...rest}
-        />
-      </UIFormControl>
+      <TextField
+        label={label}
+        InputProps={{
+          classes: {root: classes.inputRoot, underline: classes.inputUnderline},
+          startAdornment: startIcon ? setAdornment(startIcon, 'start') : null,
+          endAdornment: endIcon ? setAdornment(endIcon, 'end') : null,
+        }}
+        InputLabelProps={{
+          classes: {
+            root: classes.labelRoot,
+          },
+          shrink: true,
+        }}
+        {...rest}
+      />
     </div>
   )
 }

@@ -12,7 +12,7 @@ export const Basic = () => {
   return (
     <div style={{padding: '20px'}}>
       <Input
-        label='NOME DA EMPRESA'
+        label='Nome da Empresa'
         value={company}
         onChange={event => setCompany(event.target.value)}
         startIcon={<i className='fa fa-trash' />}
