@@ -1,0 +1,14 @@
+$baseDimension: 32px;
+
+$width: $baseDimension;
+$height: $baseDimension;
+
+.Spinner {
+  width: $width;
+  height: $height;
+
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin: -0.5 * $baseDimension;
+}

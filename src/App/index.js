@@ -7,6 +7,8 @@ import DateFnsUtils from '@date-io/date-fns'
 import Header from 'components/Header'
 import theme from 'assets/themes'
 
+import AppRouter from './AppRouter'
+
 import 'assets/fontawesome/fa.css'
 import 'assets/styles/main.module.scss'
 
@@ -18,12 +20,7 @@ const App = () => {
           <div className='App'>
             <header className='App-header'>
               <Header />
-              <p>
-                Edit <code>src/App.js</code> and save to reload.
-              </p>
-              <a className='App-link' href='https://reactjs.org' target='_blank' rel='noopener noreferrer'>
-                Learn React
-              </a>
+              <AppRouter />
             </header>
           </div>
         </ThemeProvider>
