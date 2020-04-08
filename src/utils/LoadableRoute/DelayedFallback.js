@@ -1,8 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import PropTypes from 'prop-types'
 
-import styles from './index.module.scss'
-
 /**
  * Delays the Loading message so we do not only flash before quickly rendering the content.
  *
@@ -21,7 +19,7 @@ const DelayedFallback = ({minDelay = 300}) => {
     return () => clearTimeout(timeout)
   }, [minDelay])
 
-  return showLoading ? 'LOADING' : null
+  return showLoading ? <>LOADING</> : null
 }
 
 DelayedFallback.propTypes = {

@@ -1,4 +1,5 @@
-import React, {lazy} from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import {BrowserRouter as Router, Switch, Redirect} from 'react-router-dom'
 
 import Input from 'components/Input'
@@ -14,6 +15,10 @@ const Layout = ({children}) => {
       {children}
     </div>
   )
+}
+
+Layout.propTypes = {
+  children: PropTypes.object,
 }
 
 const AppRouter = () => {
