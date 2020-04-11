@@ -4,7 +4,6 @@ import {ThemeProvider, CssBaseline} from '@material-ui/core'
 import {MuiPickersUtilsProvider} from '@material-ui/pickers'
 import DateFnsUtils from '@date-io/date-fns'
 
-import Header from 'components/Header'
 import theme from 'assets/themes'
 
 import AppRouter from './AppRouter'
@@ -17,12 +16,7 @@ const App = () => {
     <CssBaseline>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <ThemeProvider theme={theme}>
-          <div className='App'>
-            <header className='App-header'>
-              <Header />
-              <AppRouter />
-            </header>
-          </div>
+          <AppRouter />
         </ThemeProvider>
       </MuiPickersUtilsProvider>
     </CssBaseline>

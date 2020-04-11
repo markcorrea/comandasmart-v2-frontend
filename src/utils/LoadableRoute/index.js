@@ -1,4 +1,4 @@
-import React, {Suspense} from 'react'
+import React, {useState, Suspense} from 'react'
 import PropTypes from 'prop-types'
 import {Route} from 'react-router-dom'
 
@@ -8,10 +8,7 @@ import DelayedFallback from './DelayedFallback'
 const EmptyLayout = ({children}) => <>{children}</>
 
 EmptyLayout.propTypes = {
-  children: PropTypes.oneOfType([
-    PropTypes.arrayOf(PropTypes.node),
-    PropTypes.node,
-  ]),
+  children: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.node), PropTypes.node]),
 }
 
 /**
@@ -22,15 +19,10 @@ EmptyLayout.propTypes = {
  * @param {object} props
  * @return {object} React component
  */
-const LoadableRoute = ({
-  component: Component,
-  routeComponent: RouteComponent,
-  layout: Layout,
-  ...options
-}) => {
+const LoadableRoute = ({component: Component, routeComponent: RouteComponent, layout: Layout}) => {
   const PageComponent = () => (
     <ErrorBoundary>
-      <Layout {...options}>
+      <Layout>
         <ErrorBoundary>
           <Suspense fallback={<DelayedFallback />}>
             <Component />
@@ -40,17 +32,14 @@ const LoadableRoute = ({
     </ErrorBoundary>
   )
 
-  return <RouteComponent {...options} component={PageComponent} />
+  return <RouteComponent component={PageComponent} />
 }
 
 LoadableRoute.propTypes = {
   component: PropTypes.object.isRequired,
   routeComponent: PropTypes.func,
-  layout: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object,
-    PropTypes.func,
-  ]),
+  layout: PropTypes.any,
+  // layout: PropTypes.oneOfType([PropTypes.string, PropTypes.object, PropTypes.func, PropTypes.element]),
 }
 
 LoadableRoute.defaultProps = {

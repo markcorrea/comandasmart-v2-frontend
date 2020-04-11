@@ -1,34 +1,19 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, {lazy} from 'react'
 import {BrowserRouter as Router, Switch, Redirect} from 'react-router-dom'
 
-import Input from 'components/Input'
-import Button from 'components/Button'
+import Layout from 'layouts/Layout'
 
 import LoadableRoute from 'utils/LoadableRoute'
 
-const Layout = ({children}) => {
-  return (
-    <div>
-      Layout goes here!
-      <br />
-      {children}
-    </div>
-  )
-}
-
-Layout.propTypes = {
-  children: PropTypes.object,
-}
+const Login = lazy(() => import(/* webpackChunkName: "Login" */ '../pages/Login'))
 
 const AppRouter = () => {
   return (
     <Router basename='/app'>
       <Switch>
-        <Redirect path='/' exact to='/main' />
+        <Redirect path='/' exact to='/login' />
 
-        <LoadableRoute path='/main' component={Input} layout={Layout} />
-        <LoadableRoute path='/other' component={Button} layout={Layout} />
+        <LoadableRoute path='/login' component={Login} layout={Layout} />
       </Switch>
     </Router>
   )

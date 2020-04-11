@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import clsx from 'clsx'
 
 import styles from './index.module.scss'
 
-const SideMenu = ({items}) => {
+const SideMenu = ({items, className}) => {
   return (
-    <div className={styles.container}>
+    <div className={clsx(styles.container, className)}>
       <div className={styles.title}>Menu</div>
       <ul>
         {items.map((item, index) => {
@@ -25,6 +26,11 @@ const SideMenu = ({items}) => {
 
 SideMenu.propTypes = {
   items: PropTypes.array.isRequired,
+  className: PropTypes.string,
+}
+
+SideMenu.defaultProps = {
+  className: '',
 }
 
 export default SideMenu
