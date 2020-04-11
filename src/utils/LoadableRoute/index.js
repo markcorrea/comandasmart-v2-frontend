@@ -1,4 +1,4 @@
-import React, {useState, Suspense} from 'react'
+import React, {Suspense} from 'react'
 import PropTypes from 'prop-types'
 import {Route} from 'react-router-dom'
 
