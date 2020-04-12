@@ -5,6 +5,8 @@ import {Route} from 'react-router-dom'
 import ErrorBoundary from './ErrorBoundary'
 import DelayedFallback from './DelayedFallback'
 
+import Store from 'store'
+
 const EmptyLayout = ({children}) => <>{children}</>
 
 EmptyLayout.propTypes = {
@@ -21,15 +23,17 @@ EmptyLayout.propTypes = {
  */
 const LoadableRoute = ({component: Component, routeComponent: RouteComponent, layout: Layout}) => {
   const PageComponent = () => (
-    <ErrorBoundary>
-      <Layout>
-        <ErrorBoundary>
-          <Suspense fallback={<DelayedFallback />}>
-            <Component />
-          </Suspense>
-        </ErrorBoundary>
-      </Layout>
-    </ErrorBoundary>
+    <Store>
+      <ErrorBoundary>
+        <Layout>
+          <ErrorBoundary>
+            <Suspense fallback={<DelayedFallback />}>
+              <Component />
+            </Suspense>
+          </ErrorBoundary>
+        </Layout>
+      </ErrorBoundary>
+    </Store>
   )
 
   return <RouteComponent component={PageComponent} />

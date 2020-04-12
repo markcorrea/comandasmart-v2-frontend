@@ -4,7 +4,6 @@ import PropTypes from 'prop-types'
 import styles from './index.module.scss'
 
 const LoggedUserInfo = ({userName, userImage, company}) => {
-  console.log('TYPE', typeof userImage)
   return (
     <div className={styles.loggedUserInfo}>
       <span className={styles.userName}>{userName}</span>

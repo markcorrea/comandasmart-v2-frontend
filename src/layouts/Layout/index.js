@@ -5,6 +5,8 @@ import Header from 'components/Header'
 import Footer from 'components/Footer'
 import SideMenu from 'components/SideMenu'
 
+import {useStore} from 'store'
+
 import styles from './index.module.scss'
 
 const items = [
@@ -45,12 +47,14 @@ const items = [
   },
 ]
 
-const Layout = ({children, showMenu}) => {
+const Layout = ({children}) => {
+  const store = useStore()
+
   return (
     <div className={styles.container}>
       <Header className={styles.header} />
       <div className={styles.content}>
-        {showMenu && <SideMenu items={items} className={styles.sideMenu} />}
+        {store.sideMenu && <SideMenu items={items} className={styles.sideMenu} />}
         <div className={styles.children}>{children}</div>
       </div>
       <Footer className={styles.footer} />
@@ -62,10 +66,8 @@ export default Layout
 
 Layout.propTypes = {
   children: PropTypes.element,
-  showMenu: PropTypes.bool,
 }
 
 Layout.defaultProps = {
   children: '',
-  showMenu: false,
 }
