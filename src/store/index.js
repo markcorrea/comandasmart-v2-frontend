@@ -4,6 +4,14 @@ import PropTypes from 'prop-types'
 const StoreContext = React.createContext(null)
 
 const initialState = {
+  loggedUser: {
+    firstName: 'Savio',
+    lastName: 'Canova',
+    company: {
+      name: 'Kanova Revistaria'
+    }
+  },
+  // loggedUser: null,
   sideMenu: false,
 }
 

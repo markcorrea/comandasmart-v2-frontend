@@ -1,6 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
+import {useMediaQuery, useTheme} from '@material-ui/core'
+
 import Header from 'components/Header'
 import Footer from 'components/Footer'
 import SideMenu from 'components/SideMenu'
@@ -49,12 +51,14 @@ const items = [
 
 const Layout = ({children}) => {
   const store = useStore()
+  const theme = useTheme()
+  const mediaQueryLarge = useMediaQuery(theme.breakpoints.up('lg'))
 
   return (
     <div className={styles.container}>
       <Header className={styles.header} />
       <div className={styles.content}>
-        {store.sideMenu && <SideMenu items={items} className={styles.sideMenu} />}
+        {store.sideMenu && mediaQueryLarge && <SideMenu items={items} className={styles.sideMenu} />}
         <div className={styles.children}>{children}</div>
       </div>
       <Footer className={styles.footer} />

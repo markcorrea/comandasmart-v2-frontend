@@ -6,6 +6,7 @@ import Layout from 'layouts/Layout'
 import LoadableRoute from 'utils/LoadableRoute'
 
 const Login = lazy(() => import(/* webpackChunkName: "Login" */ '../pages/Login'))
+const Tickets = lazy(() => import(/* webpackChunkName: "Tickets" */ '../pages/Tickets'))
 
 const AppRouter = () => {
   return (
@@ -14,6 +15,7 @@ const AppRouter = () => {
         <Redirect path='/' exact to='/login' />
 
         <LoadableRoute path='/login' component={Login} layout={Layout} />
+        <LoadableRoute path='/tickets' component={Tickets} layout={Layout} />
       </Switch>
     </Router>
   )

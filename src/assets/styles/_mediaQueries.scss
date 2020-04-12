@@ -1,9 +1,13 @@
-$mediaQueryMedium: 768px;
-$mediaQueryLarge: 996px;
-$mediaQueryExLarge: 1024px;
+$xs: 0;
+$sm: 576;
+$md: 768;
+$lg: 1024;
+$xl: 1280;
 
 :export {
-  mediaQueryMedium: $mediaQueryMedium;
-  mediaQueryLarge: $mediaQueryLarge;
-  mediaQueryExLarge: $mediaQueryExLarge;
+  mediaQueryXS: $xs;
+  mediaQuerySM: $sm;
+  mediaQueryMD: $md;
+  mediaQueryLG: $lg;
+  mediaQueryXL: $xl;
 }

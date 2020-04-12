@@ -1,18 +1,17 @@
 import {createMuiTheme} from '@material-ui/core/styles'
 
-import {mediaQueryMedium, mediaQueryLarge, mediaQueryExLarge} from 'assets/styles/main.module.scss'
+import {mediaQueryXS, mediaQuerySM, mediaQueryMD, mediaQueryLG, mediaQueryXL} from 'assets/styles/main.module.scss'
 
-const theme = createMuiTheme(theme => ({
+const theme = createMuiTheme({
   breakpoints: {
-    ...theme.breakpoints,
     values: {
-      xs: mediaQueryMedium,
-      sm: mediaQueryLarge,
-      md: 1024,
-      lg: mediaQueryExLarge,
-      xl: 1440,
+      xs: Number(mediaQueryXS),
+      sm: Number(mediaQuerySM),
+      md: Number(mediaQueryMD),
+      lg: Number(mediaQueryLG),
+      xl: Number(mediaQueryXL),
     },
   },
-}))
+})
 
 export default theme
