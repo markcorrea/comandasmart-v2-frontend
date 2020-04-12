@@ -5,7 +5,6 @@ const StoreContext = React.createContext(null)
 
 const initialState = {
   sideMenu: false,
-  color: 'red',
 }
 
 const Store = ({children}) => {
