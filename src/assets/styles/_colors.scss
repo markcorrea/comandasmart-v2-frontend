@@ -1,3 +1,4 @@
+$defaultBackgroundColor: #f3f3f3;
 $darkestGray: #1a1919;
 $darkGray: #2a2a2a;
 $mediumGray: #8b8b8b;
@@ -11,6 +12,7 @@ $goldTips: #EBB917;
 
 // Exports variables to be used in JS theme definition at assets/themes.
 :export {
+  defaultBackgroundColor: $defaultBackgroundColor;
   darkestGray: $darkestGray;
   darkGray: $darkGray;
   gray: $gray;

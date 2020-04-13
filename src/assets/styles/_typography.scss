@@ -3,8 +3,8 @@
 $defaultFontFamily: Roboto;
 $robotoBoldFontFamily: Roboto-bold;
 
-$bigFontSize: 1.2rem; //24px
 $defaultFontSize: 20px; //20px
+$bigFontSize: 1.2rem; //24px
 $smallFontSize: 0.8rem; //16px
 $mediumFontSize: 0.9rem; //18px
 $smallestFontSize: 0.7rem; //14px
@@ -17,40 +17,6 @@ $titleLetterSpacing: 1px;
 
 $h2FontSize: 1.6rem; //32px
 $h3FontSize: 1rem; //20px
-
-// Font definitions
-html,
-body,
-p {
-  font-family: $defaultFontFamily;
-  font-size: $defaultFontSize;
-}
-
-h1 {
-  font-size: $h1FontSize;
-  font-weight: $titleFontWeight;
-  line-height: $titleLineHeight;
-  letter-spacing: $titleLetterSpacing;
-  margin-top: 70px;
-}
-
-h2 {
-  font-size: $h2FontSize;
-  font-weight: $titleFontWeight;
-  line-height: $titleLineHeight;
-  letter-spacing: $titleLetterSpacing;
-}
-
-h3 {
-  font-size: $h3FontSize;
-  font-weight: normal;
-  line-height: 120%;
-  letter-spacing: $titleLetterSpacing;
-}
-
-small {
-  font-size: $smallFontSize;
-}
 
 // Exports variables to be used in JS theme definition at assets/themes.
 :export {

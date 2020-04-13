@@ -1,7 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import {useMediaQuery, useTheme} from '@material-ui/core'
+import useMediaQuery from 'utils/mediaQuery'
+import {mediaQueryLG} from 'assets/styles/_mediaQueries.scss'
 
 import Header from 'components/Header'
 import Footer from 'components/Footer'
@@ -51,8 +52,7 @@ const items = [
 
 const Layout = ({children}) => {
   const store = useStore()
-  const theme = useTheme()
-  const mediaQueryLarge = useMediaQuery(theme.breakpoints.up('lg'))
+  const mediaQueryLarge = useMediaQuery('min', mediaQueryLG)
 
   return (
     <div className={styles.container}>
