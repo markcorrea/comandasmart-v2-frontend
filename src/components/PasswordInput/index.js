@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import PropTypes from 'prop-types'
 
-import Input from 'components/Input'
+import {Input} from 'components'
 
 import styles from './index.module.scss'
 

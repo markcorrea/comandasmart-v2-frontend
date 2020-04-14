@@ -1,0 +1,25 @@
+@import '~assets/styles/_mediaQueries.scss';
+
+.header {
+  height: 68px;
+}
+.paper {
+  min-height: calc(100% - 68px);
+  padding: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+}
+
+.flexCell {
+  padding: 15px;
+  width: 100%;
+
+  @include media-breakpoint-up(md) {
+    width: 50%;
+  }
+
+  @include media-breakpoint-up(xl) {
+    width: 33%;
+  }
+}

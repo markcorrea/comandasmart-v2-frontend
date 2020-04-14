@@ -30,6 +30,14 @@ p {
   color: $darkGray;
 }
 
-div {
+div, section {
   box-sizing: border-box;
+}
+
+h1 {
+  font-family: $robotoBoldFontFamily;
+  font-size: $h1FontSize;
+  color: $darkGray;
+  line-height: 38px;
+  margin: 0;
 }

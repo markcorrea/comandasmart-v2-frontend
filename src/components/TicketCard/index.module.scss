@@ -3,6 +3,11 @@
 
 .container {
   padding: 20px;
+  cursor: pointer;
+  
+  &:hover {
+    background-color: $eggSour;
+  }
 }
 
 .ticketNumber {
@@ -13,12 +18,13 @@
 .userName {
   font-size: $bigFontSize;
   color: $mediumGray;
-  line-height: 50px;
+  line-height: 30px;
+  margin: 15px 0;
 }
 
 .price {
   font-family: $defaultFontFamily;
-  font-size: $h2FontSize;
+  font-size: $biggerFontSize;
 }
 
 .timer {
@@ -32,7 +38,7 @@
     height: 27px;
     margin: 0 auto 7px;
     i {
-      font-size: 17px;
+      font-size: 19px;
     }
   }
   span {

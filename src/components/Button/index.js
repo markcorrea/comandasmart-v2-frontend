@@ -10,10 +10,12 @@ const Button = ({children, classes: {root}, onClick}) => {
   const useStyles = makeStyles(() => ({
     root: {
       backgroundColor: ronchi,
+      border: `solid thin transparent`,
       color: darkGray,
       fontSize: smallFontSize,
+      lineHeight: smallFontSize,
       borderRadius: '10px',
-      padding: '10px 20px 8px',
+      padding: '11px 20px 9px',
       minWidth: '200px',
       fontFamily: robotoBoldFontFamily,
       ...root,

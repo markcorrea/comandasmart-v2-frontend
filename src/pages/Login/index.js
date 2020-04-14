@@ -1,11 +1,6 @@
 import React, {useState} from 'react'
 
-import Paper from 'components/Paper'
-import Input from 'components/Input'
-import PasswordInput from 'components/PasswordInput'
-import Button from 'components/Button'
-import LoginMenu from 'components/LoginMenu'
-import Drawer from 'components/Drawer'
+import {Button, Drawer, Input, LoginMenu, Paper, PasswordInput} from 'components'
 
 import logo from 'assets/images/logo_login_mobile.svg'
 

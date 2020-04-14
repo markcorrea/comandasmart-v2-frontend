@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import Paper from 'components/Paper'
+import {Paper} from 'components'
 
 import styles from './index.module.scss'
 
