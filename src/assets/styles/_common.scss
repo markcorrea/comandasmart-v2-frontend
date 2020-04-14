@@ -1,3 +1,16 @@
+/* Change the white to any color ;) */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
+
+input:-webkit-autofill::first-line {
+  font-size: $smallerFontSize;
+  text-transform: uppercase;
+}
+
 html,
 body {
   height: 100%;
@@ -14,6 +27,7 @@ p {
   line-height: 1.43;
   letter-spacing: 0.01071em;
   -webkit-font-smoothing: antialiased;
+  color: $darkGray;
 }
 
 div {

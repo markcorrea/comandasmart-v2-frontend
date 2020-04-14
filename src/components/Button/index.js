@@ -6,7 +6,7 @@ import {makeStyles} from '@material-ui/core/styles'
 
 import {ronchi, darkGray, smallFontSize, robotoBoldFontFamily} from 'assets/styles/main.module.scss'
 
-const Button = ({children, classes, onClick}) => {
+const Button = ({children, classes: {root}, onClick}) => {
   const useStyles = makeStyles(() => ({
     root: {
       backgroundColor: ronchi,
@@ -16,13 +16,17 @@ const Button = ({children, classes, onClick}) => {
       padding: '10px 20px 8px',
       minWidth: '200px',
       fontFamily: robotoBoldFontFamily,
+      ...root,
     },
-    ...classes,
   }))
 
   const buttonClasses = useStyles()
 
-  return <UIButton classes={buttonClasses} onClick={onClick}>{children}</UIButton>
+  return (
+    <UIButton classes={buttonClasses} onClick={onClick}>
+      {children}
+    </UIButton>
+  )
 }
 
 Button.propTypes = {

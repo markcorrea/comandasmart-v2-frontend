@@ -5,9 +5,10 @@ $robotoBoldFontFamily: Roboto-bold;
 
 $defaultFontSize: 20px; //20px
 $bigFontSize: 1.2rem; //24px
-$smallFontSize: 0.8rem; //16px
 $mediumFontSize: 0.9rem; //18px
-$smallestFontSize: 0.7rem; //14px
+$smallFontSize: 0.8rem; //16px
+$smallerFontSize: 0.7rem; //14px
+$miniFontSize: 0.6rem;
 $microFontSize: 0.55rem; //11px
 
 $h1FontSize: 2rem; //40px
@@ -25,7 +26,9 @@ $h3FontSize: 1rem; //20px
   bigFontSize: $bigFontSize;
   defaultFontSize: $defaultFontSize;
   smallFontSize: $smallFontSize;
-  smallestFontSize: $smallestFontSize;
+  smallerFontSize: $smallerFontSize;
+  miniFontSize: $miniFontSize;
+  microFontSize: $microFontSize;
   h1FontSize: $h1FontSize;
   h2FontSize: $h2FontSize;
   h3FontSize: $h3FontSize;

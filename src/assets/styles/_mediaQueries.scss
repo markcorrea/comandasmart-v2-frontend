@@ -1,13 +1,13 @@
-$xs: 0;
-$sm: 576;
-$md: 768;
-$lg: 1024;
-$xl: 1280;
+$mediaQueryXS: 0;
+$mediaQuerySM: 576;
+$mediaQueryMD: 768;
+$mediaQueryLG: 1024;
+$mediaQueryXL: 1280;
 
 :export {
-  mediaQueryXS: $xs;
-  mediaQuerySM: $sm;
-  mediaQueryMD: $md;
-  mediaQueryLG: $lg;
-  mediaQueryXL: $xl;
+  mediaQueryXS: $mediaQueryXS;
+  mediaQuerySM: $mediaQuerySM;
+  mediaQueryMD: $mediaQueryMD;
+  mediaQueryLG: $mediaQueryLG;
+  mediaQueryXL: $mediaQueryXL;
 }
