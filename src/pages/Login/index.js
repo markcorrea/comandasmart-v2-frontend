@@ -1,11 +1,20 @@
-import React from 'react'
+import React, {useState} from 'react'
 
 import Paper from 'components/Paper'
 import Input from 'components/Input'
 import PasswordInput from 'components/PasswordInput'
 import Button from 'components/Button'
+import LoginMenu from 'components/LoginMenu'
+import Drawer from 'components/Drawer'
+
+import logo from 'assets/images/logo_login_mobile.svg'
+
+import useMediaQuery from 'utils/mediaQuery'
+import {mediaQuerySM} from 'assets/styles/_mediaQueries.scss'
 
 import {defaultFontFamily, smallerFontSize} from 'assets/styles/main.module.scss'
+
+import menu from './menu'
 import styles from './index.module.scss'
 
 const classes = {
@@ -20,23 +29,59 @@ const classes = {
   },
 }
 
+const PasswordForgot = () => (
+  <a href='http://www.google.com.br' className={styles.passwordForgot}>
+    Esqueci minha Senha
+  </a>
+)
+
 const Login = () => {
-  return (
+  const mediaSM = useMediaQuery('min', mediaQuerySM)
+  const [open, setOpen] = useState(false)
+
+  const Form = () => (
+    <>
+      {mediaSM ? (
+        <div className={styles.title}>Digite Seu Email E Senha</div>
+      ) : (
+        <img className={styles.logo} alt='logo' src={logo} />
+      )}
+      <div className={styles.inputFields}>
+        <Input classes={{input: classes.input}} />
+        <PasswordInput className={styles.passwordInput} />
+        {!mediaSM && <PasswordForgot />}
+      </div>
+      <Button type='submit' classes={{root: classes.buttonRoot}} onClick={() => console.log('clicked button')}>
+        Entrar
+      </Button>
+    </>
+  )
+
+  const Desktop = () => (
     <Paper className={styles.paper}>
-      <div className={styles.title}>Digite Seu Email E Senha</div>
-      <form>
-        <div className={styles.inputFields}>
-          <Input classes={{input: classes.input}} />
-          <PasswordInput className={styles.passwordInput} />
-        </div>
-        <Button classes={{root: classes.buttonRoot}} onClick={() => console.log('clicked button')}>
-          Entrar
-        </Button>
-      </form>
-      <a href='http://www.google.com.br' className={styles.passwordForgot}>
-        Esqueci minha Senha
-      </a>
+      <Form />
+      <PasswordForgot />
     </Paper>
+  )
+
+  const Mobile = () => (
+    <>
+      <div className={styles.burgerMenu} onClick={() => setOpen(true)}>
+        <i className='fas fa-bars'></i>
+      </div>
+      <div className={styles.containerMobile}>
+        <Form />
+      </div>
+    </>
+  )
+
+  return (
+    <>
+      {mediaSM ? <Desktop /> : <Mobile />}
+      <Drawer open={open} setOpen={setOpen}>
+        <LoginMenu items={menu} />
+      </Drawer>
+    </>
   )
 }
 

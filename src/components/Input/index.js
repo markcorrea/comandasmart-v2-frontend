@@ -69,6 +69,7 @@ const Input = ({label, startIcon, endIcon, classes: {input}, ...rest}) => {
           },
           shrink: true,
         }}
+        autoComplete='comanda-smart-password'
         {...rest}
       />
     </div>

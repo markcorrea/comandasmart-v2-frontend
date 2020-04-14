@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import useMediaQuery from 'utils/mediaQuery'
-import {mediaQueryLG} from 'assets/styles/_mediaQueries.scss'
+import {mediaQueryLG, mediaQuerySM} from 'assets/styles/_mediaQueries.scss'
 
 import Header from 'components/Header'
 import Footer from 'components/Footer'
@@ -53,15 +53,16 @@ const items = [
 const Layout = ({children}) => {
   const store = useStore()
   const mediaQueryLarge = useMediaQuery('min', mediaQueryLG)
+  const mediaQuerySmall = useMediaQuery('min', mediaQuerySM)
 
   return (
     <div className={styles.container}>
-      <Header className={styles.header} />
+      {mediaQuerySmall && <Header className={styles.header} />}
       <div className={styles.content}>
         {store.sideMenu && mediaQueryLarge && <SideMenu items={items} className={styles.sideMenu} />}
         <div className={styles.children}>{children}</div>
       </div>
-      <Footer className={styles.footer} />
+      {mediaQuerySmall && <Footer className={styles.footer} />}
     </div>
   )
 }

@@ -3,7 +3,7 @@
 
 .paper {
   max-width: 643px;
-  margin: 30px auto 0;
+  margin: 0 auto;
   padding: 30px;
 }
 
@@ -29,9 +29,34 @@
   display: block;
   margin: 30px auto 0;
   width: 160px;
+  color: $darkGray;
   text-align: center;
   text-transform: uppercase;
   text-decoration: none;
   font-size: $miniFontSize;
   cursor: pointer;
+}
+
+.burgerMenu {
+  width: fit-content;
+  cursor: pointer;
+}
+
+.containerMobile {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+
+  .logo {
+    width: 80%;
+  }
+
+  .inputFields {
+    margin: 0;
+  }
+
+  .passwordForgot {
+    margin: 20px auto 0;
+  }
 }

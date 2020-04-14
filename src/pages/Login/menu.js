@@ -1,13 +1,4 @@
-import React, {useState} from 'react'
-import LoginMenu from 'components/LoginMenu'
-import Drawer from 'components/Drawer'
-
-export default {
-  title: 'Components/LoginMenu',
-  component: LoginMenu,
-}
-
-const items = [
+export default [
   {
     label: 'Sobre',
     icon: 'fa fa-info-circle',
@@ -39,22 +30,3 @@ const items = [
     onClick: () => console.log('Twitter'),
   },
 ]
-
-export const Basic = () => (
-  <div style={{height: '880px'}}>
-    <LoginMenu items={items} />
-  </div>
-)
-
-export const DrawerMenu = () => {
-  const [open, setOpen] = useState(false)
-
-  return (
-    <div>
-      <button onClick={() => setOpen(!open)}>Open/Close</button>
-      <Drawer open={open} setOpen={setOpen}>
-        <LoginMenu items={items} />
-      </Drawer>
-    </div>
-  )
-}
