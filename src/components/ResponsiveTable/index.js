@@ -5,6 +5,8 @@ import 'react-super-responsive-table/dist/SuperResponsiveTableStyle.css'
 
 import styles from './index.module.scss'
 
+// https://www.npmjs.com/package/react-super-responsive-table
+
 const ResponsiveTable = () => {
   return (
     <Table className={styles.table}>
