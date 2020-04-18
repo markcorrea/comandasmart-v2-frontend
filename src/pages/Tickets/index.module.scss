@@ -1,4 +1,5 @@
 @import '~assets/styles/_mediaQueries.scss';
+@import '~assets/styles/_colors.scss';
 
 .header {
   height: 68px;
@@ -9,6 +10,7 @@
   display: flex;
   flex-wrap: wrap;
   align-content: flex-start;
+  position: relative;
 }
 
 .flexCell {
@@ -21,5 +23,21 @@
 
   @include media-breakpoint-up(xl) {
     width: 33%;
+  }
+}
+
+.addButton {
+  border: none;
+  border-radius: 50%;
+  padding: 0;
+  width: 86px;
+  height: 86px;
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  cursor: pointer;
+  i {
+    font-size: 86px;
+    color: $saffron;
   }
 }

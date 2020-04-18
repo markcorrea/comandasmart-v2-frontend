@@ -52,6 +52,12 @@ const Tickets = () => {
         <div className={styles.flexCell}>
           <TicketCard ticket={ticket} />
         </div>
+        <div className={styles.flexCell}>
+          <TicketCard ticket={ticket} />
+        </div>
+        <button className={styles.addButton}>
+          <i className='fas fa-plus-circle'></i>
+        </button>
       </Paper>
     </>
   )
