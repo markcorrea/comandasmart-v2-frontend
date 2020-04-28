@@ -6,26 +6,30 @@ import HeaderButton from './HeaderButton'
 import LoggedUserInfo from './LoggedUserInfo'
 
 import logo from 'assets/images/comandasmart_white.svg'
+import logoMobile from 'assets/images/logo_white.svg'
 import userImage from 'assets/images/user.png'
+import useMediaQuery from 'utils/mediaQuery'
 
 import {useStore} from 'store'
 
+import {mediaQueryLG} from 'assets/styles/_mediaQueries.scss'
 import styles from './index.module.scss'
 
 const Header = ({className}) => {
   const store = useStore()
 
+  const mediaLG = useMediaQuery('min', mediaQueryLG)
+
   const UserIsLoggedComponents = () => {
     if (store.loggedUser) {
       const {
         firstName,
-        lastName,
         company: {name: companyName},
       } = store.loggedUser
       return (
         <>
           <HeaderButton icon='sign-out-alt' label='sair' onClick={() => console.log('clicked info')} />
-          <LoggedUserInfo userName={`${firstName} ${lastName}`} userImage={userImage} company={companyName} />
+          <LoggedUserInfo userName={firstName} userImage={userImage} company={companyName} />
         </>
       )
     }
@@ -40,7 +44,7 @@ const Header = ({className}) => {
 
   return (
     <div className={clsx(styles.container, className)}>
-      <img alt='logo' src={logo} className={styles.logo} />
+      <img alt='logo' src={mediaLG ? logo : logoMobile} className={styles.logo} />
       <UserIsLoggedComponents />
     </div>
   )

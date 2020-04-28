@@ -34,7 +34,7 @@ const Input = ({label, startIcon, endIcon, classes: {input}, ...rest}) => {
         marginLeft: '15px',
         textTransform: 'uppercase',
         '&&+.MuiInput-formControl': {
-          marginTop: '25px',
+          marginTop: '20px',
         },
       },
       adornmentRoot: {
