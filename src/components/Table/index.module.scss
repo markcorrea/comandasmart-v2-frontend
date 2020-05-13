@@ -1,0 +1,30 @@
+@import '~assets/styles/_colors.scss';
+@import '~assets/styles/_typography.scss';
+
+.table {
+  border-spacing: 0;
+  font-size: $bigFontSize;
+
+  thead {
+    tr {
+      th {
+        padding: 16px;
+      }
+    }
+  }
+  tbody {
+    tr {
+      td {
+        border-bottom: solid thin $lightGray;
+        padding: 16px;
+        text-align: center;
+      }
+      &:first-child td {
+        border-top: solid thin $lightGray;
+      }
+      &:last-child td {
+        border-bottom: solid thin transparent;
+      }
+    }
+  }
+}
