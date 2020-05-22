@@ -1,0 +1,38 @@
+@import '~assets/styles/_mediaQueries.scss';
+@import '~assets/styles/_colors.scss';
+
+.header {
+  height: 68px;
+}
+.paper {
+  min-height: calc(100% - 68px);
+  padding: 8px 8px 80px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  position: relative;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  .flexCell {
+    padding: 7px;
+    width: 100%;
+
+    @include media-breakpoint-up(md) {
+      width: 50%;
+    }
+
+    @include media-breakpoint-up(xl) {
+      width: 33%;
+    }
+  }
+}
+
+.buttons {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+}

@@ -6,10 +6,10 @@ $gray: #979797;
 $lightGray: #d9d8d8;
 $lightestGray: #f3f3f3;
 $ronchi: #f5c94c;
-$saffron: #F6CA3E;
-$tulipTree: #E6BD39;
-$goldTips: #EBB917;
-$eggSour: #FEF5DD;
+$saffron: #f6ca3e;
+$tulipTree: #e6bd39;
+$goldTips: #ebb917;
+$eggSour: #fef5dd;
 
 // Exports variables to be used in JS theme definition at assets/themes.
 :export {
@@ -19,5 +19,6 @@ $eggSour: #FEF5DD;
   mediumGray: $mediumGray;
   gray: $gray;
   lightGray: $lightGray;
+  lightestGray: $lightestGray;
   ronchi: $ronchi;
 }

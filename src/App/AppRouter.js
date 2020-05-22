@@ -7,6 +7,8 @@ import LoadableRoute from 'utils/LoadableRoute'
 
 const Login = lazy(() => import(/* webpackChunkName: "Login" */ '../pages/Login'))
 const Tickets = lazy(() => import(/* webpackChunkName: "Tickets" */ '../pages/Tickets'))
+const ClientList = lazy(() => import(/* webpackChunkName: "ClientList" */ '../pages/ClientList'))
+const ClientDetails = lazy(() => import(/* webpackChunkName: "ClientDetails" */ '../pages/ClientDetails'))
 
 const AppRouter = () => {
   return (
@@ -16,6 +18,8 @@ const AppRouter = () => {
 
         <LoadableRoute path='/login' component={Login} layout={Layout} />
         <LoadableRoute path='/tickets' component={Tickets} layout={Layout} />
+        <LoadableRoute path='/client/list' component={ClientList} layout={Layout} />
+        <LoadableRoute path='/client/details' component={ClientDetails} layout={Layout} />
       </Switch>
     </Router>
   )

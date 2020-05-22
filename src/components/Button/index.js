@@ -1,17 +1,27 @@
-import React from 'react'
+import React, {useMemo, memo} from 'react'
 import PropTypes from 'prop-types'
 
 import UIButton from '@material-ui/core/Button'
 import {makeStyles} from '@material-ui/core/styles'
 
-import {ronchi, darkGray, smallFontSize, robotoBoldFontFamily} from 'assets/styles/main.module.scss'
+import {ronchi, lightestGray, mediumGray, darkGray, smallFontSize, robotoBoldFontFamily} from 'assets/styles/main.module.scss'
 
-const Button = ({children, classes: {root}, onClick}) => {
+const Button = ({children, classes: {root}, onClick, color: buttonColor}) => {
+  const backgroundColor = useMemo(() => {
+    if (buttonColor === 'cancel') return lightestGray
+    return ronchi
+  }, [buttonColor])
+
+  const color = useMemo(() => {
+    if (buttonColor === 'cancel') return mediumGray
+    return darkGray
+  }, [buttonColor])
+
   const useStyles = makeStyles(() => ({
     root: {
-      backgroundColor: ronchi,
+      backgroundColor: backgroundColor,
       border: `solid thin transparent`,
-      color: darkGray,
+      color: color,
       fontSize: smallFontSize,
       lineHeight: smallFontSize,
       borderRadius: '10px',
@@ -35,12 +45,14 @@ Button.propTypes = {
   classes: PropTypes.object,
   children: PropTypes.string,
   onClick: PropTypes.func,
+  buttonColor: PropTypes.string,
 }
 
 Button.defaultProps = {
   classes: {},
   children: 'button',
   onClick: () => {},
+  buttonColor: 'default',
 }
 
-export default Button
+export default memo(Button)
