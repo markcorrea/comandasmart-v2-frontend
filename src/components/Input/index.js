@@ -11,7 +11,6 @@ const Input = ({label, startIcon, endIcon, classes: {input}, ...rest}) => {
   const useStyles = makeStyles(() => ({
     root: {
       width: '100%',
-      // height: '100px',
     },
     inputRoot: {
       height: '50px',
