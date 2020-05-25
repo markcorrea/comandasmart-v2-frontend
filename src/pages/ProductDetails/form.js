@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {useForm, Controller} from 'react-hook-form'
 import * as yup from 'yup'
 
-import {Input, Button, Datepicker} from 'components'
+import {Input, Button} from 'components'
 
 import useMediaQuery from 'utils/mediaQuery'
 import {mediaQuerySM} from 'assets/styles/_mediaQueries.scss'
@@ -17,7 +17,7 @@ const getErrorMessage = error => {
   return (error && error.message) || ''
 }
 
-const ClientForm = ({defaultValues}) => {
+const ProductForm = ({defaultValues}) => {
   const {handleSubmit, control, errors, reset} = useForm({
     defaultValues,
     validationSchema,
@@ -54,9 +54,19 @@ const ClientForm = ({defaultValues}) => {
         <div className={styles.flexCell}>
           <Controller
             as={Input}
+            name='barCode'
+            control={control}
+            label={'Código de Barras:'}
+            error={Boolean(errors.barCode)}
+            helperText={getErrorMessage(errors.barCode)}
+          />
+        </div>
+        <div className={styles.flexCell}>
+          <Controller
+            as={Input}
             name='uniqueCode'
             control={control}
-            label={'Código Unico:'}
+            label={'Código rápido:'}
             error={Boolean(errors.uniqueCode)}
             helperText={getErrorMessage(errors.uniqueCode)}
           />
@@ -64,31 +74,31 @@ const ClientForm = ({defaultValues}) => {
         <div className={styles.flexCell}>
           <Controller
             as={Input}
-            name='phone'
+            name='quantity'
             control={control}
-            label={'Telefone:'}
-            error={Boolean(errors.phone)}
-            helperText={getErrorMessage(errors.phone)}
-          />
-        </div>
-        <div className={styles.flexCell}>
-          <Controller
-            as={<Datepicker />}
-            name='birthdate'
-            control={control}
-            label={'Data de Nascimento:'}
-            error={Boolean(errors.birthdate)}
-            helperText={getErrorMessage(errors.birthdate)}
+            label={'Quantidade:'}
+            error={Boolean(errors.quantity)}
+            helperText={getErrorMessage(errors.quantity)}
           />
         </div>
         <div className={styles.flexCell}>
           <Controller
             as={Input}
-            name='email'
+            name='price'
             control={control}
-            label={'E-mail:'}
-            error={Boolean(errors.email)}
-            helperText={getErrorMessage(errors.email)}
+            label={'Valor:'}
+            error={Boolean(errors.price)}
+            helperText={getErrorMessage(errors.price)}
+          />
+        </div>
+        <div className={styles.flexCell}>
+          <Controller
+            as={Input}
+            name='terminal'
+            control={control}
+            label={'Terminal:'}
+            error={Boolean(errors.terminal)}
+            helperText={getErrorMessage(errors.terminal)}
           />
         </div>
       </div>
@@ -102,8 +112,8 @@ const ClientForm = ({defaultValues}) => {
   )
 }
 
-ClientForm.propTypes = {
+ProductForm.propTypes = {
   defaultValues: PropTypes.object,
 }
 
-export default ClientForm
+export default ProductForm

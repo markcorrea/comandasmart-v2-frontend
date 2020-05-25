@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {useForm, Controller} from 'react-hook-form'
 import * as yup from 'yup'
 
-import {Input, Button, Datepicker} from 'components'
+import {Input, Button} from 'components'
 
 import useMediaQuery from 'utils/mediaQuery'
 import {mediaQuerySM} from 'assets/styles/_mediaQueries.scss'
@@ -17,7 +17,7 @@ const getErrorMessage = error => {
   return (error && error.message) || ''
 }
 
-const ClientForm = ({defaultValues}) => {
+const TerminalForm = ({defaultValues}) => {
   const {handleSubmit, control, errors, reset} = useForm({
     defaultValues,
     validationSchema,
@@ -51,46 +51,6 @@ const ClientForm = ({defaultValues}) => {
             helperText={getErrorMessage(errors.name)}
           />
         </div>
-        <div className={styles.flexCell}>
-          <Controller
-            as={Input}
-            name='uniqueCode'
-            control={control}
-            label={'Código Unico:'}
-            error={Boolean(errors.uniqueCode)}
-            helperText={getErrorMessage(errors.uniqueCode)}
-          />
-        </div>
-        <div className={styles.flexCell}>
-          <Controller
-            as={Input}
-            name='phone'
-            control={control}
-            label={'Telefone:'}
-            error={Boolean(errors.phone)}
-            helperText={getErrorMessage(errors.phone)}
-          />
-        </div>
-        <div className={styles.flexCell}>
-          <Controller
-            as={<Datepicker />}
-            name='birthdate'
-            control={control}
-            label={'Data de Nascimento:'}
-            error={Boolean(errors.birthdate)}
-            helperText={getErrorMessage(errors.birthdate)}
-          />
-        </div>
-        <div className={styles.flexCell}>
-          <Controller
-            as={Input}
-            name='email'
-            control={control}
-            label={'E-mail:'}
-            error={Boolean(errors.email)}
-            helperText={getErrorMessage(errors.email)}
-          />
-        </div>
       </div>
       <div className={styles.buttons}>
         <Button type='button' color='cancel' classes={headerButtonClass}>
@@ -102,8 +62,8 @@ const ClientForm = ({defaultValues}) => {
   )
 }
 
-ClientForm.propTypes = {
+TerminalForm.propTypes = {
   defaultValues: PropTypes.object,
 }
 
-export default ClientForm
+export default TerminalForm
