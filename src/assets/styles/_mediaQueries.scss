@@ -8,6 +8,7 @@
 $xs: 0;
 $sm: 576;
 $md: 768;
+$gg: 861;
 $lg: 1024;
 $xl: 1280;
 
@@ -15,6 +16,7 @@ $grid-breakpoints: (
   xs: $xs,
   sm: $sm * 1px,
   md: $md * 1px,
+  gg: $gg * 1px,
   lg: $lg * 1px,
   xl: $xl * 1px,
 );
@@ -23,6 +25,7 @@ $grid-breakpoints: (
   mediaQueryXS: $xs;
   mediaQuerySM: $sm;
   mediaQueryMD: $md;
+  mediaQueryGG: $gg;
   mediaQueryLG: $lg;
   mediaQueryXL: $xl;
 }
