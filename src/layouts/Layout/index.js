@@ -1,15 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import useMediaQuery from 'utils/mediaQuery'
-import {mediaQueryLG, mediaQuerySM} from 'assets/styles/_mediaQueries.scss'
+import {Footer, Header, SideMenu} from 'components'
 
-import Header from 'components/Header'
-import Footer from 'components/Footer'
-import SideMenu from 'components/SideMenu'
+import useMediaQuery from 'utils/mediaQuery'
 
 import {useStore} from 'store'
 
+import {mediaQueryLG, mediaQuerySM} from 'assets/styles/_mediaQueries.scss'
 import styles from './index.module.scss'
 
 const items = [

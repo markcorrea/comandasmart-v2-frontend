@@ -1,10 +1,10 @@
-import React, {useMemo, memo} from 'react'
+import React, {memo, useMemo} from 'react'
 import PropTypes from 'prop-types'
 
 import UIButton from '@material-ui/core/Button'
 import {makeStyles} from '@material-ui/core/styles'
 
-import {ronchi, lightestGray, mediumGray, darkGray, smallFontSize, robotoBoldFontFamily} from 'assets/styles/main.module.scss'
+import {darkGray, lightestGray, mediumGray, robotoBoldFontFamily, ronchi, smallFontSize} from 'assets/styles/main.module.scss'
 
 const Button = ({children, classes: {root}, onClick, color: buttonColor, type}) => {
   const backgroundColor = useMemo(() => {

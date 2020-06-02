@@ -3,9 +3,10 @@ import PropTypes from 'prop-types'
 import {useForm, Controller} from 'react-hook-form'
 import * as yup from 'yup'
 
-import {Input, Button} from 'components'
+import {Button, Input} from 'components'
 
 import useMediaQuery from 'utils/mediaQuery'
+
 import {mediaQuerySM} from 'assets/styles/_mediaQueries.scss'
 import styles from './index.module.scss'
 

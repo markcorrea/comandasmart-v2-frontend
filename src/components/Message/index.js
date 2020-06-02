@@ -1,6 +1,6 @@
 import React, {useContext} from 'react'
-import PropTypes from 'prop-types'
 import {SnackbarProvider, useSnackbar} from 'notistack'
+import PropTypes from 'prop-types'
 
 const MessageContext = React.createContext(null)
 

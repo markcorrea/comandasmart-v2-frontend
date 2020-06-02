@@ -1,14 +1,15 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import clsx from 'clsx'
-
-import HeaderButton from './HeaderButton'
-import LoggedUserInfo from './LoggedUserInfo'
+import PropTypes from 'prop-types'
 
 import logo from 'assets/images/comandasmart_white.svg'
 import logoMobile from 'assets/images/logo_white.svg'
 import userImage from 'assets/images/user.png'
+
 import useMediaQuery from 'utils/mediaQuery'
+
+import HeaderButton from './HeaderButton'
+import LoggedUserInfo from './LoggedUserInfo'
 
 import {useStore} from 'store'
 

@@ -3,13 +3,12 @@ import React, {useState} from 'react'
 import {Button, Drawer, Input, LoginMenu, Paper, PasswordInput} from 'components'
 
 import logo from 'assets/images/logo_login_mobile.svg'
-
-import useMediaQuery from 'utils/mediaQuery'
 import {mediaQuerySM} from 'assets/styles/_mediaQueries.scss'
-
-import {defaultFontFamily, smallerFontSize} from 'assets/styles/main.module.scss'
+import useMediaQuery from 'utils/mediaQuery'
 
 import menu from './menu'
+
+import {defaultFontFamily, smallerFontSize} from 'assets/styles/main.module.scss'
 import styles from './index.module.scss'
 
 const classes = {
