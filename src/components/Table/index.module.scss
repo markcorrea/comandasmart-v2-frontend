@@ -1,49 +1,62 @@
 @import '~assets/styles/_colors.scss';
 @import '~assets/styles/_typography.scss';
-@import '~assets/styles/_mediaQueries.scss';
 
-.table {
-  border-spacing: 0;
-  font-size: $bigFontSize;
+$divisionBorder: 1px solid rgba(224, 224, 224, 1);
+
+.tableContainer {
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
   font-size: $smallerFontSize;
+  table {
+    width: 100%;
+    th,
+    td {
+      padding: 16px;
+      text-align: right;
 
-  @include media-breakpoint-up(gg) {
-    border: solid thin $lightGray;
-    border-radius: 4px;
-    box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
-  }
-
-  thead {
-    tr {
-      th {
-        padding: 16px;
-        text-align: right;
-        &:first-child {
-          text-align: left;
-        }
-      }
-    }
-  }
-  tbody {
-    tr {
-      td {
-        border-bottom: solid thin $lightGray;
-        padding: 16px;
-        text-align: right;
-        &:first-child {
-          text-align: left;
-        }
-      }
-      &:first-child td {
-        border-top: solid thin $lightGray;
-      }
-      &:last-child td {
-        border-bottom: solid thin transparent;
+      &:first-child {
+        text-align: left;
       }
     }
   }
 
-  &.mobile {
-    border: solid thin red;
+  td {
+    border-top: $divisionBorder;
+
+    &.view {
+      i {
+        color: $blue;
+      }
+    }
+
+    &.edit {
+      i {
+        color: $gray;
+      }
+    }
+
+    &.delete {
+      i {
+        color: $red;
+      }
+    }
+
+    &.view,
+    &.edit,
+    &.delete {
+      width: 46px;
+      text-align: right;
+      i {
+        cursor: pointer;
+        &:hover {
+          color: $ronchi;
+        }
+      }
+    }
+  }
+
+  .pagination {
+    border-top: $divisionBorder;
+    padding: 16px;
+    text-align: right;
   }
 }
