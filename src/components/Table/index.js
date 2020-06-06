@@ -20,7 +20,9 @@ const Table = ({className, rows, columns, onViewClick, onEditClick, onDeleteClic
           <tr>
             {withCheckbox && <th></th>}
             {columns.map((column, index) => (
-              <th key={`column_${index}`}>{column.value}</th>
+              <th className={clsx(column.textAlign ? styles[column.textAlign] : '')} key={`column_${index}`}>
+                {column.value}
+              </th>
             ))}
             {onViewClick && <th>View</th>}
             {onEditClick && <th>Edit</th>}
@@ -37,7 +39,11 @@ const Table = ({className, rows, columns, onViewClick, onEditClick, onDeleteClic
                   </td>
                 )}
                 {columns.map((cell, cellIndex) => {
-                  return <td key={`cell_${rowIndex}_${cellIndex}`}>{row[cell.key]}</td>
+                  return (
+                    <td className={clsx(cell.textAlign ? styles[cell.textAlign] : '')} key={`cell_${rowIndex}_${cellIndex}`}>
+                      {row[cell.key]}
+                    </td>
+                  )
                 })}
                 {onViewClick && (
                   <td className={styles.view} onClick={() => onViewClick(row)}>

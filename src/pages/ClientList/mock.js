@@ -2,22 +2,27 @@ export const columns = [
   {
     key: 'dessert',
     value: 'Dessert (100g serving)',
+    textAlign: 'left',
   },
   {
     key: 'calories',
     value: 'Calories',
+    textAlign: 'right',
   },
   {
     key: 'fat',
     value: 'Fat (g)',
+    textAlign: 'right',
   },
   {
     key: 'carbs',
     value: 'Carbs (g)',
+    textAlign: 'right',
   },
   {
     key: 'protein',
     value: 'Protein (g)',
+    textAlign: 'right',
   },
 ]
 

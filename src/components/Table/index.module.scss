@@ -11,17 +11,24 @@ $divisionBorder: 1px solid rgba(224, 224, 224, 1);
     th,
     td {
       padding: 16px;
-      text-align: right;
+      text-align: left;
 
-      &:first-child {
+      &.left {
         text-align: left;
+      }
+
+      &.center {
+        text-align: center;
+      }
+
+      &.right {
+        text-align: right;
       }
     }
   }
 
   td {
     border-top: $divisionBorder;
-
     &.view {
       i {
         color: $blue;
