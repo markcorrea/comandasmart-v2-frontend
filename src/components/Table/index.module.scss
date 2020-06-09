@@ -8,6 +8,7 @@ $divisionBorder: 1px solid rgba(224, 224, 224, 1);
   font-size: $smallerFontSize;
   table {
     width: 100%;
+    border-collapse: collapse;
     th,
     td {
       padding: 16px;
@@ -34,8 +35,16 @@ $divisionBorder: 1px solid rgba(224, 224, 224, 1);
     }
   }
 
+  tr {
+    &.rowClickable:hover {
+      background-color: $eggSour;
+      cursor: pointer;
+    }
+  }
+
   td {
     border-top: $divisionBorder;
+
     &.view {
       i {
         color: $blue;

@@ -17,7 +17,16 @@ const buttonClasses = classes => ({
   },
 })
 
-const Table = ({className, rows: defaultRows, columns, onViewClick, onEditClick, onDeleteClick, hasCheckboxWithButtons}) => {
+const Table = ({
+  className,
+  rows: defaultRows,
+  columns,
+  onViewClick,
+  onEditClick,
+  onDeleteClick,
+  hasCheckboxWithButtons,
+  rowClickable,
+}) => {
   const [rows, setRows] = useState([])
 
   useEffect(() => {
@@ -76,7 +85,7 @@ const Table = ({className, rows: defaultRows, columns, onViewClick, onEditClick,
         <tbody>
           {rows.map((row, rowIndex) => {
             return (
-              <tr key={`table_row_${rowIndex}`}>
+              <tr key={`table_row_${rowIndex}`} className={rowClickable ? styles.rowClickable : ''}>
                 {hasCheckboxWithButtons && (
                   <td>
                     <input
@@ -89,7 +98,10 @@ const Table = ({className, rows: defaultRows, columns, onViewClick, onEditClick,
                 )}
                 {columns.map((cell, cellIndex) => {
                   return (
-                    <td className={clsx(cell.textAlign ? styles[cell.textAlign] : '')} key={`cell_${rowIndex}_${cellIndex}`}>
+                    <td
+                      className={clsx(cell.textAlign ? styles[cell.textAlign] : '')}
+                      key={`cell_${rowIndex}_${cellIndex}`}
+                      {...(rowClickable ? {onClick: () => rowClickable(row)} : {})}>
                       {row[cell.key]}
                     </td>
                   )
@@ -147,6 +159,7 @@ Table.propTypes = {
   onDeleteClick: PropTypes.func,
   withCheckbox: PropTypes.bool,
   hasCheckboxWithButtons: PropTypes.array,
+  rowClickable: PropTypes.func,
 }
 
 export default Table

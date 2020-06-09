@@ -50,6 +50,7 @@ const ClientList = () => {
           onEditClick={editItem => console.log('edit', editItem)}
           onDeleteClick={deleteItem => console.log('delete', deleteItem)}
           hasCheckboxWithButtons={tableButtons}
+          rowClickable={row => console.log('ROW CLICKABLE', row)}
         />
       </Paper>
     </>
