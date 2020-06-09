@@ -14,6 +14,28 @@ const ClientList = () => {
     store.showMenu()
   }, [store])
 
+  const tableButtons = [
+    {
+      label: 'Purchase',
+      onClick: selectedItems => console.log('PURCHASING', selectedItems),
+      classes: {
+        backgroundColor: 'blue',
+        color: 'white',
+      },
+    },
+    {
+      label: 'Delete',
+      onClick: selectedItems => console.log('DELETING', selectedItems),
+      classes: {
+        backgroundColor: 'red',
+      },
+    },
+    {
+      label: 'Other',
+      onClick: selectedItems => console.log('OTHER', selectedItems),
+    },
+  ]
+
   return (
     <>
       <header className={styles.header}>
@@ -27,7 +49,7 @@ const ClientList = () => {
           onViewClick={viewItem => console.log('view', viewItem)}
           onEditClick={editItem => console.log('edit', editItem)}
           onDeleteClick={deleteItem => console.log('delete', deleteItem)}
-          withCheckbox
+          hasCheckboxWithButtons={tableButtons}
         />
       </Paper>
     </>

@@ -25,6 +25,13 @@ $divisionBorder: 1px solid rgba(224, 224, 224, 1);
         text-align: right;
       }
     }
+
+    th {
+      cursor: pointer;
+      &:hover {
+        color: $ronchi;
+      }
+    }
   }
 
   td {
@@ -65,5 +72,13 @@ $divisionBorder: 1px solid rgba(224, 224, 224, 1);
     border-top: $divisionBorder;
     padding: 16px;
     text-align: right;
+  }
+
+  .buttons {
+    border-top: $divisionBorder;
+    padding: 16px;
+    .right {
+      float: right;
+    }
   }
 }
