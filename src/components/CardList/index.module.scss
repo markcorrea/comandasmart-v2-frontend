@@ -1,0 +1,61 @@
+@import '~assets/styles/_colors.scss';
+@import '~assets/styles/_typography.scss';
+
+.title {
+  font-size: $bigFontSize;
+  margin-bottom: 20px;
+}
+
+.checkbox {
+  float: right;
+  padding: 0 !important;
+}
+
+.row {
+  display: flex;
+  font-family: $defaultFontFamily;
+  letter-spacing: 0.01071em;
+  border-bottom: dotted thin $lightGray;
+  margin-bottom: 14px;
+  padding-bottom: 3px;
+  div {
+    flex-grow: 1;
+  }
+
+  .name {
+    font-size: $smallFontSize;
+  }
+  .value {
+    font-size: $smallFontSize;
+    text-align: right;
+    color: $gray;
+  }
+}
+
+.buttons {
+  justify-content: flex-end;
+  padding: 0 10px 15px 0 !important;
+  .button {
+    min-width: 40px;
+    i {
+      font-size: 20px;
+    }
+    &.view {
+      i {
+        color: $blue;
+      }
+    }
+
+    &.edit {
+      i {
+        color: $gray;
+      }
+    }
+
+    &.delete {
+      i {
+        color: $red;
+      }
+    }
+  }
+}

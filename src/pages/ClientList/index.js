@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react'
 
-import {Paper, Table} from 'components'
+import {CardList, Paper, Table} from 'components'
 
 import {useStore} from 'store'
 
@@ -36,13 +36,19 @@ const ClientList = () => {
     },
   ]
 
+  const items = [1, 2, 3]
+
   return (
     <>
       <header className={styles.header}>
         <h1>Clientes</h1>
       </header>
-      <Paper className={styles.paper}>
-        <Table
+      {/* <Paper className={styles.paper}> */}
+      {items.map((item, index) => (
+        <CardList key={index} />
+      ))}
+
+      {/* <Table
           className={styles.table}
           rows={rows.products}
           columns={columns}
@@ -51,8 +57,8 @@ const ClientList = () => {
           onDeleteClick={deleteItem => console.log('delete', deleteItem)}
           hasCheckboxWithButtons={tableButtons}
           rowClickable={row => console.log('ROW CLICKABLE', row)}
-        />
-      </Paper>
+        /> */}
+      {/* </Paper> */}
     </>
   )
 }
