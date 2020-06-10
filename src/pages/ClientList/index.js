@@ -43,12 +43,12 @@ const ClientList = () => {
       <header className={styles.header}>
         <h1>Clientes</h1>
       </header>
-      {/* <Paper className={styles.paper}> */}
-      {items.map((item, index) => (
-        <CardList key={index} />
-      ))}
+      <Paper className={styles.paper}>
+        {items.map((item, index) => (
+          <CardList key={index} />
+        ))}
 
-      {/* <Table
+        <Table
           className={styles.table}
           rows={rows.products}
           columns={columns}
@@ -57,8 +57,8 @@ const ClientList = () => {
           onDeleteClick={deleteItem => console.log('delete', deleteItem)}
           hasCheckboxWithButtons={tableButtons}
           rowClickable={row => console.log('ROW CLICKABLE', row)}
-        /> */}
-      {/* </Paper> */}
+        />
+      </Paper>
     </>
   )
 }
