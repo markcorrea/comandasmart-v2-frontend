@@ -17,7 +17,7 @@ const Button = ({className, children, classes: {root}, onClick, color: buttonCol
     return darkGray
   }, [buttonColor])
 
-  const useStyles = makeStyles(() => ({
+  const useStyles = makeStyles(({
     root: {
       backgroundColor: backgroundColor,
       border: `solid thin transparent`,

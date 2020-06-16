@@ -1,4 +1,5 @@
-import React from 'react'
+import React, {useState} from 'react'
+import PropTypes from 'prop-types'
 import clsx from 'clsx'
 
 import {makeStyles} from '@material-ui/core/styles'
@@ -10,11 +11,13 @@ import CardContent from '@material-ui/core/CardContent'
 import Button from '@material-ui/core/Button'
 import Checkbox from '@material-ui/core/Checkbox'
 
+import {SpeedDial} from 'components'
+
 import styles from './index.module.scss'
 
 const useStyles = makeStyles({
   root: {
-    maxWidth: 345,
+    width: '100%',
     boxShadow: '0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12)',
     marginBottom: '20px',
   },
@@ -24,53 +27,77 @@ const useStyles = makeStyles({
   },
 })
 
-const CardList = () => {
+const CardList = ({className, rows, columns, titleColumn, onViewClick, onEditClick, onDeleteClick, hasCheckboxWithButtons}) => {
   const classes = useStyles()
-  const [checked, setChecked] = React.useState(true)
+  const [checked, setChecked] = useState(true)
 
   return (
-    <Card className={classes.root}>
-      <CardActionArea>
-        <CardContent>
-          <Checkbox
-            className={styles.checkbox}
-            checked={checked}
-            color='primary'
-            onChange={event => setChecked(event.target.checked)}
-            inputProps={{'aria-label': 'primary checkbox'}}
-          />
-          <div className={styles.title}>Frozen Yoghurt</div>
-          <div className={styles.row}>
-            <div className={styles.name}>Calories</div>
-            <div className={styles.value}>159</div>
-          </div>
-          <div className={styles.row}>
-            <div className={styles.name}>Fat (g)</div>
-            <div className={styles.value}>5</div>
-          </div>
-          <div className={styles.row}>
-            <div className={styles.name}>Carbs (g)</div>
-            <div className={styles.value}>24</div>
-          </div>
-          <div className={styles.row}>
-            <div className={styles.name}>Protein</div>
-            <div className={styles.value}>4</div>
-          </div>
-        </CardContent>
-      </CardActionArea>
-      <CardActions className={styles.buttons}>
-        <Button className={clsx(styles.button, styles.view)} size='small' color='primary'>
-          <i className='far fa-eye' />
-        </Button>
-        <Button className={clsx(styles.button, styles.edit)} size='small' color='primary'>
-          <i className='far fa-edit' />
-        </Button>
-        <Button className={clsx(styles.button, styles.delete)} size='small' color='primary'>
-          <i className='fas fa-trash-alt' />
-        </Button>
-      </CardActions>
-    </Card>
+    <>
+      {rows.map((row, rowIndex) => (
+        <Card key={`card_item_${rowIndex}`} className={clsx(classes.root, className)}>
+          <CardActionArea>
+            <CardContent>
+              {hasCheckboxWithButtons && (
+                <Checkbox
+                  className={styles.checkbox}
+                  checked={checked}
+                  color='primary'
+                  onChange={event => setChecked(event.target.checked)}
+                  inputProps={{'aria-label': 'primary checkbox'}}
+                />
+              )}
+              {titleColumn ? <div className={styles.title}>{row[titleColumn]}</div> : <div className={styles.emptyRow} />}
+              {columns.map((column, columnIndex) => {
+                const {key, value} = column
+                if (key !== titleColumn) {
+                  return (
+                    <div key={`card_item_row_${rowIndex}_${columnIndex}`} className={styles.row}>
+                      <div className={styles.name}>{value}</div>
+                      <div className={styles.value}>{row[key]}</div>
+                    </div>
+                  )
+                }
+                return null
+              })}
+            </CardContent>
+          </CardActionArea>
+          <CardActions className={styles.buttons}>
+            {onViewClick && (
+              <Button className={clsx(styles.button, styles.view)} size='small' color='primary' onClick={() => onViewClick(row)}>
+                <i className='far fa-eye' />
+              </Button>
+            )}
+            {onEditClick && (
+              <Button className={clsx(styles.button, styles.edit)} size='small' color='primary' onClick={() => onEditClick(row)}>
+                <i className='far fa-edit' />
+              </Button>
+            )}
+            {onDeleteClick && (
+              <Button
+                className={clsx(styles.button, styles.delete)}
+                size='small'
+                color='primary'
+                onClick={() => onDeleteClick(row)}>
+                <i className='fas fa-trash-alt' />
+              </Button>
+            )}
+          </CardActions>
+        </Card>
+      ))}
+      <SpeedDial />
+    </>
   )
+}
+
+CardList.propTypes = {
+  className: PropTypes.string,
+  rows: PropTypes.array,
+  columns: PropTypes.array,
+  titleColumn: PropTypes.string,
+  onViewClick: PropTypes.func,
+  onEditClick: PropTypes.func,
+  onDeleteClick: PropTypes.func,
+  hasCheckboxWithButtons: PropTypes.array,
 }
 
 export default CardList
