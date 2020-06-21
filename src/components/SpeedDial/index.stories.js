@@ -6,10 +6,32 @@ export default {
   component: SpeedDial,
 }
 
+const tableButtons = [
+  {
+    label: 'Purchase',
+    onClick: selectedItems => console.log('PURCHASING', selectedItems),
+    classes: {
+      backgroundColor: 'blue',
+      color: 'white',
+    },
+  },
+  {
+    label: 'Delete',
+    onClick: selectedItems => console.log('DELETING', selectedItems),
+    classes: {
+      backgroundColor: 'red',
+    },
+  },
+  {
+    label: 'Other',
+    onClick: selectedItems => console.log('OTHER', selectedItems),
+  },
+]
+
 export const Basic = () => {
   return (
     <div style={{padding: '20px'}}>
-      <SpeedDial />
+      <SpeedDial buttons={tableButtons} />
     </div>
   )
 }

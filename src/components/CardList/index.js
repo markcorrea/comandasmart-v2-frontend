@@ -1,6 +1,8 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect, useCallback, useMemo, memo} from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
+
+import {SpeedDial} from 'components'
 
 import {makeStyles} from '@material-ui/core/styles'
 
@@ -10,8 +12,6 @@ import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
 import Button from '@material-ui/core/Button'
 import Checkbox from '@material-ui/core/Checkbox'
-
-import {SpeedDial} from 'components'
 
 import styles from './index.module.scss'
 
@@ -27,22 +27,69 @@ const useStyles = makeStyles({
   },
 })
 
-const CardList = ({className, rows, columns, titleColumn, onViewClick, onEditClick, onDeleteClick, hasCheckboxWithButtons}) => {
+const CardList = ({
+  className,
+  rows: defaultRows,
+  columns,
+  titleColumn,
+  onViewClick,
+  onEditClick,
+  onDeleteClick,
+  hasCheckbox,
+  hasButtons,
+}) => {
   const classes = useStyles()
-  const [checked, setChecked] = useState(true)
+  const [rows, setRows] = useState([])
+
+  useEffect(() => {
+    const result = hasCheckbox ? defaultRows.map(row => ({...row, checked: false})) : defaultRows
+    setRows(result)
+  }, [defaultRows, hasCheckbox, setRows])
+
+  const checkRow = useCallback(
+    (row, index) => {
+      const newRow = {...row, checked: !row.checked}
+      setRows(rows => {
+        rows.splice(index, 1, newRow)
+        return [...rows]
+      })
+    },
+    [setRows]
+  )
+
+  const toggleAll = useCallback(
+    () =>
+      setRows(rows => {
+        const hasUnchecked = rows.some(row => row.checked === false)
+        return rows.map(row => ({...row, checked: hasUnchecked}))
+      }),
+    [setRows]
+  )
+
+  const buttons = useMemo(() => {
+    return [
+      ...(hasCheckbox ? [{label: 'Select All', onClick: toggleAll}] : []),
+      ...(hasButtons
+        ? hasButtons.map(button => {
+            const returnRows = hasCheckbox ? rows.filter(row => row.checked) : rows
+            return {...button, onClick: () => button.onClick(returnRows)}
+          })
+        : []),
+    ]
+  }, [hasCheckbox, hasButtons, rows, toggleAll])
 
   return (
-    <>
+    <div className={styles.container}>
       {rows.map((row, rowIndex) => (
         <Card key={`card_item_${rowIndex}`} className={clsx(classes.root, className)}>
           <CardActionArea>
             <CardContent>
-              {hasCheckboxWithButtons && (
+              {hasCheckbox && (
                 <Checkbox
                   className={styles.checkbox}
-                  checked={checked}
                   color='primary'
-                  onChange={event => setChecked(event.target.checked)}
+                  checked={row.checked}
+                  onChange={() => checkRow(row, rowIndex)}
                   inputProps={{'aria-label': 'primary checkbox'}}
                 />
               )}
@@ -84,8 +131,8 @@ const CardList = ({className, rows, columns, titleColumn, onViewClick, onEditCli
           </CardActions>
         </Card>
       ))}
-      <SpeedDial />
-    </>
+      {(hasButtons || hasCheckbox) && <SpeedDial positionFixed buttons={buttons} />}
+    </div>
   )
 }
 
@@ -97,7 +144,12 @@ CardList.propTypes = {
   onViewClick: PropTypes.func,
   onEditClick: PropTypes.func,
   onDeleteClick: PropTypes.func,
-  hasCheckboxWithButtons: PropTypes.array,
+  hasCheckbox: PropTypes.bool,
+  hasButtons: PropTypes.array,
 }
 
-export default CardList
+CardList.defaultProps = {
+  hasCheckbox: false,
+}
+
+export default memo(CardList)

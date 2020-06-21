@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useCallback, useEffect} from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 
@@ -24,51 +24,78 @@ const Table = ({
   onViewClick,
   onEditClick,
   onDeleteClick,
-  hasCheckboxWithButtons,
+  hasCheckbox,
+  hasButtons,
   rowClickable,
 }) => {
   const [rows, setRows] = useState([])
+  const [sortingOrder, setSortingOrder] = useState('')
 
   useEffect(() => {
-    const result = hasCheckboxWithButtons ? defaultRows.map(row => ({...row, checked: false})) : defaultRows
-    setRows(result)
-  }, [defaultRows, hasCheckboxWithButtons, setRows])
+    setRows(() => (hasCheckbox ? defaultRows.map(row => ({...row, checked: false})) : defaultRows))
+  }, [defaultRows, hasCheckbox, setRows])
 
-  const checkRow = (row, index) => {
-    const newRow = {...row, checked: !row.checked}
-    setRows(rows => {
-      rows.splice(index, 1, newRow)
-      return [...rows]
-    })
-  }
+  const checkRow = useCallback(
+    (row, index) => {
+      const newRow = {...row, checked: !row.checked}
+      setRows(rows => {
+        rows.splice(index, 1, newRow)
+        return [...rows]
+      })
+    },
+    [setRows]
+  )
 
-  const sortColumn = key => {
-    const formatCell = cell => (typeof cell === 'string' ? cell.toLowerCase() : cell)
+  const sortColumn = useCallback(
+    key => {
+      const formatCell = cell => (typeof cell === 'string' ? cell.toLowerCase() : cell)
 
-    const sorted = rows.sort((a, b) => {
-      const rowA = formatCell(a[key])
-      const rowB = formatCell(b[key])
+      const sort = (rowA, rowB) => {
+        if (rowA > rowB) return 1
+        if (rowA < rowB) return -1
+        return 0
+      }
 
-      if (rowA > rowB) return 1
-      if (rowA < rowB) return -1
-      return 0
-    })
+      setRows(rows => {
+        const sorted = rows.sort((a, b) => {
+          const rowA = formatCell(a[key])
+          const rowB = formatCell(b[key])
 
-    setRows([...sorted])
-  }
+          return sortingOrder === 'asc' ? sort(rowA, rowB) : sort(rowB, rowA)
+        })
 
-  const toggleAll = () =>
-    setRows(rows => {
-      const hasUnchecked = rows.some(row => row.checked === false)
-      return rows.map(row => ({...row, checked: hasUnchecked}))
-    })
+        setSortingOrder(() => (sortingOrder === 'asc' ? 'desc' : 'asc'))
+
+        return [...sorted]
+      })
+    },
+    [setRows, sortingOrder, setSortingOrder]
+  )
+
+  const toggleAll = useCallback(
+    () =>
+      setRows(rows => {
+        const hasUnchecked = rows.some(row => row.checked === false)
+        return rows.map(row => ({...row, checked: hasUnchecked}))
+      }),
+    [setRows]
+  )
+
+  const clickableRowFunction = useCallback(
+    (row, rowIndex) => {
+      if (hasCheckbox) return {onClick: () => checkRow(row, rowIndex)}
+      if (rowClickable) return {onClick: () => rowClickable(row)}
+      return {}
+    },
+    [checkRow, hasCheckbox, rowClickable]
+  )
 
   return (
     <div className={clsx(styles.tableContainer, className)}>
       <table>
         <thead>
           <tr>
-            {hasCheckboxWithButtons && <th></th>}
+            {hasCheckbox && <th></th>}
             {columns.map((column, index) => (
               <th
                 onClick={() => sortColumn(column.key)}
@@ -86,8 +113,8 @@ const Table = ({
           {rows.map((row, rowIndex) => {
             return (
               <tr key={`table_row_${rowIndex}`} className={rowClickable ? styles.rowClickable : ''}>
-                {hasCheckboxWithButtons && (
-                  <td>
+                {hasCheckbox && (
+                  <td {...clickableRowFunction(row, rowIndex)}>
                     <input
                       type='checkbox'
                       name={`table_row_${rowIndex}`}
@@ -101,7 +128,7 @@ const Table = ({
                     <td
                       className={clsx(cell.textAlign ? styles[cell.textAlign] : '')}
                       key={`cell_${rowIndex}_${cellIndex}`}
-                      {...(rowClickable ? {onClick: () => rowClickable(row)} : {})}>
+                      {...clickableRowFunction(row, rowIndex)}>
                       {row[cell.key]}
                     </td>
                   )
@@ -129,21 +156,21 @@ const Table = ({
       <div className={styles.pagination}>
         <Pagination count={100} page={1} onChangePage={console.log} rowsPerPage={10} onChangeRowsPerPage={console.log} />
       </div>
-      {hasCheckboxWithButtons && (
+      {(hasButtons || hasCheckbox) && (
         <div className={styles.buttons}>
-          <Button onClick={toggleAll}>Select All</Button>
-          {hasCheckboxWithButtons.map((button, index) => {
-            const {label, onClick, classes} = button
+          {hasCheckbox && <Button onClick={toggleAll}>Select All</Button>}
+          {hasButtons &&
+            hasButtons.map((button, index) => {
+              const {label, onClick, classes} = button
+              const returnRows = hasCheckbox ? rows.filter(row => row.checked) : rows
 
-            return (
-              <Button
-                key={`button_${index}`}
-                classes={buttonClasses(classes)}
-                onClick={() => onClick(rows.filter(row => row.checked))}>
-                {label}
-              </Button>
-            )
-          })}
+              return (
+                <Button key={`button_${index}`} classes={buttonClasses(classes)} onClick={() => onClick(returnRows)}>
+                  {label}
+                </Button>
+              )
+            })}
+          <div style={{clear: 'both'}} />
         </div>
       )}
     </div>
@@ -158,8 +185,13 @@ Table.propTypes = {
   onEditClick: PropTypes.func,
   onDeleteClick: PropTypes.func,
   withCheckbox: PropTypes.bool,
-  hasCheckboxWithButtons: PropTypes.array,
+  hasCheckbox: PropTypes.bool,
+  hasButtons: PropTypes.array,
   rowClickable: PropTypes.func,
+}
+
+Table.defaultProps = {
+  hasCheckbox: false,
 }
 
 export default Table

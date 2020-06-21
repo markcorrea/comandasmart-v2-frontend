@@ -1,6 +1,12 @@
 @import '~assets/styles/_colors.scss';
 @import '~assets/styles/_typography.scss';
 
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+}
+
 .title {
   font-size: $bigFontSize;
   margin-bottom: 20px;
