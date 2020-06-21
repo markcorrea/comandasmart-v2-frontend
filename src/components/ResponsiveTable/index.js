@@ -37,7 +37,7 @@ const ResponsiveTable = ({buttons}) => {
             onEditClick={row => console.log('edit', row)}
             onDeleteClick={row => console.log('delete', row)}
             hasCheckbox
-            hasButtons={buttons}
+            // hasButtons={buttons}
           />
         </div>
       )}

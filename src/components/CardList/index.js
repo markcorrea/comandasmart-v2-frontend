@@ -67,15 +67,10 @@ const CardList = ({
   )
 
   const buttons = useMemo(() => {
-    return [
-      ...(hasCheckbox ? [{label: 'Select All', onClick: toggleAll}] : []),
-      ...(hasButtons
-        ? hasButtons.map(button => {
-            const returnRows = hasCheckbox ? rows.filter(row => row.checked) : rows
-            return {...button, onClick: () => button.onClick(returnRows)}
-          })
-        : []),
-    ]
+    const returnRows = hasCheckbox ? rows.filter(row => row.checked) : rows
+    const newButtons = hasButtons ? hasButtons.map(button => ({...button, onClick: () => button.onClick(returnRows)})) : []
+
+    return [...(hasCheckbox ? [{label: 'Select All', onClick: toggleAll}] : []), ...newButtons]
   }, [hasCheckbox, hasButtons, rows, toggleAll])
 
   return (

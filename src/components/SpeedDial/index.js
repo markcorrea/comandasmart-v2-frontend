@@ -72,6 +72,7 @@ const SpeedDial = ({buttons, positionFixed}) => {
 
 SpeedDial.propTypes = {
   buttons: PropTypes.array,
+  positionFixed: PropTypes.bool,
 }
 
 export default SpeedDial
