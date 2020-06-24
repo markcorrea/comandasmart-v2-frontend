@@ -120,7 +120,7 @@ const ClientForm = ({user}) => {
 }
 
 ClientForm.propTypes = {
-  defaultValues: PropTypes.object,
+  user: PropTypes.object,
 }
 
 export default ClientForm
