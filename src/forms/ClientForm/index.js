@@ -33,16 +33,17 @@ const defaultValues = {
 const validationResolver = useYupValidationResolver(validationRules)
 
 const ClientForm = ({user}) => {
-  const mediaQueryMedium = useMediaQuery('min', mediaQueryMD)
   const mediaQuerySmall = useMediaQuery('min', mediaQuerySM)
   const headerButtonClass = {
     root: {
       maxWidth: '200px',
-      ...(mediaQuerySmall ? {
-        margin: '0 0 10px 20px',
-      } : {
-        margin: '10px auto 10px',
-      })
+      ...(mediaQuerySmall
+        ? {
+            margin: '0 0 10px 20px',
+          }
+        : {
+            margin: '10px auto 10px',
+          }),
     },
   }
 
@@ -55,15 +56,11 @@ const ClientForm = ({user}) => {
     if (user) {
       reset(user)
     }
-  }, [user])
+  }, [reset, user])
 
   const formSubmit = data => {
     console.log('FORM DATA', data)
   }
-
-  useEffect(() => {
-    reset(defaultValues)
-  }, [defaultValues, reset])
 
   return (
     <form className={styles.form} onSubmit={handleSubmit(formSubmit)}>
