@@ -5,7 +5,6 @@ import * as yup from 'yup'
 
 import {Button, Input} from 'components'
 
-import {mediaQueryMD} from 'assets/styles/_mediaQueries.scss'
 import {mediaQuerySM} from 'assets/styles/_mediaQueries.scss'
 
 import useMediaQuery from 'utils/mediaQuery'
@@ -37,13 +36,7 @@ const ClientForm = ({user}) => {
   const headerButtonClass = {
     root: {
       maxWidth: '200px',
-      ...(mediaQuerySmall
-        ? {
-            margin: '0 0 10px 20px',
-          }
-        : {
-            margin: '10px auto 10px',
-          }),
+      margin: mediaQuerySmall ? '0 0 10px 20px' : '10px auto 10px',
     },
   }
 
