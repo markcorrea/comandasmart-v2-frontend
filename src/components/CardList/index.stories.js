@@ -1,15 +1,14 @@
 import React from 'react'
-import Table from 'components/Table'
+import CardList from 'components/CardList'
 
 import {rows, columns} from './mock'
-import styles from './index.module.scss'
 
 export default {
-  title: 'Components/Table',
-  component: Table,
+  title: 'Components/CardList',
+  component: CardList,
 }
 
-const tableButtons = [
+const buttons = [
   {
     label: 'Purchase',
     onClick: selectedItems => console.log('PURCHASING', selectedItems),
@@ -31,17 +30,21 @@ const tableButtons = [
   },
 ]
 
+const cardDisplayColumns = ['name', 'email']
+
 export const Basic = () => {
   return (
     <div style={{padding: '20px'}}>
-      <Table
-        className={styles.table}
+      <CardList
+        titleColumn='dessert'
+        hasCheckbox
+        hasButtons={buttons}
         rows={rows.products}
         columns={columns}
+        cardDisplayColumns={cardDisplayColumns}
         onViewClick={viewItem => console.log('view', viewItem)}
         onEditClick={editItem => console.log('edit', editItem)}
         onDeleteClick={deleteItem => console.log('delete', deleteItem)}
-        hasCheckboxWithButtons={tableButtons}
         rowClickable={row => console.log('ROW CLICKABLE', row)}
       />
     </div>

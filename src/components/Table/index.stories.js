@@ -9,6 +9,8 @@ export default {
   component: Table,
 }
 
+const tableDisplayColumns = ['name', 'cpf']
+
 const tableButtons = [
   {
     label: 'Purchase',
@@ -41,6 +43,7 @@ export const Basic = () => {
         onViewClick={viewItem => console.log('view', viewItem)}
         onEditClick={editItem => console.log('edit', editItem)}
         onDeleteClick={deleteItem => console.log('delete', deleteItem)}
+        tableDisplayColumns={tableDisplayColumns}
         hasCheckboxWithButtons={tableButtons}
         rowClickable={row => console.log('ROW CLICKABLE', row)}
       />

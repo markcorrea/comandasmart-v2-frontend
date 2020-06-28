@@ -1,4 +1,4 @@
-import React, {useState, useCallback, useEffect} from 'react'
+import React, {useState, useCallback, useEffect, useMemo, memo} from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 
@@ -27,6 +27,7 @@ const Table = ({
   hasCheckbox,
   hasButtons,
   rowClickable,
+  displayColumns,
 }) => {
   const [rows, setRows] = useState([])
   const [sortingOrder, setSortingOrder] = useState('')
@@ -81,6 +82,13 @@ const Table = ({
     [setRows]
   )
 
+  const columnsToDisplay = useMemo(() => {
+    if (displayColumns.length) {
+      return columns.filter(column => displayColumns.some(displayColumn => displayColumn === column.key))
+    }
+    return columns
+  }, [displayColumns, columns])
+
   const clickableRowFunction = useCallback(
     (row, rowIndex) => {
       if (hasCheckbox) return {onClick: () => checkRow(row, rowIndex)}
@@ -96,7 +104,7 @@ const Table = ({
         <thead>
           <tr>
             {hasCheckbox && <th></th>}
-            {columns.map((column, index) => (
+            {columnsToDisplay.map((column, index) => (
               <th
                 onClick={() => sortColumn(column.key)}
                 className={clsx(column.textAlign ? styles[column.textAlign] : '')}
@@ -104,9 +112,9 @@ const Table = ({
                 {column.value}
               </th>
             ))}
-            {onViewClick && <th>View</th>}
-            {onEditClick && <th>Edit</th>}
-            {onDeleteClick && <th>Delete</th>}
+            {onViewClick && <th>Visualizar</th>}
+            {onEditClick && <th>Editar</th>}
+            {onDeleteClick && <th>Excluir</th>}
           </tr>
         </thead>
         <tbody>
@@ -123,10 +131,10 @@ const Table = ({
                     />
                   </td>
                 )}
-                {columns.map((cell, cellIndex) => {
+                {columnsToDisplay.map((cell, cellIndex) => {
                   return (
                     <td
-                      className={clsx(cell.textAlign ? styles[cell.textAlign] : '')}
+                      className={clsx(cell.textAlign ? styles[cell.textAlign] : styles.right)}
                       key={`cell_${rowIndex}_${cellIndex}`}
                       {...clickableRowFunction(row, rowIndex)}>
                       {row[cell.key]}
@@ -188,10 +196,12 @@ Table.propTypes = {
   hasCheckbox: PropTypes.bool,
   hasButtons: PropTypes.array,
   rowClickable: PropTypes.func,
+  displayColumns: PropTypes.array,
 }
 
 Table.defaultProps = {
   hasCheckbox: false,
+  displayColumns: [],
 }
 
-export default Table
+export default memo(Table)

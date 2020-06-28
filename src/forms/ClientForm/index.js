@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {useForm, Controller} from 'react-hook-form'
 import * as yup from 'yup'
 
-import {Button, Datepicker, Input, MaskInput} from 'components'
+import {Button, Datepicker, Input, MaskInput, Select} from 'components'
 
 import {mediaQuerySM} from 'assets/styles/_mediaQueries.scss'
 
@@ -14,11 +14,6 @@ import styles from './index.module.scss'
 
 const validationRules = yup.object().shape({
   name: yup.string().required('Name is required'),
-  uniqueCode: yup.string().required('Unique Code is required'),
-  email: yup
-    .string()
-    .email('E-mail format: example@example.com')
-    .required('E-mail is required'),
 })
 
 const getErrorMessage = error => {
@@ -73,14 +68,7 @@ const ClientForm = ({user}) => {
           label={'Name'}
           error={Boolean(errors.name)}
           helperText={getErrorMessage(errors.name)}
-        />
-        <Controller
-          as={Input}
-          name='uniqueCode'
-          control={control}
-          label={'Unique Code'}
-          error={Boolean(errors.uniqueCode)}
-          helperText={getErrorMessage(errors.uniqueCode)}
+          required
         />
         <Controller
           as={Input}
@@ -91,13 +79,12 @@ const ClientForm = ({user}) => {
           helperText={getErrorMessage(errors.email)}
         />
         <Controller
-          as={MaskInput}
-          name='phone'
+          as={Input}
+          name='cpf'
           control={control}
-          label={'Phone'}
-          error={Boolean(errors.phone)}
-          helperText={getErrorMessage(errors.phone)}
-          mask={['(', /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+          label={'CPF'}
+          error={Boolean(errors.cpf)}
+          helperText={getErrorMessage(errors.cpf)}
         />
         <Controller
           as={Datepicker}
@@ -106,6 +93,39 @@ const ClientForm = ({user}) => {
           label={'Date of Birth'}
           error={Boolean(errors.birthDate)}
           helperText={getErrorMessage(errors.birthDate)}
+        />
+        <Controller
+          as={MaskInput}
+          name='phone'
+          control={control}
+          label={'Phone (only numbers)'}
+          error={Boolean(errors.phone)}
+          helperText={getErrorMessage(errors.phone)}
+          mask={['(', /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+        />
+        <Controller
+          as={Input}
+          name='address'
+          control={control}
+          label={'Address'}
+          error={Boolean(errors.address)}
+          helperText={getErrorMessage(errors.address)}
+        />
+        <Controller
+          as={Input}
+          name='city'
+          control={control}
+          label={'City'}
+          error={Boolean(errors.city)}
+          helperText={getErrorMessage(errors.city)}
+        />
+        <Controller
+          as={Input}
+          name='state'
+          control={control}
+          label={'State'}
+          error={Boolean(errors.state)}
+          helperText={getErrorMessage(errors.state)}
         />
       </div>
       <div className={styles.buttons}>

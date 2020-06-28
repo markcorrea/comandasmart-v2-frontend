@@ -37,6 +37,7 @@ const CardList = ({
   onDeleteClick,
   hasCheckbox,
   hasButtons,
+  displayColumns,
 }) => {
   const classes = useStyles()
   const [rows, setRows] = useState([])
@@ -66,6 +67,13 @@ const CardList = ({
     [setRows]
   )
 
+  const columnsToDisplay = useMemo(() => {
+    if (displayColumns.length) {
+      return columns.filter(column => displayColumns.some(displayColumn => displayColumn === column.key))
+    }
+    return columns
+  }, [displayColumns, columns])
+
   const buttons = useMemo(() => {
     const returnRows = hasCheckbox ? rows.filter(row => row.checked) : rows
     const newButtons = hasButtons ? hasButtons.map(button => ({...button, onClick: () => button.onClick(returnRows)})) : []
@@ -89,7 +97,7 @@ const CardList = ({
                 />
               )}
               {titleColumn ? <div className={styles.title}>{row[titleColumn]}</div> : <div className={styles.emptyRow} />}
-              {columns.map((column, columnIndex) => {
+              {columnsToDisplay.map((column, columnIndex) => {
                 const {key, value} = column
                 if (key !== titleColumn) {
                   return (
@@ -141,10 +149,12 @@ CardList.propTypes = {
   onDeleteClick: PropTypes.func,
   hasCheckbox: PropTypes.bool,
   hasButtons: PropTypes.array,
+  displayColumns: PropTypes.array,
 }
 
 CardList.defaultProps = {
   hasCheckbox: false,
+  displayColumns: [],
 }
 
 export default memo(CardList)
