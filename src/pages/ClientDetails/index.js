@@ -4,7 +4,7 @@ import {Paper} from 'components'
 
 import {useStore} from 'store'
 
-import ClientForm from './form'
+import ClientForm from 'forms/ClientForm'
 
 import styles from './index.module.scss'
 

@@ -7,7 +7,7 @@ import UIInputAdornment from '@material-ui/core/InputAdornment'
 
 import {gray} from 'assets/styles/main.module.scss'
 
-const Input = ({label, startIcon, endIcon, classes: {input}, ...rest}) => {
+const Input = ({label, startIcon, endIcon, classes: {input}, InputProps, ...rest}) => {
   const useStyles = makeStyles(() => ({
     root: {
       width: '100%',
@@ -47,7 +47,7 @@ const Input = ({label, startIcon, endIcon, classes: {input}, ...rest}) => {
       color: 'rgba(0, 0, 0, 0.54)',
     },
     formHelperTextRoot: {
-      margin: '4px 15px 4px'
+      margin: '4px 15px 4px',
     },
   }))
 
@@ -67,6 +67,7 @@ const Input = ({label, startIcon, endIcon, classes: {input}, ...rest}) => {
         label={label}
         classes={{root: classes.root}}
         InputProps={{
+          ...InputProps,
           classes: {root: classes.inputRoot, input: classes.input, underline: classes.inputUnderline},
           startAdornment: startIcon ? setAdornment(startIcon, 'start') : null,
           endAdornment: endIcon ? setAdornment(endIcon, 'end') : null,
@@ -94,6 +95,7 @@ Input.propTypes = {
   startIcon: iconProps,
   endIcon: iconProps,
   classes: PropTypes.object,
+  InputProps: PropTypes.object,
 }
 
 Input.defaultProps = {

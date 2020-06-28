@@ -43,29 +43,31 @@ const Datepicker = ({label, value, onChange, ...props}) => {
   const classes = useStyles()
 
   return (
-    <KeyboardDatePicker
-      disableToolbar
-      format='dd/MM/yyyy'
-      label={label}
-      value={value}
-      onChange={onChange}
-      KeyboardButtonProps={{
-        'aria-label': 'change date',
-      }}
-      classes={{root: classes.root}}
-      InputProps={{
-        classes: {
-          root: classes.inputRoot,
-          underline: classes.inputUnderline,
-        },
-      }}
-      InputLabelProps={{
-        classes: {
-          root: classes.labelRoot,
-        },
-      }}
-      {...props}
-    />
+    <div>
+      <KeyboardDatePicker
+        disableToolbar
+        format='dd/MM/yyyy'
+        label={label}
+        value={value}
+        onChange={onChange}
+        KeyboardButtonProps={{
+          'aria-label': 'change date',
+        }}
+        classes={{root: classes.root}}
+        InputProps={{
+          classes: {
+            root: classes.inputRoot,
+            underline: classes.inputUnderline,
+          },
+        }}
+        InputLabelProps={{
+          classes: {
+            root: classes.labelRoot,
+          },
+        }}
+        {...props}
+      />
+    </div>
   )
 }
 

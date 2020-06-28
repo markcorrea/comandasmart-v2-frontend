@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {useForm, Controller} from 'react-hook-form'
 import * as yup from 'yup'
 
-import {Button, Input} from 'components'
+import {Button, Datepicker, Input, MaskInput} from 'components'
 
 import {mediaQuerySM} from 'assets/styles/_mediaQueries.scss'
 
@@ -14,7 +14,11 @@ import styles from './index.module.scss'
 
 const validationRules = yup.object().shape({
   name: yup.string().required('Name is required'),
-  surname: yup.string().required('Surname is required'),
+  uniqueCode: yup.string().required('Unique Code is required'),
+  email: yup
+    .string()
+    .email('E-mail format: example@example.com')
+    .required('E-mail is required'),
 })
 
 const getErrorMessage = error => {
@@ -24,9 +28,9 @@ const getErrorMessage = error => {
 const defaultValues = {
   name: '',
   uniqueCode: '',
-  phone: '',
-  birthDate: '',
   email: '',
+  phone: '',
+  birthDate: new Date(),
 }
 
 const validationResolver = useYupValidationResolver(validationRules)
@@ -54,6 +58,10 @@ const ClientForm = ({user}) => {
   const formSubmit = data => {
     console.log('FORM DATA', data)
   }
+
+  useEffect(() => {
+    console.log('ERRORS', errors)
+  }, [errors])
 
   return (
     <form className={styles.form} onSubmit={handleSubmit(formSubmit)}>
@@ -83,15 +91,16 @@ const ClientForm = ({user}) => {
           helperText={getErrorMessage(errors.email)}
         />
         <Controller
-          as={Input}
+          as={MaskInput}
           name='phone'
           control={control}
           label={'Phone'}
           error={Boolean(errors.phone)}
           helperText={getErrorMessage(errors.phone)}
+          mask={['(', /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
         />
         <Controller
-          as={Input}
+          as={Datepicker}
           name='birthDate'
           control={control}
           label={'Date of Birth'}
