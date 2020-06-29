@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {useForm, Controller} from 'react-hook-form'
 import * as yup from 'yup'
 
-import {Button, Datepicker, Input, MaskInput, Select} from 'components'
+import {Button, Datepicker, Input, MaskInput} from 'components'
 
 import {mediaQuerySM} from 'assets/styles/_mediaQueries.scss'
 

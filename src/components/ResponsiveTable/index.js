@@ -25,8 +25,8 @@ const ResponsiveTable = ({cardDisplayColumns, tableDisplayColumns, ...props}) =>
 }
 
 ResponsiveTable.propTypes = {
-  cardDisplaycolumns: PropTypes.array,
-  tableDisplaycolumns: PropTypes.array,
+  cardDisplayColumns: PropTypes.array,
+  tableDisplayColumns: PropTypes.array,
 }
 
 export default ResponsiveTable
