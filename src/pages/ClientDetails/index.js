@@ -8,7 +8,6 @@ import ClientForm from 'forms/ClientForm'
 import clientResponse from 'mocks/client'
 
 import styles from './index.module.scss'
-import {subMinutes} from 'date-fns'
 
 const ClientDetails = () => {
   const store = useStore()
