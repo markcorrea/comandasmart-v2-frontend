@@ -22,8 +22,9 @@ const AppRouter = () => {
 
         <LoadableRoute path='/login' component={Login} layout={Layout} />
         <LoadableRoute path='/tickets' component={Tickets} layout={Layout} />
-        <LoadableRoute path='/client/list' component={ClientList} layout={Layout} />
-        <LoadableRoute path='/client/details' component={ClientDetails} layout={Layout} />
+        <LoadableRoute path='/clients' component={ClientList} layout={Layout} />
+        <LoadableRoute exact path='/client/details' component={ClientDetails} layout={Layout} />
+        <LoadableRoute exact path='/client/details/:clientId' component={ClientDetails} layout={Layout} />
         <LoadableRoute path='/product/details' component={ProductDetails} layout={Layout} />
         <LoadableRoute path='/company/details' component={CompanyDetails} layout={Layout} />
         <LoadableRoute path='/user/details' component={UserDetails} layout={Layout} />

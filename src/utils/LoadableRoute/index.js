@@ -22,12 +22,12 @@ EmptyLayout.propTypes = {
  * @param {object} props
  * @return {object} React component
  */
-const LoadableRoute = ({component: Component, routeComponent: RouteComponent, layout: Layout}) => {
+const LoadableRoute = ({component: Component, routeComponent: RouteComponent, layout: Layout, ...options}) => {
   const PageComponent = () => (
     <MessageProvider>
       <Store>
         <ErrorBoundary>
-          <Layout>
+          <Layout {...options}>
             <ErrorBoundary>
               <Suspense fallback={<DelayedFallback />}>
                 <Component />
@@ -39,7 +39,7 @@ const LoadableRoute = ({component: Component, routeComponent: RouteComponent, la
     </MessageProvider>
   )
 
-  return <RouteComponent component={PageComponent} />
+  return <RouteComponent {...options} component={PageComponent} />
 }
 
 LoadableRoute.propTypes = {

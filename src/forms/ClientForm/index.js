@@ -22,15 +22,18 @@ const getErrorMessage = error => {
 
 const defaultValues = {
   name: '',
-  uniqueCode: '',
   email: '',
-  phone: '',
+  cpf: '',
   birthDate: new Date(),
+  phone: '',
+  address: '',
+  city: '',
+  state: '',
 }
 
 const validationResolver = useYupValidationResolver(validationRules)
 
-const ClientForm = ({user}) => {
+const ClientForm = ({client, onSubmit}) => {
   const mediaQuerySmall = useMediaQuery('min', mediaQuerySM)
   const headerButtonClass = {
     root: {
@@ -45,21 +48,13 @@ const ClientForm = ({user}) => {
   })
 
   useEffect(() => {
-    if (user) {
-      reset(user)
+    if (client) {
+      reset(client)
     }
-  }, [reset, user])
-
-  const formSubmit = data => {
-    console.log('FORM DATA', data)
-  }
-
-  useEffect(() => {
-    console.log('ERRORS', errors)
-  }, [errors])
+  }, [reset, client])
 
   return (
-    <form className={styles.form} onSubmit={handleSubmit(formSubmit)}>
+    <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
       <div className={styles.fields}>
         <Controller
           as={Input}
@@ -139,7 +134,8 @@ const ClientForm = ({user}) => {
 }
 
 ClientForm.propTypes = {
-  user: PropTypes.object,
+  client: PropTypes.object,
+  onSubmit: PropTypes.func,
 }
 
 export default ClientForm

@@ -1,4 +1,5 @@
 import React, {useEffect} from 'react'
+import {useHistory} from 'react-router-dom'
 
 import {Paper, ResponsiveTable} from 'components'
 
@@ -28,6 +29,8 @@ export const columns = [
 
 const ClientList = () => {
   const store = useStore()
+  const history = useHistory()
+
   useEffect(() => {
     store.showMenu()
   }, [store])
@@ -40,9 +43,9 @@ const ClientList = () => {
       <Paper className={styles.paper}>
         <ResponsiveTable
           columns={columns}
-          rows={clients.products}
+          rows={clients.data}
           titleColumn='name'
-          onEditClick={row => console.log('edit', row)}
+          onEditClick={row => history.push(`/client/details/${row.id}`)}
           onDeleteClick={row => console.log('delete', row)}
           rowClickable={row => console.log('clickable row', row)}
         />

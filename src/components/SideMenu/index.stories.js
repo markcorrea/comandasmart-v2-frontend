@@ -39,6 +39,11 @@ const items = [
     onClick: () => console.log('Usuários'),
   },
   {
+    label: 'Clientes',
+    icon: 'fa fa-smile',
+    onClick: () => console.log('Clientes'),
+  },
+  {
     label: 'Ajuda',
     icon: 'fa fa-question-circle',
     onClick: () => console.log('Ajuda'),

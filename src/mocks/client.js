@@ -3,8 +3,9 @@ import {cpfMask} from 'utils/stringmasks'
 export default {
   total: 1,
   totalPages: 1,
-  products: [
+  data: [
     {
+      id: '08989565600',
       name: 'Marcus',
       email: 'mrc.correa@gmail.com',
       cpf: cpfMask('08989565600'),
@@ -15,6 +16,7 @@ export default {
       state: 'Santa Catarina',
     },
     {
+      id: '08528752666',
       name: 'Salun',
       email: 'salunmarvin@gmail.com',
       cpf: cpfMask('08528752666'),
@@ -25,6 +27,7 @@ export default {
       state: 'Santa Catarina',
     },
     {
+      id: '12345678912',
       name: 'Savio',
       email: 'savio@kanova.com',
       cpf: cpfMask('12345678912'),
