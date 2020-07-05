@@ -42,7 +42,7 @@ const Layout = ({children}) => {
     {
       label: 'Produtos',
       icon: 'fa fa-tag',
-      onClick: () => console.log('Produtos'),
+      onClick: () => history.push('/products'),
     },
     {
       label: 'Clientes',

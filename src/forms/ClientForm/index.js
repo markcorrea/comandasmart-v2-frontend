@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react'
 import PropTypes from 'prop-types'
 import {useForm, Controller} from 'react-hook-form'
+import {yupResolver} from '@hookform/resolvers'
 import * as yup from 'yup'
 
 import {Button, Datepicker, Input, MaskInput} from 'components'
@@ -8,7 +9,6 @@ import {Button, Datepicker, Input, MaskInput} from 'components'
 import {mediaQuerySM} from 'assets/styles/_mediaQueries.scss'
 
 import useMediaQuery from 'utils/mediaQuery'
-import useYupValidationResolver from 'utils/useYupValidationResolver'
 
 import styles from './index.module.scss'
 
@@ -20,20 +20,7 @@ const getErrorMessage = error => {
   return (error && error.message) || ''
 }
 
-const defaultValues = {
-  name: '',
-  email: '',
-  cpf: '',
-  birthDate: new Date(),
-  phone: '',
-  address: '',
-  city: '',
-  state: '',
-}
-
-const validationResolver = useYupValidationResolver(validationRules)
-
-const ClientForm = ({client, onSubmit}) => {
+const ClientForm = ({client: defaultValues, onSubmit}) => {
   const mediaQuerySmall = useMediaQuery('min', mediaQuerySM)
   const headerButtonClass = {
     root: {
@@ -44,14 +31,14 @@ const ClientForm = ({client, onSubmit}) => {
 
   const {handleSubmit, control, errors, reset} = useForm({
     defaultValues,
-    validationResolver,
+    resolver: yupResolver(validationRules),
   })
 
   useEffect(() => {
-    if (client) {
-      reset(client)
+    if (defaultValues) {
+      reset(defaultValues)
     }
-  }, [reset, client])
+  }, [reset, defaultValues])
 
   return (
     <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
@@ -63,7 +50,6 @@ const ClientForm = ({client, onSubmit}) => {
           label={'Name'}
           error={Boolean(errors.name)}
           helperText={getErrorMessage(errors.name)}
-          required
         />
         <Controller
           as={Input}
@@ -133,9 +119,24 @@ const ClientForm = ({client, onSubmit}) => {
   )
 }
 
+const defaultValues = {
+  name: '',
+  email: '',
+  cpf: '',
+  birthDate: new Date(),
+  phone: '',
+  address: '',
+  city: '',
+  state: '',
+}
+
 ClientForm.propTypes = {
   client: PropTypes.object,
   onSubmit: PropTypes.func,
+}
+
+ClientForm.defaultProps = {
+  client: defaultValues,
 }
 
 export default ClientForm

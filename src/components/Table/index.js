@@ -107,7 +107,7 @@ const Table = ({
             {columnsToDisplay.map((column, index) => (
               <th
                 onClick={() => sortColumn(column.key)}
-                className={clsx(column.textAlign ? styles[column.textAlign] : '')}
+                className={clsx(column.textAlign ? styles[column.textAlign] : styles.right)}
                 key={`column_${index}`}>
                 {column.value}
               </th>

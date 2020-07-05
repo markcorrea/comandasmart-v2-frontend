@@ -6,14 +6,20 @@ import TextField from '@material-ui/core/TextField'
 import MenuItem from '@material-ui/core/MenuItem'
 import UIInputAdornment from '@material-ui/core/InputAdornment'
 
-import {lightGray} from 'assets/styles/main.module.scss'
+import {gray} from 'assets/styles/main.module.scss'
 
 const useStyles = makeStyles(() => ({
+  root: {
+    width: '100%',
+  },
   selectRoot: {
     height: '50px',
     padding: '17px 10px',
     borderRadius: '8px',
-    border: `solid thin ${lightGray}`,
+    border: `solid thin ${gray}`,
+    '&&.Mui-error': {
+      border: `solid thin red`,
+    },
   },
   selectUnderline: {
     '&&&:before': {
@@ -27,7 +33,7 @@ const useStyles = makeStyles(() => ({
     marginLeft: '15px',
     textTransform: 'uppercase',
     '&&+.MuiInput-formControl': {
-      marginTop: '25px',
+      marginTop: '20px',
     },
   },
   adornmentRoot: {
@@ -35,7 +41,7 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-const Select = ({label, startIcon, endIcon, items, ...rest}) => {
+const Select = ({label, startIcon, endIcon, items, showEmptyOption, ...rest}) => {
   const classes = useStyles()
 
   const setAdornment = (icon, position) => {
@@ -47,29 +53,31 @@ const Select = ({label, startIcon, endIcon, items, ...rest}) => {
   }
 
   return (
-    <TextField
-      select
-      value={''}
-      label={label}
-      InputProps={{
-        classes: {root: classes.selectRoot, underline: classes.selectUnderline},
-        startAdornment: startIcon ? setAdornment(startIcon, 'start') : null,
-        endAdornment: endIcon ? setAdornment(endIcon, 'end') : null,
-      }}
-      InputLabelProps={{
-        classes: {
-          root: classes.labelRoot,
-        },
-        shrink: true,
-      }}
-      {...rest}>
-      <MenuItem value=''>--</MenuItem>
-      {items.map((item, index) => (
-        <MenuItem key={`item_${index}`} value={item.value}>
-          {item.name}
-        </MenuItem>
-      ))}
-    </TextField>
+    <div>
+      <TextField
+        select
+        classes={{root: classes.root}}
+        label={label}
+        InputProps={{
+          classes: {root: classes.selectRoot, underline: classes.selectUnderline},
+          startAdornment: startIcon ? setAdornment(startIcon, 'start') : null,
+          endAdornment: endIcon ? setAdornment(endIcon, 'end') : null,
+        }}
+        InputLabelProps={{
+          classes: {
+            root: classes.labelRoot,
+          },
+          shrink: true,
+        }}
+        {...rest}>
+        {showEmptyOption && <MenuItem value=''>--</MenuItem>}
+        {items.map((item, index) => (
+          <MenuItem key={`item_${index}`} value={item.value}>
+            {item.name}
+          </MenuItem>
+        ))}
+      </TextField>
+    </div>
   )
 }
 
@@ -80,6 +88,7 @@ Select.propTypes = {
   startIcon: iconProps,
   endIcon: iconProps,
   items: PropTypes.array,
+  showEmptyOption: PropTypes.bool,
 }
 
 Select.defaultProps = {

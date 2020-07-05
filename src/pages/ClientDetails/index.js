@@ -34,7 +34,7 @@ const ClientDetails = () => {
   return (
     <>
       <header className={styles.header}>
-        <h1>Editar Cliente</h1>
+        <h1>{clientId ? 'Editar' : 'Criar'} Cliente</h1>
       </header>
       <Paper className={styles.paper}>
         <ClientForm client={client} onSubmit={data => console.log('SUBMIT', data)} />
