@@ -17,16 +17,16 @@ export const columns = [
   },
   {
     key: 'brand',
-    value: 'Brand',
+    value: 'Marca',
     textAlign: 'left',
   },
   {
     key: 'stock',
-    value: 'Stock',
+    value: 'Estoque',
   },
   {
     key: 'price',
-    value: 'Price',
+    value: 'Preço',
   },
 ]
 

@@ -34,7 +34,7 @@ const defaultValues = {
   terminal: '',
 }
 
-const ProductForm = ({product, terminals, onSubmit}) => {
+const ProductForm = ({product, terminals, unitTypes, onSubmit, onCancel}) => {
   const mediaQuerySmall = useMediaQuery('min', mediaQuerySM)
   const headerButtonClass = {
     root: {
@@ -82,7 +82,7 @@ const ProductForm = ({product, terminals, onSubmit}) => {
           error={Boolean(errors.barCode)}
           helperText={getErrorMessage(errors.barCode)}
         />
-        <Controller as={Input} name='unitType' control={control} label={'Unidade de Medida'} />
+        <Controller as={Select} name='unitType' items={unitTypes} control={control} label='Unidades de Medida' showEmptyOption />
         <Controller
           as={NumberInput}
           name='volumePerUnit'
@@ -106,10 +106,11 @@ const ProductForm = ({product, terminals, onSubmit}) => {
           name='price'
           control={control}
           label='Preço'
-          decimalScale={2}
-          thousandSeparator
           error={Boolean(errors.price)}
           helperText={getErrorMessage(errors.price)}
+          thousandSeparator
+          decimalScale={2}
+          prefix='$ '
         />
         <Controller
           as={NumberInput}
@@ -129,10 +130,11 @@ const ProductForm = ({product, terminals, onSubmit}) => {
           label='Terminal'
           error={Boolean(errors.terminal)}
           helperText={getErrorMessage(errors.terminal)}
+          showEmptyOption
         />
       </div>
       <div className={styles.buttons}>
-        <Button type='button' color='cancel' classes={headerButtonClass}>
+        <Button onClick={() => onCancel()} type='button' color='cancel' classes={headerButtonClass}>
           Cancelar
         </Button>
         <Button classes={headerButtonClass}>Salvar</Button>
@@ -144,11 +146,14 @@ const ProductForm = ({product, terminals, onSubmit}) => {
 ProductForm.propTypes = {
   product: PropTypes.object,
   onSubmit: PropTypes.func,
+  onCancel: PropTypes.func,
   terminals: PropTypes.array,
+  unitTypes: PropTypes.array,
 }
 
 ProductForm.defaultProps = {
   terminals: [],
+  unitTypes: [],
 }
 
 export default ProductForm

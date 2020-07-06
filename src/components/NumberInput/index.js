@@ -5,9 +5,7 @@ import {Input} from 'components'
 
 import NumberFormat from 'react-number-format'
 
-const NumberFormatCustom = props => {
-  const {inputRef, onChange, prefix, ...other} = props
-
+const NumberFormatCustom = ({inputRef, onChange, prefix, ...other}) => {
   return (
     <NumberFormat
       {...other}
@@ -16,7 +14,7 @@ const NumberFormatCustom = props => {
         onChange(values.value)
       }}
       isNumericString
-      prefix={`${prefix} `}
+      prefix={prefix}
     />
   )
 }
@@ -44,7 +42,7 @@ const NumberInput = ({value, onChange, prefix, thousandSeparator, decimalScale, 
 }
 
 NumberInput.propTypes = {
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onChange: PropTypes.func,
   prefix: PropTypes.string,
   thousandSeparator: PropTypes.bool,

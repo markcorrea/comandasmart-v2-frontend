@@ -30,10 +30,14 @@ const useStyles = makeStyles(() => ({
     },
   },
   labelRoot: {
+    color: '#979797',
     marginLeft: '15px',
     textTransform: 'uppercase',
     '&&+.MuiInput-formControl': {
       marginTop: '20px',
+    },
+    '&&.Mui-focused': {
+      color: '#979797',
     },
   },
   adornmentRoot: {
