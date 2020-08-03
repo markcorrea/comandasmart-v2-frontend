@@ -1,4 +1,5 @@
 import React, {useState} from 'react'
+import {useHistory} from 'react-router-dom'
 
 import {Button, Drawer, Input, LoginMenu, Paper, PasswordInput} from 'components'
 
@@ -30,6 +31,7 @@ const PasswordForgot = () => (
 )
 
 const Login = () => {
+  const history = useHistory()
   const mediaSM = useMediaQuery('min', mediaQuerySM)
   const [open, setOpen] = useState(false)
 
@@ -45,7 +47,7 @@ const Login = () => {
         <PasswordInput className={styles.passwordInput} />
         {!mediaSM && <PasswordForgot />}
       </div>
-      <Button type='submit' classes={{root: classes.buttonRoot}} onClick={() => console.log('clicked button')}>
+      <Button type='submit' classes={{root: classes.buttonRoot}} onClick={() => history.push('/tickets')}>
         Entrar
       </Button>
     </>

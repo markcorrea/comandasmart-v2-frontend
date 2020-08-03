@@ -1,5 +1,7 @@
 # Comanda Smart 2.0
 
+This project is available accessing the Netlify link:
+- https://comandasmart.netlify.app
 
 ## Running locally
 Clone
