@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, memo} from 'react'
-import {useHistory} from 'react-router-dom'
+// import {useHistory} from 'react-router-dom'
 
 import {Paper, ResponsiveTable} from 'components'
 
@@ -19,9 +19,9 @@ export const columns = [
 
 const TerminalList = () => {
   const store = useStore()
-  const history = useHistory()
+  // const history = useHistory()
 
-  const terminals = useMemo(() => terminalsResponse.map(terminal => ({...terminal, value: terminal.id})), [terminalsResponse])
+  const terminals = useMemo(() => terminalsResponse.map(terminal => ({...terminal, value: terminal.id})), [])
 
   useEffect(() => {
     store.showMenu()
