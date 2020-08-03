@@ -15,6 +15,7 @@ const CompanyDetails = lazy(() => import(/* webpackChunkName: "CompanyDetails" *
 const UserDetails = lazy(() => import(/* webpackChunkName: "UserDetails" */ '../pages/UserDetails'))
 const TerminalList = lazy(() => import(/* webpackChunkName: "TerminalList" */ '../pages/TerminalList'))
 // const TerminalDetails = lazy(() => import(/* webpackChunkName: "TerminalDetails" */ '../pages/TerminalDetails'))
+const NotFound = lazy(() => import(/* webpackChunkName: "NotFound" */ './NotFound'))
 
 const AppRouter = () => {
   return (
@@ -35,6 +36,7 @@ const AppRouter = () => {
         <LoadableRoute path='/terminals' component={TerminalList} layout={Layout} />
         {/* <LoadableRoute exact path='/terminal/details' component={TerminalDetails} layout={Layout} />
         <LoadableRoute exact path='/terminal/details/:terminalId' component={TerminalDetails} layout={Layout} /> */}
+        <LoadableRoute component={NotFound} layout={Layout} />
       </Switch>
     </Router>
   )
