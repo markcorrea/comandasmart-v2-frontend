@@ -14,7 +14,7 @@ const ProductDetails = lazy(() => import(/* webpackChunkName: "ProductDetails" *
 const CompanyDetails = lazy(() => import(/* webpackChunkName: "CompanyDetails" */ '../pages/CompanyDetails'))
 const UserDetails = lazy(() => import(/* webpackChunkName: "UserDetails" */ '../pages/UserDetails'))
 const TerminalList = lazy(() => import(/* webpackChunkName: "TerminalList" */ '../pages/TerminalList'))
-const TerminalDetails = lazy(() => import(/* webpackChunkName: "TerminalDetails" */ '../pages/TerminalDetails'))
+// const TerminalDetails = lazy(() => import(/* webpackChunkName: "TerminalDetails" */ '../pages/TerminalDetails'))
 
 const AppRouter = () => {
   return (
@@ -30,12 +30,11 @@ const AppRouter = () => {
         <LoadableRoute path='/products' component={ProductList} layout={Layout} />
         <LoadableRoute exact path='/product/details' component={ProductDetails} layout={Layout} />
         <LoadableRoute exact path='/product/details/:productId' component={ProductDetails} layout={Layout} />
-        <LoadableRoute path='/terminals' component={TerminalList} layout={Layout} />
-        <LoadableRoute exact path='/terminal/details' component={TerminalDetails} layout={Layout} />
-        <LoadableRoute exact path='/terminal/details/:terminalId' component={TerminalDetails} layout={Layout} />
         <LoadableRoute path='/company/details' component={CompanyDetails} layout={Layout} />
         <LoadableRoute path='/user/details' component={UserDetails} layout={Layout} />
-        <LoadableRoute path='/terminal/details' component={TerminalDetails} layout={Layout} />
+        <LoadableRoute path='/terminals' component={TerminalList} layout={Layout} />
+        {/* <LoadableRoute exact path='/terminal/details' component={TerminalDetails} layout={Layout} />
+        <LoadableRoute exact path='/terminal/details/:terminalId' component={TerminalDetails} layout={Layout} /> */}
       </Switch>
     </Router>
   )
