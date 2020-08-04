@@ -13,7 +13,7 @@ import useMediaQuery from 'utils/mediaQuery'
 import styles from './index.module.scss'
 
 const validationRules = yup.object().shape({
-  name: yup.string().required('Name is required'),
+  name: yup.string().required('Nome é um campo obrigatório'),
 })
 
 const getErrorMessage = error => {
@@ -47,7 +47,7 @@ const ClientForm = ({client: defaultValues, onSubmit}) => {
           as={Input}
           name='name'
           control={control}
-          label={'Name'}
+          label='Nome'
           error={Boolean(errors.name)}
           helperText={getErrorMessage(errors.name)}
         />
@@ -71,7 +71,7 @@ const ClientForm = ({client: defaultValues, onSubmit}) => {
           as={Datepicker}
           name='birthDate'
           control={control}
-          label={'Date of Birth'}
+          label='Data de Nascimento'
           error={Boolean(errors.birthDate)}
           helperText={getErrorMessage(errors.birthDate)}
         />
@@ -79,7 +79,7 @@ const ClientForm = ({client: defaultValues, onSubmit}) => {
           as={MaskInput}
           name='phone'
           control={control}
-          label={'Phone (only numbers)'}
+          label='Telefone (apenas números)'
           error={Boolean(errors.phone)}
           helperText={getErrorMessage(errors.phone)}
           mask={['(', /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
@@ -88,7 +88,7 @@ const ClientForm = ({client: defaultValues, onSubmit}) => {
           as={Input}
           name='address'
           control={control}
-          label={'Address'}
+          label='Endereço'
           error={Boolean(errors.address)}
           helperText={getErrorMessage(errors.address)}
         />
@@ -96,7 +96,7 @@ const ClientForm = ({client: defaultValues, onSubmit}) => {
           as={Input}
           name='city'
           control={control}
-          label={'City'}
+          label='Cidade'
           error={Boolean(errors.city)}
           helperText={getErrorMessage(errors.city)}
         />
@@ -104,7 +104,7 @@ const ClientForm = ({client: defaultValues, onSubmit}) => {
           as={Input}
           name='state'
           control={control}
-          label={'State'}
+          label='Estado'
           error={Boolean(errors.state)}
           helperText={getErrorMessage(errors.state)}
         />

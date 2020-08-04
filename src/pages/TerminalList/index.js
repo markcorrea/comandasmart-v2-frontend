@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, memo} from 'react'
-// import {useHistory} from 'react-router-dom'
+import {useHistory} from 'react-router-dom'
 
 import {Paper, ResponsiveTable} from 'components'
 
@@ -19,9 +19,9 @@ export const columns = [
 
 const TerminalList = () => {
   const store = useStore()
-  // const history = useHistory()
+  const history = useHistory()
 
-  const terminals = useMemo(() => terminalsResponse.map(terminal => ({...terminal, value: terminal.id})), [])
+  const terminals = useMemo(() => terminalsResponse.data.map(terminal => ({...terminal, value: terminal.id})), [])
 
   useEffect(() => {
     store.showMenu()
@@ -38,7 +38,7 @@ const TerminalList = () => {
           rows={terminals}
           titleColumn='name'
           onViewClick={row => console.log('view', row)}
-          onEditClick={row => console.log('edit', row)}
+          onEditClick={row => history.push(`/terminal/details/${row.id}`)}
           onDeleteClick={row => console.log('delete', row)}
           rowClickable={row => console.log('clickable row', row)}
         />

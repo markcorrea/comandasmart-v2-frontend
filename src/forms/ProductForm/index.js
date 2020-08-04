@@ -61,7 +61,7 @@ const ProductForm = ({product, terminals, unitTypes, onSubmit, onCancel}) => {
           as={Input}
           name='name'
           control={control}
-          label={'Nome'}
+          label='Nome'
           error={Boolean(errors.name)}
           helperText={getErrorMessage(errors.name)}
         />
@@ -89,7 +89,7 @@ const ProductForm = ({product, terminals, unitTypes, onSubmit, onCancel}) => {
           decimalScale={3}
           thousandSeparator
           control={control}
-          label={'Quantidade por Unidade'}
+          label='Quantidade por Unidade'
         />
         <Controller
           as={NumberInput}

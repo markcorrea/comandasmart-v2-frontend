@@ -32,7 +32,7 @@ const Layout = ({children}) => {
     {
       label: 'Terminais',
       icon: 'fa fa-tablet-alt',
-      onClick: () => console.log('Terminais'),
+      onClick: () => history.push('/terminals'),
     },
     {
       label: 'Caixas',

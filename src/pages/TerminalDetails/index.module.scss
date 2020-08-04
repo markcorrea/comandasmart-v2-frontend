@@ -1,0 +1,57 @@
+@import '~assets/styles/_mediaQueries.scss';
+@import '~assets/styles/_colors.scss';
+
+.header {
+  height: 68px;
+}
+.paper {
+  min-height: calc(100% - 68px);
+  padding: 8px 8px 150px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  position: relative;
+
+  @include media-breakpoint-up(md) {
+    padding: 8px 8px 120px;
+  }
+}
+
+.form {
+  width: 100%;
+}
+
+.grid {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  .flexCell {
+    padding: 7px;
+    width: 100%;
+
+    @include media-breakpoint-up(md) {
+      width: 50%;
+    }
+
+    @include media-breakpoint-up(xl) {
+      width: 33%;
+    }
+  }
+}
+
+.buttons {
+  position: absolute;
+  bottom: 15px;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-wrap: wrap-reverse;
+  flex-direction: column;
+  @include media-breakpoint-up(sm) {
+    right: 15px;
+    left: auto;
+    display: block;
+    flex-wrap: unset;
+    flex-direction: unset;
+  }
+}
