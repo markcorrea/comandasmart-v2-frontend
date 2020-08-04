@@ -1,5 +1,5 @@
 import React, {lazy} from 'react'
-import {BrowserRouter as Router, Switch, Redirect} from 'react-router-dom'
+import {HashRouter as Router, Switch, Redirect} from 'react-router-dom'
 
 import Layout from 'layouts/Layout'
 
@@ -19,7 +19,7 @@ const NotFound = lazy(() => import(/* webpackChunkName: "NotFound" */ './NotFoun
 
 const AppRouter = () => {
   return (
-    <Router basename='/app'>
+    <Router>
       <Switch>
         <Redirect path='/' exact to='/login' />
 
