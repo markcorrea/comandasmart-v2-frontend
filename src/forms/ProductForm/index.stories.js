@@ -1,9 +1,9 @@
 import React, {useState} from 'react'
-import ClientForm from 'forms/ClientForm'
+import ProductForm from 'forms/ProductForm'
 
 export default {
-  title: 'Forms/ClientForm',
-  component: ClientForm,
+  title: 'Forms/ProductForm',
+  component: ProductForm,
 }
 
 export const Basic = () => {
@@ -19,7 +19,7 @@ export const Basic = () => {
   return (
     <div style={{padding: '0 10px'}}>
       <h2>Form:</h2>
-      <ClientForm user={data} />
+      <ProductForm user={data} />
       <br />
       <br />
       <br />

@@ -6,7 +6,8 @@ import Layout from 'layouts/Layout'
 import LoadableRoute from 'utils/LoadableRoute'
 
 const Login = lazy(() => import(/* webpackChunkName: "Login" */ '../pages/Login'))
-const Tickets = lazy(() => import(/* webpackChunkName: "Tickets" */ '../pages/Tickets'))
+const TicketList = lazy(() => import(/* webpackChunkName: "TicketList" */ '../pages/TicketList'))
+const TicketDetails = lazy(() => import(/* webpackChunkName: "TicketDetails" */ '../pages/TicketDetails'))
 const ClientList = lazy(() => import(/* webpackChunkName: "ClientList" */ '../pages/ClientList'))
 const ClientDetails = lazy(() => import(/* webpackChunkName: "ClientDetails" */ '../pages/ClientDetails'))
 const ProductList = lazy(() => import(/* webpackChunkName: "ProductList" */ '../pages/ProductList'))
@@ -24,7 +25,8 @@ const AppRouter = () => {
         <Redirect path='/' exact to='/login' />
 
         <LoadableRoute path='/login' component={Login} layout={Layout} />
-        <LoadableRoute path='/tickets' component={Tickets} layout={Layout} />
+        <LoadableRoute path='/tickets' component={TicketList} layout={Layout} />
+        <LoadableRoute path='/ticket/details' component={TicketDetails} layout={Layout} />
         <LoadableRoute path='/clients' component={ClientList} layout={Layout} />
         <LoadableRoute exact path='/client/details' component={ClientDetails} layout={Layout} />
         <LoadableRoute exact path='/client/details/:clientId' component={ClientDetails} layout={Layout} />

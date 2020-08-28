@@ -1,0 +1,47 @@
+@import '~assets/styles/_colors.scss';
+@import '~assets/styles/_typography.scss';
+
+.container {
+  padding: 20px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $eggSour;
+  }
+}
+
+.productNumber {
+  font-family: $robotoBoldFontFamily;
+  font-size: $biggerFontSize;
+}
+
+.productName {
+  font-size: $bigFontSize;
+  color: $mediumGray;
+  line-height: 30px;
+  margin: 15px 0;
+}
+
+.price {
+  font-family: $defaultFontFamily;
+  font-size: $biggerFontSize;
+}
+
+.timer {
+  text-align: center;
+  float: right;
+
+  .clock {
+    background-color: lightgreen;
+    border-radius: 50%;
+    width: 27px;
+    height: 27px;
+    margin: 0 auto 7px;
+    i {
+      font-size: 19px;
+    }
+  }
+  span {
+    color: $mediumGray;
+  }
+}

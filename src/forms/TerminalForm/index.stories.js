@@ -1,9 +1,9 @@
 import React, {useState} from 'react'
-import ClientForm from 'forms/ClientForm'
+import TerminalForm from 'forms/TerminalForm'
 
 export default {
-  title: 'Forms/ClientForm',
-  component: ClientForm,
+  title: 'Forms/TerminalForm',
+  component: TerminalForm,
 }
 
 export const Basic = () => {
@@ -19,7 +19,7 @@ export const Basic = () => {
   return (
     <div style={{padding: '0 10px'}}>
       <h2>Form:</h2>
-      <ClientForm user={data} />
+      <TerminalForm user={data} />
       <br />
       <br />
       <br />

@@ -6,7 +6,7 @@ import {makeStyles} from '@material-ui/core/styles'
 
 import {darkGray, lightestGray, mediumGray, robotoBoldFontFamily, ronchi, smallFontSize} from 'assets/styles/main.module.scss'
 
-const Button = ({className, children, classes: {root}, onClick, color: buttonColor, type}) => {
+const Button = ({className, children, classes: {root}, onClick, color: buttonColor, type, ...rest}) => {
   const backgroundColor = useMemo(() => {
     if (buttonColor === 'cancel') return lightestGray
     return ronchi
@@ -17,7 +17,7 @@ const Button = ({className, children, classes: {root}, onClick, color: buttonCol
     return darkGray
   }, [buttonColor])
 
-  const useStyles = makeStyles(({
+  const useStyles = makeStyles({
     root: {
       backgroundColor: backgroundColor,
       border: `solid thin transparent`,
@@ -30,12 +30,12 @@ const Button = ({className, children, classes: {root}, onClick, color: buttonCol
       fontFamily: robotoBoldFontFamily,
       ...root,
     },
-  }))
+  })
 
   const buttonClasses = useStyles()
 
   return (
-    <UIButton className={className} type={type} classes={buttonClasses} onClick={onClick}>
+    <UIButton className={className} type={type} classes={buttonClasses} onClick={onClick} {...rest}>
       {children}
     </UIButton>
   )

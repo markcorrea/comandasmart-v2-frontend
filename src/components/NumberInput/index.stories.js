@@ -1,9 +1,9 @@
 import React, {useState} from 'react'
-import MaskInput from 'components/MaskInput'
+import NumberInput from 'components/NumberInput'
 
 export default {
-  title: 'Components/MaskInput',
-  component: MaskInput,
+  title: 'Components/NumberInput',
+  component: NumberInput,
 }
 
 export const Basic = () => {
@@ -11,7 +11,7 @@ export const Basic = () => {
 
   return (
     <div style={{padding: '20px'}}>
-      <MaskInput
+      <NumberInput
         label='Nome da Empresa'
         value={value}
         onChange={event => setValue(event.target.value)}
