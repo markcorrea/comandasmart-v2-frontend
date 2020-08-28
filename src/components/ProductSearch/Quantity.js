@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import clsx from 'clsx'
 
 import NumberInput from 'components/NumberInput'
@@ -33,6 +34,16 @@ const Quantity = ({quantity, setQuantity, disabled}) => {
       endIcon={<Plus />}
     />
   )
+}
+
+Quantity.propTypes = {
+  quantity: PropTypes.number.isRequired,
+  setQuantity: PropTypes.func.isRequired,
+  disabled: PropTypes.bool,
+}
+
+Quantity.defaultProps = {
+  disabled: false,
 }
 
 export default Quantity

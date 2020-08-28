@@ -53,7 +53,7 @@ const ProductSearch = ({onConfirm, onEnterPress, getProducts}) => {
 
       fetch()
     }
-  }, [debouncedSearchTerm])
+  }, [debouncedSearchTerm, getProducts, setShowOptions, setLoadingList, setProductList])
 
   const selectProduct = product => {
     setProduct(product)
