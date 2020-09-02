@@ -4,7 +4,7 @@ import {useForm, Controller} from 'react-hook-form'
 import {yupResolver} from '@hookform/resolvers'
 import * as yup from 'yup'
 
-import {Button, Datepicker, Input} from 'components'
+import {Button, Input} from 'components'
 
 import {mediaQuerySM} from 'assets/styles/_mediaQueries.scss'
 
