@@ -19,10 +19,6 @@ const TicketList = () => {
 
   const tableButtons = [
     {
-      label: 'Venda Rápida',
-      onClick: selectedItems => console.log('PURCHASING', selectedItems),
-    },
-    {
       label: 'Nova Comanda',
       onClick: selectedItems => console.log('DELETING', selectedItems),
     },

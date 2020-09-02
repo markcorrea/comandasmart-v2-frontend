@@ -52,7 +52,12 @@ const Layout = ({children}) => {
     {
       label: 'Usuários',
       icon: 'fa fa-users',
-      onClick: () => console.log('Usuários'),
+      onClick: () => history.push('/users'),
+    },
+    {
+      label: 'Empresas',
+      icon: 'fa fa-building',
+      onClick: () => history.push('/companies'),
     },
     {
       label: 'Ajuda',

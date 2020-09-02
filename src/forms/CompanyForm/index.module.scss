@@ -1,0 +1,50 @@
+@import '~assets/styles/_mediaQueries.scss';
+@import '~assets/styles/_typography.scss';
+
+.form {
+  width: 100%;
+  padding-bottom: 148px;
+  position: relative;
+  @include media-breakpoint-up(sm) {
+    padding-bottom: 108px;
+  }
+
+  .subtitle {
+    font-family: $robotoBoldFontFamily;
+    font-size: $smallFontSize;
+    margin: 15px 10px 5px;
+    font-weight: 600;
+  }
+
+  .fields {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    @include media-breakpoint-up(md) {
+      flex-direction: row;
+    }
+    & > div {
+      padding: 8px 10px;
+      width: 100%;
+      @include media-breakpoint-up(md) {
+        max-width: 50%;
+      }
+    }
+  }
+
+  .buttons {
+    position: absolute;
+    bottom: 15px;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column-reverse;
+    @include media-breakpoint-up(sm) {
+      right: 15px;
+      left: auto;
+      display: block;
+      flex-wrap: unset;
+      flex-direction: unset;
+    }
+  }
+}
