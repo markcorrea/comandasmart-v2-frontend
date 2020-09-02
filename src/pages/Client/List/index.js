@@ -3,7 +3,7 @@ import {useHistory} from 'react-router-dom'
 
 import {Paper, ResponsiveTable} from 'components'
 
-import products from 'mocks/product'
+import clients from 'mocks/client'
 
 import {useStore} from 'store'
 
@@ -16,21 +16,18 @@ export const columns = [
     textAlign: 'left',
   },
   {
-    key: 'brand',
-    value: 'Marca',
+    key: 'email',
+    value: 'E-mail',
     textAlign: 'left',
   },
   {
-    key: 'stock',
-    value: 'Estoque',
-  },
-  {
-    key: 'price',
-    value: 'Preço',
+    key: 'cpf',
+    value: 'CPF',
+    textAlign: 'left',
   },
 ]
 
-const ProductList = () => {
+const ClientList = () => {
   const store = useStore()
   const history = useHistory()
 
@@ -41,20 +38,21 @@ const ProductList = () => {
   return (
     <>
       <header className={styles.header}>
-        <h1>Produtos</h1>
+        <h1>Clientes</h1>
       </header>
       <Paper className={styles.paper}>
         <ResponsiveTable
           columns={columns}
-          rows={products.data}
+          rows={clients.data}
           titleColumn='name'
-          onEditClick={row => history.push(`/product/details/${row.id}`)}
+          onEditClick={row => history.push(`/client/details/${row.id}`)}
           onDeleteClick={row => console.log('delete', row)}
           rowClickable={row => console.log('clickable row', row)}
+          emptyTableMessage='Não há clientes registrados.'
         />
       </Paper>
     </>
   )
 }
 
-export default ProductList
+export default ClientList

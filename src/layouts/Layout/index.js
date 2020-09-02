@@ -37,7 +37,7 @@ const Layout = ({children}) => {
     {
       label: 'Caixas',
       icon: 'fa fa-money-bill-alt',
-      onClick: () => console.log('Caixas'),
+      onClick: () => history.push(`/cashiers`),
     },
     {
       label: 'Produtos',

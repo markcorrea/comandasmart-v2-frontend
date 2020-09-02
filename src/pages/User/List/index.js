@@ -1,9 +1,9 @@
-import React, {useEffect, useMemo, memo} from 'react'
+import React, {useEffect} from 'react'
 import {useHistory} from 'react-router-dom'
 
 import {Paper, ResponsiveTable} from 'components'
 
-import terminalsResponse from 'mocks/terminal'
+import users from 'mocks/user'
 
 import {useStore} from 'store'
 
@@ -11,17 +11,20 @@ import styles from './index.module.scss'
 
 export const columns = [
   {
+    key: 'id',
+    value: 'Código',
+    textAlign: 'left',
+  },
+  {
     key: 'name',
     value: 'Nome',
     textAlign: 'left',
   },
 ]
 
-const TerminalList = () => {
+const UserList = () => {
   const store = useStore()
   const history = useHistory()
-
-  const terminals = useMemo(() => terminalsResponse.data.map(terminal => ({...terminal, value: terminal.id})), [])
 
   useEffect(() => {
     store.showMenu()
@@ -30,21 +33,21 @@ const TerminalList = () => {
   return (
     <>
       <header className={styles.header}>
-        <h1>Terminais</h1>
+        <h1>Usuários</h1>
       </header>
       <Paper className={styles.paper}>
         <ResponsiveTable
           columns={columns}
-          rows={terminals}
+          rows={users.data}
           titleColumn='name'
-          onViewClick={row => console.log('view', row)}
-          onEditClick={row => history.push(`/terminal/details/${row.id}`)}
+          onEditClick={row => history.push(`/user/details/${row.id}`)}
           onDeleteClick={row => console.log('delete', row)}
           rowClickable={row => console.log('clickable row', row)}
+          emptyTableMessage='Não há usuários registrados.'
         />
       </Paper>
     </>
   )
 }
 
-export default memo(TerminalList)
+export default UserList

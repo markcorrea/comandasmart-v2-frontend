@@ -44,7 +44,9 @@ export const Basic = () => {
         onEditClick={editItem => console.log('edit', editItem)}
         onDeleteClick={deleteItem => console.log('delete', deleteItem)}
         tableDisplayColumns={tableDisplayColumns}
-        hasCheckboxWithButtons={tableButtons}
+        hasCheckbox
+        hasButtons={tableButtons}
+        hasPagination
         rowClickable={row => console.log('ROW CLICKABLE', row)}
       />
     </div>

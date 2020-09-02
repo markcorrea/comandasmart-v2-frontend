@@ -5,10 +5,10 @@ import {Paper} from 'components'
 
 import styles from './index.module.scss'
 
-const TicketCard = ({ticket}) => {
+const TicketCard = ({ticket, onClick, inset}) => {
   const {number, userName, price, lastOrder} = ticket
   return (
-    <Paper inset className={styles.container}>
+    <Paper inset={inset} className={styles.container} onClick={() => onClick(ticket)}>
       <div className={styles.timer}>
         <div className={styles.clock}>
           <i className='far fa-clock' />
@@ -24,6 +24,13 @@ const TicketCard = ({ticket}) => {
 
 TicketCard.propTypes = {
   ticket: PropTypes.object.isRequired,
+  onClick: PropTypes.func,
+  inset: PropTypes.bool,
+}
+
+TicketCard.defaultProps = {
+  onClick: () => {},
+  inset: true,
 }
 
 export default TicketCard

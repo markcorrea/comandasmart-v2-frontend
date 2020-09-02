@@ -1,0 +1,22 @@
+.header {
+  height: 68px;
+}
+
+.paper {
+  min-height: calc(100% - 68px);
+  padding: 15px;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  position: relative;
+}
+
+.responsiveTable {
+  margin-top: 40px;
+  width: 100%;
+}
+
+.totalPrice {
+  width: 100%;
+  text-align: right;
+}

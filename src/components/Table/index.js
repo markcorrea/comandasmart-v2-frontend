@@ -26,8 +26,11 @@ const Table = ({
   onDeleteClick,
   hasCheckbox,
   hasButtons,
+  hasPagination,
   rowClickable,
   displayColumns,
+  additionalRow,
+  emptyTableMessage,
 }) => {
   const [rows, setRows] = useState([])
   const [sortingOrder, setSortingOrder] = useState('')
@@ -82,6 +85,15 @@ const Table = ({
     [setRows]
   )
 
+  const defineColspan = useMemo(() => {
+    let count = columns.length
+    if (onEditClick) count++
+    if (onViewClick) count++
+    if (onDeleteClick) count++
+    if (hasCheckbox) count++
+    return count.toString()
+  }, [columns, hasCheckbox, onEditClick, onViewClick, onDeleteClick])
+
   const columnsToDisplay = useMemo(() => {
     if (displayColumns.length) {
       return columns.filter(column => displayColumns.some(displayColumn => displayColumn === column.key))
@@ -118,55 +130,70 @@ const Table = ({
           </tr>
         </thead>
         <tbody>
-          {rows.map((row, rowIndex) => {
-            return (
-              <tr key={`table_row_${rowIndex}`} className={rowClickable ? styles.rowClickable : ''}>
-                {hasCheckbox && (
-                  <td {...clickableRowFunction(row, rowIndex)}>
-                    <input
-                      type='checkbox'
-                      name={`table_row_${rowIndex}`}
-                      checked={row.checked}
-                      onChange={() => checkRow(row, rowIndex)}
-                    />
-                  </td>
-                )}
-                {columnsToDisplay.map((cell, cellIndex) => {
-                  return (
-                    <td
-                      className={clsx(cell.textAlign ? styles[cell.textAlign] : styles.right)}
-                      key={`cell_${rowIndex}_${cellIndex}`}
-                      {...clickableRowFunction(row, rowIndex)}>
-                      {row[cell.key]}
+          {rows.length ? (
+            rows.map((row, rowIndex) => {
+              return (
+                <tr key={`table_row_${rowIndex}`} className={rowClickable || hasCheckbox ? styles.rowClickable : ''}>
+                  {hasCheckbox && (
+                    <td {...clickableRowFunction(row, rowIndex)}>
+                      <input
+                        type='checkbox'
+                        name={`table_row_${rowIndex}`}
+                        checked={row.checked}
+                        onChange={() => checkRow(row, rowIndex)}
+                      />
                     </td>
-                  )
-                })}
-                {onViewClick && (
-                  <td className={styles.view} onClick={() => onViewClick(row)}>
-                    <i className='far fa-eye' />
-                  </td>
-                )}
-                {onEditClick && (
-                  <td className={styles.edit} onClick={() => onEditClick(row)}>
-                    <i className='far fa-edit' />
-                  </td>
-                )}
-                {onDeleteClick && (
-                  <td className={styles.delete} onClick={() => onDeleteClick(row)}>
-                    <i className='fas fa-trash-alt' />
-                  </td>
-                )}
-              </tr>
-            )
-          })}
+                  )}
+                  {columnsToDisplay.map((cell, cellIndex) => {
+                    return (
+                      <td
+                        className={clsx(cell.textAlign ? styles[cell.textAlign] : styles.right)}
+                        key={`cell_${rowIndex}_${cellIndex}`}
+                        {...clickableRowFunction(row, rowIndex)}>
+                        {row[cell.key]}
+                      </td>
+                    )
+                  })}
+                  {onViewClick && (
+                    <td className={styles.view} onClick={() => onViewClick(row)}>
+                      <i className='far fa-eye' />
+                    </td>
+                  )}
+                  {onEditClick && (
+                    <td className={styles.edit} onClick={() => onEditClick(row)}>
+                      <i className='far fa-edit' />
+                    </td>
+                  )}
+                  {onDeleteClick && (
+                    <td className={styles.delete} onClick={() => onDeleteClick(row)}>
+                      <i className='fas fa-trash-alt' />
+                    </td>
+                  )}
+                </tr>
+              )
+            })
+          ) : (
+            <tr>
+              <td className={styles.center} colSpan={defineColspan}>
+                {emptyTableMessage}
+              </td>
+            </tr>
+          )}
+          {additionalRow && (
+            <tr>
+              <td colSpan={defineColspan}>{additionalRow}</td>
+            </tr>
+          )}
         </tbody>
       </table>
-      <div className={styles.pagination}>
-        <Pagination count={100} page={1} onChangePage={console.log} rowsPerPage={10} onChangeRowsPerPage={console.log} />
-      </div>
+      {hasPagination && (
+        <div className={styles.pagination}>
+          <Pagination count={100} page={1} onChangePage={console.log} rowsPerPage={10} onChangeRowsPerPage={console.log} />
+        </div>
+      )}
       {(hasButtons || hasCheckbox) && (
         <div className={styles.buttons}>
-          {hasCheckbox && <Button onClick={toggleAll}>Select All</Button>}
+          {hasCheckbox && <Button onClick={toggleAll}>Selecionar Tudo</Button>}
           {hasButtons &&
             hasButtons.map((button, index) => {
               const {label, onClick, classes} = button
@@ -195,13 +222,18 @@ Table.propTypes = {
   withCheckbox: PropTypes.bool,
   hasCheckbox: PropTypes.bool,
   hasButtons: PropTypes.array,
+  hasPagination: PropTypes.bool,
   rowClickable: PropTypes.func,
   displayColumns: PropTypes.array,
+  additionalRow: PropTypes.any,
+  emptyTableMessage: PropTypes.string,
 }
 
 Table.defaultProps = {
   hasCheckbox: false,
   displayColumns: [],
+  additionalRow: null,
+  emptyTableMessage: 'Não há itens cadastrados.',
 }
 
 export default memo(Table)

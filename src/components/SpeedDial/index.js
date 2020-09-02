@@ -22,6 +22,17 @@ const buttonClasses = classes => ({
   },
 })
 
+const SpeedDialOptions = ({buttons}) => {
+  return buttons.map((button, index) => {
+    const {label, onClick, classes} = button
+    return (
+      <Button key={`speed_dial_button_${index}`} classes={buttonClasses(classes)} onClick={onClick}>
+        {label}
+      </Button>
+    )
+  })
+}
+
 const SpeedDial = ({buttons, positionFixed}) => {
   const useStyles = makeStyles({
     root: {
@@ -57,14 +68,7 @@ const SpeedDial = ({buttons, positionFixed}) => {
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
         open={open}>
-        {buttons.map((button, index) => {
-          const {label, onClick, classes} = button
-          return (
-            <Button key={`speed_dial_button_${index}`} classes={buttonClasses(classes)} onClick={onClick}>
-              {label}
-            </Button>
-          )
-        })}
+        <SpeedDialOptions buttons={buttons} />
       </UISpeedDial>
     </>
   )
