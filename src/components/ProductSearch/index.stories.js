@@ -59,7 +59,7 @@ const products = [
   },
 ]
 
-const getProducts = search =>
+const searchProducts = search =>
   new Promise(resolve => {
     setTimeout(() => {
       resolve(products.filter(item => item.name.toLowerCase().includes(search.toLowerCase())))
@@ -70,7 +70,7 @@ export const Basic = () => {
   return (
     <div style={{padding: '20px'}}>
       <ProductSearch
-        getProducts={getProducts}
+        searchProducts={searchProducts}
         onEnterPress={message => console.log('enter here', message)}
         onConfirm={() => console.log('confirming')}
       />

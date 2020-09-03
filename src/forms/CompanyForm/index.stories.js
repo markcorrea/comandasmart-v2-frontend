@@ -8,11 +8,20 @@ export default {
 
 export const Basic = () => {
   const newData = {
-    name: 'Marcus Coelho',
-    uniqueCode: '1234',
-    email: 'mrc.correa@gmail.com',
-    phone: '47991115868',
-    birthDate: new Date('2014-08-18T21:11:54'),
+    name: 'Kanova Revistaria',
+    uniqueCode: '1',
+    phone: '(47)99111-5868',
+    address: 'Rua Antônio da Veiga, 301',
+    city: 'Blumenau',
+    state: 'SC',
+    paid: '',
+    postalCode: '89012-360',
+    admin: {
+      name: 'Savio Kanova',
+      email: 'savio@kanova.com',
+      password: '1234',
+      address: 'Rua Antônio da Veiga, 301',
+    },
   }
 
   const [data, setData] = useState({})

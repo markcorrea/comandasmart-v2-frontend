@@ -40,9 +40,9 @@ const UserList = () => {
           columns={columns}
           rows={users.data}
           titleColumn='name'
-          onEditClick={row => history.push(`/user/details/${row.id}`)}
+          onEditClick={row => history.push(`/user/${row.id}`)}
+          rowClickable={row => history.push(`/user/${row.id}`)}
           onDeleteClick={row => console.log('delete', row)}
-          rowClickable={row => console.log('clickable row', row)}
           emptyTableMessage='Não há usuários registrados.'
         />
       </Paper>

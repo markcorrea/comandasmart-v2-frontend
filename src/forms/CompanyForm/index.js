@@ -20,7 +20,7 @@ const getErrorMessage = error => {
   return (error && error.message) || ''
 }
 
-const CompanyForm = ({company: defaultValues, onSubmit}) => {
+const CompanyForm = ({company: defaultValues, onSubmit, onCancel}) => {
   const mediaQuerySmall = useMediaQuery('min', mediaQuerySM)
   const headerButtonClass = {
     root: {
@@ -145,7 +145,7 @@ const CompanyForm = ({company: defaultValues, onSubmit}) => {
         />
       </div>
       <div className={styles.buttons}>
-        <Button type='button' color='cancel' classes={headerButtonClass}>
+        <Button type='button' color='cancel' classes={headerButtonClass} onClick={onCancel}>
           Cancelar
         </Button>
         <Button classes={headerButtonClass}>Salvar</Button>
@@ -157,18 +157,28 @@ const CompanyForm = ({company: defaultValues, onSubmit}) => {
 const defaultValues = {
   name: '',
   uniqueCode: '',
-  email: '',
-  permission: '',
-  password: '',
+  phone: '',
+  address: '',
+  city: '',
+  state: '',
+  paid: '',
+  postalCode: '',
+  admin: {
+    name: '',
+    email: '',
+    password: '',
+    address: '',
+  },
 }
 
 CompanyForm.propTypes = {
-  client: PropTypes.object,
+  company: PropTypes.object,
   onSubmit: PropTypes.func,
+  onCancel: PropTypes.func,
 }
 
 CompanyForm.defaultProps = {
-  client: defaultValues,
+  company: defaultValues,
 }
 
 export default CompanyForm

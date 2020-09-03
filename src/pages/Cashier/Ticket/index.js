@@ -48,7 +48,7 @@ TotalPrice.propTypes = {
 }
 
 const CashierTicket = () => {
-  const {getProducts, getTicketById} = services
+  const {searchProducts, getTicketById} = services
   const {ticketId} = useParams()
   const store = useStore()
 
@@ -76,7 +76,7 @@ const CashierTicket = () => {
       </header>
       <Paper className={styles.paper}>
         <ProductSearch
-          getProducts={getProducts}
+          searchProducts={searchProducts}
           onEnterPress={message => console.log('enter here', message)}
           onConfirm={() => console.log('confirming')}
         />

@@ -40,9 +40,9 @@ const CompanyList = () => {
           columns={columns}
           rows={companies.data}
           titleColumn='name'
-          onEditClick={row => history.push(`/company/details/${row.id}`)}
+          onEditClick={row => history.push(`/company/${row.id}`)}
+          rowClickable={row => history.push(`/company/${row.id}`)}
           onDeleteClick={row => console.log('delete', row)}
-          rowClickable={row => console.log('clickable row', row)}
           emptyTableMessage='Não há empresas registradas.'
         />
       </Paper>

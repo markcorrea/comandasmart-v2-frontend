@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useState} from 'react'
-import {useParams} from 'react-router-dom'
+import {useParams, useHistory} from 'react-router-dom'
 
 import {Paper} from 'components'
 import {useStore} from 'store'
@@ -12,6 +12,7 @@ import styles from './index.module.scss'
 const ClientDetails = () => {
   const store = useStore()
   const {clientId} = useParams()
+  const history = useHistory()
 
   const [client, setClient] = useState({})
 
@@ -37,7 +38,7 @@ const ClientDetails = () => {
         <h1>{clientId ? 'Editar' : 'Criar'} Cliente</h1>
       </header>
       <Paper className={styles.paper}>
-        <ClientForm client={client} onSubmit={data => console.log('SUBMIT', data)} />
+        <ClientForm client={client} onSubmit={data => console.log('SUBMIT', data)} onCancel={() => history.push('/clients')}/>
       </Paper>
     </>
   )

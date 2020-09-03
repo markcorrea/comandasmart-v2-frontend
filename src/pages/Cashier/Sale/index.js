@@ -50,7 +50,7 @@ TotalPrice.propTypes = {
 }
 
 const CashierSale = () => {
-  const {getProducts} = services
+  const {searchProducts} = services
 
   const store = useStore()
 
@@ -67,7 +67,7 @@ const CashierSale = () => {
       </header>
       <Paper className={styles.paper}>
         <ProductSearch
-          getProducts={getProducts}
+          searchProducts={searchProducts}
           onEnterPress={message => setProducts([])}
           onConfirm={() => console.log('confirming')}
         />

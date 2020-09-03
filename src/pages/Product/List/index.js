@@ -1,11 +1,11 @@
-import React, {useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import {useHistory} from 'react-router-dom'
 
 import {Paper, ResponsiveTable} from 'components'
 
-import products from 'mocks/product'
-
 import {useStore} from 'store'
+
+import services from 'services'
 
 import styles from './index.module.scss'
 
@@ -34,9 +34,23 @@ const ProductList = () => {
   const store = useStore()
   const history = useHistory()
 
+  const {getProducts} = services
+
+  const [products, setProducts] = useState([])
+
   useEffect(() => {
     store.showMenu()
   }, [store])
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const result = await getProducts()
+      if (result) {
+        setProducts(result.data)
+      }
+    }
+    fetchProducts()
+  }, [getProducts, setProducts])
 
   return (
     <>
@@ -46,11 +60,11 @@ const ProductList = () => {
       <Paper className={styles.paper}>
         <ResponsiveTable
           columns={columns}
-          rows={products.data}
+          rows={products}
           titleColumn='name'
-          onEditClick={row => history.push(`/product/details/${row.id}`)}
+          onEditClick={row => history.push(`/product/${row.id}`)}
           onDeleteClick={row => console.log('delete', row)}
-          rowClickable={row => console.log('clickable row', row)}
+          rowClickable={row => history.push(`/product/${row.id}`)}
           emptyTableMessage='Não há produtos registrados.'
         />
       </Paper>

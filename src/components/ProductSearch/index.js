@@ -11,7 +11,7 @@ import useDebounce from './debounce'
 
 import styles from './index.module.scss'
 
-const ProductSearch = ({onConfirm, onEnterPress, getProducts}) => {
+const ProductSearch = ({onConfirm, onEnterPress, searchProducts}) => {
   const [product, setProduct] = useState(null)
   const [productList, setProductList] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
@@ -46,14 +46,14 @@ const ProductSearch = ({onConfirm, onEnterPress, getProducts}) => {
       const fetch = async () => {
         setShowOptions(true)
         setLoadingList(true)
-        const result = await getProducts(debouncedSearchTerm)
+        const result = await searchProducts(debouncedSearchTerm)
         setProductList(result)
         setLoadingList(false)
       }
 
       fetch()
     }
-  }, [debouncedSearchTerm, getProducts, setShowOptions, setLoadingList, setProductList])
+  }, [debouncedSearchTerm, searchProducts, setShowOptions, setLoadingList, setProductList])
 
   const selectProduct = product => {
     setProduct(product)
@@ -129,13 +129,13 @@ const ProductSearch = ({onConfirm, onEnterPress, getProducts}) => {
 ProductSearch.propTypes = {
   onConfirm: PropTypes.func,
   onEnterPress: PropTypes.func,
-  getProducts: PropTypes.func,
+  searchProducts: PropTypes.func,
 }
 
 ProductSearch.defaultProps = {
   onConfirm: () => {},
   onEnterPress: () => {},
-  getProducts: () => {},
+  searchProducts: () => {},
 }
 
 export default ProductSearch

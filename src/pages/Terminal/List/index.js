@@ -38,9 +38,9 @@ const TerminalList = () => {
           rows={terminals}
           titleColumn='name'
           onViewClick={row => history.push(`/terminal/view/${row.id}`)}
-          onEditClick={row => history.push(`/terminal/details/${row.id}`)}
+          onEditClick={row => history.push(`/terminal/${row.id}`)}
           onDeleteClick={row => console.log('delete', row)}
-          rowClickable={row => console.log('clickable row', row)}
+          rowClickable={row => history.push(`/terminal/${row.id}`)}
           emptyTableMessage='Não há comandas registradas.'
         />
       </Paper>

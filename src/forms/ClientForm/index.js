@@ -20,7 +20,7 @@ const getErrorMessage = error => {
   return (error && error.message) || ''
 }
 
-const ClientForm = ({client: defaultValues, onSubmit}) => {
+const ClientForm = ({client: defaultValues, onSubmit, onCancel}) => {
   const mediaQuerySmall = useMediaQuery('min', mediaQuerySM)
   const headerButtonClass = {
     root: {
@@ -110,7 +110,7 @@ const ClientForm = ({client: defaultValues, onSubmit}) => {
         />
       </div>
       <div className={styles.buttons}>
-        <Button type='button' color='cancel' classes={headerButtonClass}>
+        <Button type='button' color='cancel' classes={headerButtonClass} onClick={onCancel}>
           Cancelar
         </Button>
         <Button classes={headerButtonClass}>Salvar</Button>
@@ -133,6 +133,7 @@ const defaultValues = {
 ClientForm.propTypes = {
   client: PropTypes.object,
   onSubmit: PropTypes.func,
+  onCancel: PropTypes.func,
 }
 
 ClientForm.defaultProps = {

@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback} from 'react'
-import {useParams} from 'react-router-dom'
+import {useParams, useHistory} from 'react-router-dom'
 
 import {Paper} from 'components'
 
@@ -15,6 +15,7 @@ const UserDetails = () => {
   const store = useStore()
 
   const {userId} = useParams()
+  const history = useHistory()
 
   const [user, setUser] = useState({})
 
@@ -40,7 +41,7 @@ const UserDetails = () => {
         <h1>{userId ? 'Editar' : 'Criar'} Usuário</h1>
       </header>
       <Paper className={styles.paper}>
-        <UserForm />
+        <UserForm user={user} onSubmit={data => console.log('SUBMIT', data)} onCancel={() => history.push('/users')} />
       </Paper>
     </>
   )

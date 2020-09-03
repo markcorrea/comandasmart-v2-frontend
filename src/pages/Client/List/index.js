@@ -45,9 +45,9 @@ const ClientList = () => {
           columns={columns}
           rows={clients.data}
           titleColumn='name'
-          onEditClick={row => history.push(`/client/details/${row.id}`)}
+          onEditClick={row => history.push(`/client/${row.id}`)}
           onDeleteClick={row => console.log('delete', row)}
-          rowClickable={row => console.log('clickable row', row)}
+          rowClickable={row => history.push(`/client/${row.id}`)}
           emptyTableMessage='Não há clientes registrados.'
         />
       </Paper>

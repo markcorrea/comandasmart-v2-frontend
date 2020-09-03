@@ -10,7 +10,7 @@ export default {
       address: 'Rua Guido Kaestner Senior, 301, ap. 1005',
       city: 'Blumenau',
       state: 'Santa Catarina',
-      birthDate: new Date('1987-09-04T12:00:00'),
+      postalCode: '89012-360',
       payment: 'credit',
       admin: {
         id: '1',
@@ -27,7 +27,7 @@ export default {
       address: 'Rua São Paulo, 301',
       city: 'Blumenau',
       state: 'Santa Catarina',
-      birthDate: new Date('1987-09-04T12:00:00'),
+      postalCode: '89012-360',
       payment: 'credit',
       admin: {
         id: '2',
@@ -44,7 +44,7 @@ export default {
       address: 'Rua Humberto Campos, 301',
       city: 'Blumenau',
       state: 'Santa Catarina',
-      birthDate: new Date('1987-09-04T12:00:00'),
+      postalCode: '89012-360',
       payment: 'credit',
       admin: {
         id: '3',
