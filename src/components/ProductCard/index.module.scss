@@ -2,12 +2,7 @@
 @import '~assets/styles/_typography.scss';
 
 .container {
-  padding: 20px;
-  cursor: pointer;
-
-  &:hover {
-    background-color: $eggSour;
-  }
+  padding: 10px 20px;
 }
 
 .productNumber {
@@ -27,21 +22,15 @@
   font-size: $biggerFontSize;
 }
 
-.timer {
-  text-align: center;
+.trash {
   float: right;
+  cursor: pointer;
+  i {
+    color: $red;
+    font-size: 19px;
 
-  .clock {
-    background-color: lightgreen;
-    border-radius: 50%;
-    width: 27px;
-    height: 27px;
-    margin: 0 auto 7px;
-    i {
-      font-size: 19px;
+    &:hover {
+      color: $saffron;
     }
-  }
-  span {
-    color: $mediumGray;
   }
 }

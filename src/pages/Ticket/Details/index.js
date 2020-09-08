@@ -1,20 +1,13 @@
 import React, {useState, useEffect} from 'react'
 import {useParams} from 'react-router-dom'
 
-import {Paper, ProductCard, ProductSearch, SpeedDial} from 'components'
+import {Paper, ProductCard, ProductSearch} from 'components'
 
 import {useStore} from 'store'
 
 import services from 'services'
 
 import styles from './index.module.scss'
-
-const tableButtons = [
-  {
-    label: 'Mudar mesa',
-    onClick: () => console.log('adicionando'),
-  },
-]
 
 const TicketDetails = () => {
   const {searchProducts, getTicketById} = services
@@ -54,16 +47,12 @@ const TicketDetails = () => {
         {ticket && ticket.items.length ? (
           ticket.items.map((product, index) => (
             <div key={`item_${index}`} className={styles.flexCell}>
-              <ProductCard product={product} />
+              <ProductCard product={product} onDeleteClick={() => console.log('HERE')} />
             </div>
           ))
         ) : (
           <div className={styles.emptyTicket}>Não há itens na comanda atual.</div>
         )}
-
-        <div style={{padding: '20px'}}>
-          <SpeedDial buttons={tableButtons} />
-        </div>
       </Paper>
     </>
   )
