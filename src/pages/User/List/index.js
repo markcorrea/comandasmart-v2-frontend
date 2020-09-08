@@ -1,11 +1,11 @@
-import React, {useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import {useHistory} from 'react-router-dom'
 
 import {Paper, ResponsiveTable} from 'components'
 
-import users from 'mocks/user'
-
 import {useStore} from 'store'
+
+import services from 'services'
 
 import styles from './index.module.scss'
 
@@ -23,12 +23,28 @@ export const columns = [
 ]
 
 const UserList = () => {
-  const store = useStore()
+  const {showMenu, setLoading, loading} = useStore()
   const history = useHistory()
 
+  const {getUsers} = services
+
+  const [users, setUsers] = useState([])
+
   useEffect(() => {
-    store.showMenu()
-  }, [store])
+    showMenu()
+  }, [showMenu])
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      setLoading(true)
+      const result = await getUsers()
+      if (result) {
+        setUsers(result.data)
+      }
+      setLoading(false)
+    }
+    fetchUsers()
+  }, [getUsers, setUsers, setLoading])
 
   return (
     <>
@@ -38,12 +54,13 @@ const UserList = () => {
       <Paper className={styles.paper}>
         <ResponsiveTable
           columns={columns}
-          rows={users.data}
+          rows={users}
           titleColumn='name'
           onEditClick={row => history.push(`/user/${row.id}`)}
           rowClickable={row => history.push(`/user/${row.id}`)}
           onDeleteClick={row => console.log('delete', row)}
           emptyTableMessage='Não há usuários registrados.'
+          loading={loading}
         />
       </Paper>
     </>

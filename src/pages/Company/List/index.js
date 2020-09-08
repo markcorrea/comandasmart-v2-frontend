@@ -1,11 +1,11 @@
-import React, {useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import {useHistory} from 'react-router-dom'
 
 import {Paper, ResponsiveTable} from 'components'
 
-import companies from 'mocks/company'
-
 import {useStore} from 'store'
+
+import services from 'services'
 
 import styles from './index.module.scss'
 
@@ -23,12 +23,28 @@ export const columns = [
 ]
 
 const CompanyList = () => {
-  const store = useStore()
+  const {showMenu, setLoading, loading} = useStore()
   const history = useHistory()
 
+  const {getCompanies} = services
+
+  const [companies, setCompanies] = useState([])
+
   useEffect(() => {
-    store.showMenu()
-  }, [store])
+    showMenu()
+  }, [showMenu])
+
+  useEffect(() => {
+    const fetchCompanies = async () => {
+      setLoading(true)
+      const result = await getCompanies()
+      if (result) {
+        setCompanies(result.data)
+      }
+      setLoading(false)
+    }
+    fetchCompanies()
+  }, [getCompanies, setCompanies, setLoading])
 
   return (
     <>
@@ -38,12 +54,13 @@ const CompanyList = () => {
       <Paper className={styles.paper}>
         <ResponsiveTable
           columns={columns}
-          rows={companies.data}
+          rows={companies}
           titleColumn='name'
           onEditClick={row => history.push(`/company/${row.id}`)}
           rowClickable={row => history.push(`/company/${row.id}`)}
           onDeleteClick={row => console.log('delete', row)}
           emptyTableMessage='Não há empresas registradas.'
+          loading={loading}
         />
       </Paper>
     </>

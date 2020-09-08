@@ -46,7 +46,7 @@ const useBackIconStyles = makeStyles({
   },
 })
 
-const Pagination = ({count, page, onChangePage, rowsPerPage, onChangeRowsPerPage}) => {
+const Pagination = ({count, page, onChangePage, rowsPerPage, onChangeRowsPerPage, loading}) => {
   const classes = useStyles()
   const nextIconClasses = useNextIconStyles()
   const backIconClasses = useBackIconStyles()
@@ -57,9 +57,9 @@ const Pagination = ({count, page, onChangePage, rowsPerPage, onChangeRowsPerPage
       classes={classes}
       count={count}
       page={page}
-      onChangePage={onChangePage}
+      onChangePage={!loading ? onChangePage : null}
       rowsPerPage={rowsPerPage}
-      onChangeRowsPerPage={onChangeRowsPerPage}
+      onChangeRowsPerPage={!loading ? onChangeRowsPerPage : null}
       nextIconButtonProps={{classes: nextIconClasses}}
       backIconButtonProps={{classes: backIconClasses}}
     />
@@ -72,6 +72,7 @@ Pagination.propTypes = {
   onChangePage: PropTypes.func,
   rowsPerPage: PropTypes.number,
   onChangeRowsPerPage: PropTypes.func,
+  loading: PropTypes.bool,
 }
 
 export default Pagination

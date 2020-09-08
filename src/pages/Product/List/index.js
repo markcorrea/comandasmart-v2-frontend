@@ -31,7 +31,7 @@ export const columns = [
 ]
 
 const ProductList = () => {
-  const store = useStore()
+  const {showMenu, setLoading, loading} = useStore()
   const history = useHistory()
 
   const {getProducts} = services
@@ -39,18 +39,20 @@ const ProductList = () => {
   const [products, setProducts] = useState([])
 
   useEffect(() => {
-    store.showMenu()
-  }, [store])
+    showMenu()
+  }, [showMenu])
 
   useEffect(() => {
     const fetchProducts = async () => {
+      setLoading(true)
       const result = await getProducts()
       if (result) {
         setProducts(result.data)
       }
+      setLoading(false)
     }
     fetchProducts()
-  }, [getProducts, setProducts])
+  }, [getProducts, setProducts, setLoading])
 
   return (
     <>
@@ -66,6 +68,7 @@ const ProductList = () => {
           onDeleteClick={row => console.log('delete', row)}
           rowClickable={row => history.push(`/product/${row.id}`)}
           emptyTableMessage='Não há produtos registrados.'
+          loading={loading}
         />
       </Paper>
     </>

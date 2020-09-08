@@ -1,9 +1,9 @@
-import React, {useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import {useHistory} from 'react-router-dom'
 
 import {Paper, ResponsiveTable} from 'components'
 
-import cashiers from 'mocks/cashier'
+import services from 'services'
 
 import {useStore} from 'store'
 
@@ -33,12 +33,28 @@ export const columns = [
 ]
 
 const CashierList = () => {
-  const store = useStore()
+  const {showMenu, setLoading, loading} = useStore()
   const history = useHistory()
 
+  const {getCashiers} = services
+
+  const [cashiers, setCashiers] = useState([])
+
   useEffect(() => {
-    store.showMenu()
-  }, [store])
+    showMenu()
+  }, [showMenu])
+
+  useEffect(() => {
+    const fetchCashiers = async () => {
+      setLoading(true)
+      const result = await getCashiers()
+      if (result) {
+        setCashiers(result.data)
+      }
+      setLoading(false)
+    }
+    fetchCashiers()
+  }, [getCashiers, setCashiers, setLoading])
 
   return (
     <>
@@ -48,10 +64,11 @@ const CashierList = () => {
       <Paper className={styles.paper}>
         <ResponsiveTable
           columns={columns}
-          rows={cashiers.data}
+          rows={cashiers}
           titleColumn='name'
           rowClickable={row => history.push(`/cashier/${row.id}`)}
           emptyTableMessage='Não há caixas registrados.'
+          loading={loading}
         />
       </Paper>
     </>

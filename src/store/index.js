@@ -1,6 +1,8 @@
 import React, {useState, useContext, useCallback} from 'react'
 import PropTypes from 'prop-types'
 
+import {useMessage} from 'components/Message'
+
 const StoreContext = React.createContext(null)
 
 const initialState = {
@@ -8,22 +10,31 @@ const initialState = {
     firstName: 'Savio',
     lastName: 'Canova',
     company: {
-      name: 'Kanova Revistaria'
-    }
+      name: 'Kanova Revistaria',
+    },
   },
   // loggedUser: null,
   sideMenu: false,
+  loading: false,
 }
 
 const Store = ({children}) => {
+  const {showLoading, hideLoading} = useMessage()
+  let loadingStack
+
   const [state, updateState] = useState(initialState)
 
-  const showMenu = useCallback(() => !state.sideMenu && updateState(state => ({...state, sideMenu: true})), [
+  const showMenu = useCallback(() => !state.sideMenu && updateState(prevState => ({...prevState, sideMenu: true})), [
     updateState,
     state.sideMenu,
   ])
 
-  return <StoreContext.Provider value={{...state, showMenu}}>{children}</StoreContext.Provider>
+  const setLoading = useCallback(setLoading => {
+    updateState(prevState => ({...prevState, loading: setLoading}))
+    setLoading ? showLoading(loadingStack) : hideLoading(loadingStack)
+  }, [])
+
+  return <StoreContext.Provider value={{...state, showMenu, setLoading}}>{children}</StoreContext.Provider>
 }
 
 Store.propTypes = {

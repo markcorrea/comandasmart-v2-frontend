@@ -1,11 +1,11 @@
-import React, {useEffect, useMemo, memo} from 'react'
+import React, {useState, useEffect, useMemo, memo} from 'react'
 import {useHistory} from 'react-router-dom'
 
 import {Paper, ResponsiveTable} from 'components'
 
-import terminalsResponse from 'mocks/terminal'
-
 import {useStore} from 'store'
+
+import services from 'services'
 
 import styles from './index.module.scss'
 
@@ -18,14 +18,30 @@ const columns = [
 ]
 
 const TerminalList = () => {
-  const store = useStore()
+  const {showMenu, setLoading} = useStore()
   const history = useHistory()
 
-  const terminals = useMemo(() => terminalsResponse.data.map(terminal => ({...terminal, value: terminal.id})), [])
+  const {getTerminals} = services
+
+  const [terminals, setTerminals] = useState([])
+
+  const newTerminals = useMemo(() => terminals.map(terminal => ({...terminal, value: terminal.id})), [terminals])
 
   useEffect(() => {
-    store.showMenu()
-  }, [store])
+    showMenu()
+  }, [showMenu])
+
+  useEffect(() => {
+    const fetchTerminals = async () => {
+      setLoading(true)
+      const result = await getTerminals()
+      if (result) {
+        setTerminals(result.data)
+      }
+      setLoading(false)
+    }
+    fetchTerminals()
+  }, [getTerminals, setTerminals, setLoading])
 
   return (
     <>
@@ -35,7 +51,7 @@ const TerminalList = () => {
       <Paper className={styles.paper}>
         <ResponsiveTable
           columns={columns}
-          rows={terminals}
+          rows={newTerminals}
           titleColumn='name'
           onViewClick={row => history.push(`/terminal/view/${row.id}`)}
           onEditClick={row => history.push(`/terminal/${row.id}`)}

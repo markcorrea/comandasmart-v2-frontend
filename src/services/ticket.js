@@ -1,5 +1,12 @@
 import tickets from 'mocks/ticket'
 
+const getTickets = () =>
+  new Promise(resolve => {
+    setTimeout(() => {
+      resolve(tickets)
+    }, 1000)
+  })
+
 const getTicketById = id =>
   new Promise(resolve => {
     setTimeout(() => {
@@ -8,5 +15,6 @@ const getTicketById = id =>
   })
 
 export default {
+  getTickets,
   getTicketById,
 }

@@ -2,16 +2,30 @@ import React, {useContext} from 'react'
 import {SnackbarProvider, useSnackbar} from 'notistack'
 import PropTypes from 'prop-types'
 
+import {Spinner} from 'components'
+
 const MessageContext = React.createContext(null)
 
 const MessageComponent = ({children}) => {
-  const {enqueueSnackbar} = useSnackbar()
+  const {enqueueSnackbar, closeSnackbar} = useSnackbar()
 
   const show = (message, type = 'success') => {
     enqueueSnackbar(message, {variant: type})
   }
 
-  return <MessageContext.Provider value={{show}}>{children}</MessageContext.Provider>
+  const showLoading = key => {
+    key = enqueueSnackbar(
+      <>
+        <Spinner />
+        &nbsp;&nbsp;Loading&nbsp;...
+      </>,
+      {variant: 'default', persist: true, anchorOrigin: {horizontal: 'center', vertical: 'top'}}
+    )
+  }
+
+  const hideLoading = key => closeSnackbar(key)
+
+  return <MessageContext.Provider value={{show, showLoading, hideLoading}}>{children}</MessageContext.Provider>
 }
 
 const MessageWrapper = ({children}) => (

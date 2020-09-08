@@ -31,6 +31,7 @@ const Table = ({
   displayColumns,
   additionalRow,
   emptyTableMessage,
+  loading,
 }) => {
   const [rows, setRows] = useState([])
   const [sortingOrder, setSortingOrder] = useState('')
@@ -41,17 +42,19 @@ const Table = ({
 
   const checkRow = useCallback(
     (row, index) => {
+      if (loading) return null
       const newRow = {...row, checked: !row.checked}
       setRows(rows => {
         rows.splice(index, 1, newRow)
         return [...rows]
       })
     },
-    [setRows]
+    [setRows, loading]
   )
 
   const sortColumn = useCallback(
     key => {
+      if (loading) return null
       const formatCell = cell => (typeof cell === 'string' ? cell.toLowerCase() : cell)
 
       const sort = (rowA, rowB) => {
@@ -73,7 +76,7 @@ const Table = ({
         return [...sorted]
       })
     },
-    [setRows, sortingOrder, setSortingOrder]
+    [setRows, sortingOrder, setSortingOrder, loading]
   )
 
   const toggleAll = useCallback(
@@ -103,11 +106,12 @@ const Table = ({
 
   const clickableRowFunction = useCallback(
     (row, rowIndex) => {
+      if (loading) return null
       if (hasCheckbox) return {onClick: () => checkRow(row, rowIndex)}
       if (rowClickable) return {onClick: () => rowClickable(row)}
       return {}
     },
-    [checkRow, hasCheckbox, rowClickable]
+    [checkRow, hasCheckbox, rowClickable, loading]
   )
 
   return (
@@ -155,17 +159,17 @@ const Table = ({
                     )
                   })}
                   {onViewClick && (
-                    <td className={styles.view} onClick={() => onViewClick(row)}>
+                    <td className={styles.view} onClick={!loading ? () => onViewClick(row) : null}>
                       <i className='far fa-eye' />
                     </td>
                   )}
                   {onEditClick && (
-                    <td className={styles.edit} onClick={() => onEditClick(row)}>
+                    <td className={styles.edit} onClick={!loading ? () => onEditClick(row) : null}>
                       <i className='far fa-edit' />
                     </td>
                   )}
                   {onDeleteClick && (
-                    <td className={styles.delete} onClick={() => onDeleteClick(row)}>
+                    <td className={styles.delete} onClick={!loading ? () => onDeleteClick(row) : null}>
                       <i className='fas fa-trash-alt' />
                     </td>
                   )}
@@ -188,19 +192,34 @@ const Table = ({
       </table>
       {hasPagination && (
         <div className={styles.pagination}>
-          <Pagination count={100} page={1} onChangePage={console.log} rowsPerPage={10} onChangeRowsPerPage={console.log} />
+          <Pagination
+            loading={loading}
+            count={100}
+            page={1}
+            onChangePage={console.log}
+            rowsPerPage={10}
+            onChangeRowsPerPage={console.log}
+          />
         </div>
       )}
       {(hasButtons || hasCheckbox) && (
         <div className={styles.buttons}>
-          {hasCheckbox && <Button onClick={toggleAll}>Selecionar Tudo</Button>}
+          {hasCheckbox && (
+            <Button disabled={loading} onClick={toggleAll}>
+              Selecionar Tudo
+            </Button>
+          )}
           {hasButtons &&
             hasButtons.map((button, index) => {
               const {label, onClick, classes} = button
               const returnRows = hasCheckbox ? rows.filter(row => row.checked) : rows
 
               return (
-                <Button key={`button_${index}`} classes={buttonClasses(classes)} onClick={() => onClick(returnRows)}>
+                <Button
+                  key={`button_${index}`}
+                  classes={buttonClasses(classes)}
+                  disabled={loading}
+                  onClick={() => onClick(returnRows)}>
                   {label}
                 </Button>
               )
@@ -227,6 +246,7 @@ Table.propTypes = {
   displayColumns: PropTypes.array,
   additionalRow: PropTypes.any,
   emptyTableMessage: PropTypes.string,
+  loading: PropTypes.bool,
 }
 
 Table.defaultProps = {
@@ -234,6 +254,7 @@ Table.defaultProps = {
   displayColumns: [],
   additionalRow: null,
   emptyTableMessage: 'Não há itens cadastrados.',
+  loading: false,
 }
 
 export default memo(Table)

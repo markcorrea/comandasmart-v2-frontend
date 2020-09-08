@@ -1,11 +1,11 @@
-import React, {useEffect} from 'react'
+import React, {useState, useEffect} from 'react'
 import {useHistory} from 'react-router-dom'
 
 import {Paper, ResponsiveTable} from 'components'
 
-import clients from 'mocks/client'
-
 import {useStore} from 'store'
+
+import services from 'services'
 
 import styles from './index.module.scss'
 
@@ -28,12 +28,28 @@ export const columns = [
 ]
 
 const ClientList = () => {
-  const store = useStore()
+  const {showMenu, setLoading, loading} = useStore()
   const history = useHistory()
 
+  const {getClients} = services
+
+  const [clients, setClients] = useState([])
+
   useEffect(() => {
-    store.showMenu()
-  }, [store])
+    showMenu()
+  }, [showMenu])
+
+  useEffect(() => {
+    const fetchClients = async () => {
+      setLoading(true)
+      const result = await getClients()
+      if (result) {
+        setClients(result.data)
+      }
+      setLoading(false)
+    }
+    fetchClients()
+  }, [getClients, setClients, setLoading])
 
   return (
     <>
@@ -43,12 +59,13 @@ const ClientList = () => {
       <Paper className={styles.paper}>
         <ResponsiveTable
           columns={columns}
-          rows={clients.data}
+          rows={clients}
           titleColumn='name'
           onEditClick={row => history.push(`/client/${row.id}`)}
           onDeleteClick={row => console.log('delete', row)}
           rowClickable={row => history.push(`/client/${row.id}`)}
           emptyTableMessage='Não há clientes registrados.'
+          loading={loading}
         />
       </Paper>
     </>
