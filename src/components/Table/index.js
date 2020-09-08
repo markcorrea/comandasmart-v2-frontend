@@ -26,7 +26,7 @@ const Table = ({
   onDeleteClick,
   hasCheckbox,
   hasButtons,
-  hasPagination,
+  pagination,
   rowClickable,
   displayColumns,
   additionalRow,
@@ -190,15 +190,14 @@ const Table = ({
           )}
         </tbody>
       </table>
-      {hasPagination && (
+      {pagination && (
         <div className={styles.pagination}>
           <Pagination
             loading={loading}
-            count={100}
-            page={1}
-            onChangePage={console.log}
-            rowsPerPage={10}
-            onChangeRowsPerPage={console.log}
+            count={pagination.count}
+            page={pagination.page}
+            rowsPerPage={pagination.rowsPerPage}
+            onChangePage={pagination.onChangePage}
           />
         </div>
       )}
@@ -241,7 +240,7 @@ Table.propTypes = {
   withCheckbox: PropTypes.bool,
   hasCheckbox: PropTypes.bool,
   hasButtons: PropTypes.array,
-  hasPagination: PropTypes.bool,
+  pagination: PropTypes.oneOfType([PropTypes.bool, PropTypes.object]),
   rowClickable: PropTypes.func,
   displayColumns: PropTypes.array,
   additionalRow: PropTypes.any,

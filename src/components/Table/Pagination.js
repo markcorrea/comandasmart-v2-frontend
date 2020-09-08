@@ -57,9 +57,8 @@ const Pagination = ({count, page, onChangePage, rowsPerPage, onChangeRowsPerPage
       classes={classes}
       count={count}
       page={page}
-      onChangePage={!loading ? onChangePage : null}
+      onChangePage={!loading ? (_, page) => onChangePage(page) : () => {}}
       rowsPerPage={rowsPerPage}
-      onChangeRowsPerPage={!loading ? onChangeRowsPerPage : null}
       nextIconButtonProps={{classes: nextIconClasses}}
       backIconButtonProps={{classes: backIconClasses}}
     />

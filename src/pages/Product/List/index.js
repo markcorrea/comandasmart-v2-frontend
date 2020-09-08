@@ -36,7 +36,12 @@ const ProductList = () => {
 
   const {getProducts} = services
 
-  const [products, setProducts] = useState([])
+  const [response, setResponse] = useState({
+    data: [],
+    count: 0,
+    page: 0,
+    rowsPerPage: 0,
+  })
 
   useEffect(() => {
     showMenu()
@@ -47,12 +52,12 @@ const ProductList = () => {
       setLoading(true)
       const result = await getProducts()
       if (result) {
-        setProducts(result.data)
+        setResponse(result)
       }
       setLoading(false)
     }
     fetchProducts()
-  }, [getProducts, setProducts, setLoading])
+  }, [getProducts, setResponse, setLoading])
 
   return (
     <>
@@ -62,13 +67,14 @@ const ProductList = () => {
       <Paper className={styles.paper}>
         <ResponsiveTable
           columns={columns}
-          rows={products}
+          rows={response.data || []}
           titleColumn='name'
           onEditClick={row => history.push(`/product/${row.id}`)}
           onDeleteClick={row => console.log('delete', row)}
           rowClickable={row => history.push(`/product/${row.id}`)}
           emptyTableMessage='Não há produtos registrados.'
           loading={loading}
+          pagination={{count: 0, page: 0, rowsPerPage: 0, onChangePage: () => {}}}
         />
       </Paper>
     </>

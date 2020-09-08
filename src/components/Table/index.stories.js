@@ -46,7 +46,7 @@ export const Basic = () => {
         tableDisplayColumns={tableDisplayColumns}
         hasCheckbox
         hasButtons={tableButtons}
-        hasPagination
+        pagination
         rowClickable={row => console.log('ROW CLICKABLE', row)}
       />
     </div>

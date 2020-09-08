@@ -48,11 +48,15 @@ const TicketList = () => {
         <h1>Comandas</h1>
       </header>
       <Paper className={styles.paper}>
-        {tickets.map((ticket, index) => (
-          <div key={`ticket_${index}`} className={styles.flexCell}>
-            <TicketCard ticket={ticket} onClick={() => ticketClick(ticket.id)} />
-          </div>
-        ))}
+        {tickets.length ? (
+          tickets.map((ticket, index) => (
+            <div key={`ticket_${index}`} className={styles.flexCell}>
+              <TicketCard ticket={ticket} onClick={() => ticketClick(ticket.id)} />
+            </div>
+          ))
+        ) : (
+          <div className={styles.noTickets}>Não há comandas abertas.</div>
+        )}
 
         <div style={{padding: '20px'}}>
           <SpeedDial buttons={tableButtons} />

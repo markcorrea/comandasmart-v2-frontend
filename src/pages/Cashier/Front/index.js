@@ -52,11 +52,15 @@ const CashierFront = () => {
         <h1>Frente de Caixa</h1>
       </header>
       <Paper className={styles.paper}>
-        {tickets.map((ticket, index) => (
-          <div key={`ticket_${index}`} className={styles.flexCell}>
-            <TicketCard ticket={ticket} onClick={ticketClick} />
-          </div>
-        ))}
+        {tickets.length ? (
+          tickets.map((ticket, index) => (
+            <div key={`ticket_${index}`} className={styles.flexCell}>
+              <TicketCard ticket={ticket} onClick={ticketClick} />
+            </div>
+          ))
+        ) : (
+          <div className={styles.noTickets}>Não há comandas abertas.</div>
+        )}
         <div style={{padding: '20px'}}>
           <SpeedDial buttons={tableButtons} />
         </div>

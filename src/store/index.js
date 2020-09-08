@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react'
+import React, {useState, useContext, useCallback} from 'react'
 import PropTypes from 'prop-types'
 
 import {useMessage} from 'components/Message'
@@ -24,12 +24,18 @@ const Store = ({children}) => {
 
   const [state, updateState] = useState(initialState)
 
-  const showMenu = () => !state.sideMenu && updateState(prevState => ({...prevState, sideMenu: true}))
+  const showMenu = useCallback(() => !state.sideMenu && updateState(prevState => ({...prevState, sideMenu: true})), [
+    updateState,
+    state.sideMenu,
+  ])
 
-  const setLoading = setLoading => {
-    updateState(prevState => ({...prevState, loading: setLoading}))
-    setLoading ? showLoading(loadingStack) : hideLoading(loadingStack)
-  }
+  const setLoading = useCallback(
+    setLoading => {
+      updateState(prevState => ({...prevState, loading: setLoading}))
+      setLoading ? showLoading(loadingStack) : hideLoading(loadingStack)
+    },
+    [hideLoading, loadingStack, showLoading]
+  )
 
   return <StoreContext.Provider value={{...state, showMenu, setLoading}}>{children}</StoreContext.Provider>
 }
