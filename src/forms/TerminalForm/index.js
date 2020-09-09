@@ -20,7 +20,7 @@ const getErrorMessage = error => {
   return (error && error.message) || ''
 }
 
-const TerminalForm = ({terminal: defaultValues, onSubmit, onCancel}) => {
+const TerminalForm = ({terminal: defaultValues, onSubmit, onCancel, loading}) => {
   const mediaQuerySmall = useMediaQuery('min', mediaQuerySM)
   const headerButtonClass = {
     root: {
@@ -45,6 +45,7 @@ const TerminalForm = ({terminal: defaultValues, onSubmit, onCancel}) => {
       <div className={styles.fields}>
         <Controller
           as={Input}
+          disabled={loading}
           name='name'
           control={control}
           label='Nome'
@@ -53,27 +54,26 @@ const TerminalForm = ({terminal: defaultValues, onSubmit, onCancel}) => {
         />
       </div>
       <div className={styles.buttons}>
-        <Button type='button' color='cancel' classes={headerButtonClass} onClick={onCancel}>
+        <Button type='button' color='cancel' classes={headerButtonClass} onClick={onCancel} disabled={loading}>
           Cancelar
         </Button>
-        <Button classes={headerButtonClass}>Salvar</Button>
+        <Button classes={headerButtonClass} disabled={loading}>
+          Salvar
+        </Button>
       </div>
     </form>
   )
-}
-
-const defaultValues = {
-  name: '',
 }
 
 TerminalForm.propTypes = {
   terminal: PropTypes.object,
   onSubmit: PropTypes.func,
   onCancel: PropTypes.func,
+  loading: PropTypes.bool,
 }
 
 TerminalForm.defaultProps = {
-  terminal: defaultValues,
+  loading: false,
 }
 
 export default TerminalForm

@@ -47,9 +47,9 @@ const AppRouter = () => {
         <LoadableRoute path='/product/:productId' component={ProductDetails} layout={Layout} />
         <LoadableRoute path='/product' component={ProductDetails} layout={Layout} />
         <LoadableRoute path='/terminals' component={TerminalList} layout={Layout} />
+        <LoadableRoute exact path='/terminal/:terminalId/view' component={TerminalView} layout={Layout} />
         <LoadableRoute exact path='/terminal/:terminalId' component={TerminalDetails} layout={Layout} />
         <LoadableRoute exact path='/terminal' component={TerminalDetails} layout={Layout} />
-        <LoadableRoute exact path='/terminal/view/:terminalId' component={TerminalView} layout={Layout} />
         <LoadableRoute path='/tickets' component={TicketList} layout={Layout} />
         <LoadableRoute path='/ticket/:ticketId' component={TicketDetails} layout={Layout} />
         <LoadableRoute path='/ticket' component={TicketDetails} layout={Layout} />

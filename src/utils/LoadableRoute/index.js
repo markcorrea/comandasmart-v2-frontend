@@ -6,7 +6,6 @@ import ErrorBoundary from './ErrorBoundary'
 import DelayedFallback from './DelayedFallback'
 
 import Store from 'store'
-import MessageProvider from 'components/Message'
 
 const EmptyLayout = ({children}) => <>{children}</>
 
@@ -24,19 +23,17 @@ EmptyLayout.propTypes = {
  */
 const LoadableRoute = ({component: Component, routeComponent: RouteComponent, layout: Layout, ...options}) => {
   const PageComponent = () => (
-    <MessageProvider>
-      <Store>
-        <ErrorBoundary>
-          <Layout {...options}>
-            <ErrorBoundary>
-              <Suspense fallback={<DelayedFallback />}>
-                <Component />
-              </Suspense>
-            </ErrorBoundary>
-          </Layout>
-        </ErrorBoundary>
-      </Store>
-    </MessageProvider>
+    <Store>
+      <ErrorBoundary>
+        <Layout {...options}>
+          <ErrorBoundary>
+            <Suspense fallback={<DelayedFallback />}>
+              <Component />
+            </Suspense>
+          </ErrorBoundary>
+        </Layout>
+      </ErrorBoundary>
+    </Store>
   )
 
   return <RouteComponent {...options} component={PageComponent} />

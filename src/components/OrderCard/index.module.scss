@@ -1,0 +1,36 @@
+@import '~assets/styles/_colors.scss';
+@import '~assets/styles/_typography.scss';
+
+.container {
+  padding: 10px 20px;
+}
+
+.productNumber {
+  font-family: $robotoBoldFontFamily;
+  font-size: $biggerFontSize;
+}
+
+.productName {
+  font-size: $bigFontSize;
+  color: $mediumGray;
+  line-height: 30px;
+  margin: 15px 0;
+}
+
+.price {
+  font-family: $defaultFontFamily;
+  font-size: $biggerFontSize;
+}
+
+.trash {
+  float: right;
+  cursor: pointer;
+  i {
+    color: $red;
+    font-size: 19px;
+
+    &:hover {
+      color: $saffron;
+    }
+  }
+}

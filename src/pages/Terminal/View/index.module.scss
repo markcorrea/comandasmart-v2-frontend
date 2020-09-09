@@ -6,9 +6,14 @@
 
 .container {
   margin: 0 -15px;
+  position: relative;
 }
 
 .flexCell {
   padding: 15px;
   width: 100%;
+}
+
+.noOrders {
+  text-align: center;
 }

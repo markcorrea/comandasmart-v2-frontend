@@ -1,11 +1,11 @@
-import React, {useState, useEffect, useMemo, memo} from 'react'
+import React, {useState, useEffect, useCallback} from 'react'
 import {useHistory} from 'react-router-dom'
 
-import {Paper, ResponsiveTable} from 'components'
+import {Paper, ResponsiveTable, SpeedDial} from 'components'
 
 import {useStore} from 'store'
 
-import services from 'services'
+import useServices from 'services'
 
 import styles from './index.module.scss'
 
@@ -18,14 +18,18 @@ const columns = [
 ]
 
 const TerminalList = () => {
-  const {showMenu, setLoading} = useStore()
+  const {showMenu} = useStore()
   const history = useHistory()
-
-  const {getTerminals} = services
+  const {getTerminals, deleteTerminalById} = useServices()
 
   const [terminals, setTerminals] = useState([])
 
-  const newTerminals = useMemo(() => terminals.map(terminal => ({...terminal, value: terminal.id})), [terminals])
+  const tableButtons = [
+    {
+      label: 'Novo Terminal',
+      onClick: () => history.push(`/terminal/`),
+    },
+  ]
 
   useEffect(() => {
     showMenu()
@@ -33,15 +37,19 @@ const TerminalList = () => {
 
   useEffect(() => {
     const fetchTerminals = async () => {
-      setLoading(true)
       const result = await getTerminals()
-      if (result) {
-        setTerminals(result.data)
-      }
-      setLoading(false)
+      if (result) setTerminals(result.data)
     }
     fetchTerminals()
-  }, [getTerminals, setTerminals, setLoading])
+  }, [getTerminals, setTerminals])
+
+  const deleteTerminal = useCallback(
+    async id => {
+      const result = await deleteTerminalById(id)
+      if (result) setTerminals(result.data)
+    },
+    [deleteTerminalById]
+  )
 
   return (
     <>
@@ -51,17 +59,20 @@ const TerminalList = () => {
       <Paper className={styles.paper}>
         <ResponsiveTable
           columns={columns}
-          rows={newTerminals}
+          rows={terminals}
           titleColumn='name'
-          onViewClick={row => history.push(`/terminal/view/${row.id}`)}
+          onDeleteClick={row => deleteTerminal(row.id)}
+          onViewClick={row => history.push(`/terminal/${row.id}/view`)}
           onEditClick={row => history.push(`/terminal/${row.id}`)}
-          onDeleteClick={row => console.log('delete', row)}
           rowClickable={row => history.push(`/terminal/${row.id}`)}
           emptyTableMessage='Não há comandas registradas.'
         />
+        <div style={{padding: '20px'}}>
+          <SpeedDial buttons={tableButtons} />
+        </div>
       </Paper>
     </>
   )
 }
 
-export default memo(TerminalList)
+export default TerminalList

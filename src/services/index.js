@@ -1,19 +1,23 @@
-import client from './client'
 import cashier from './cashier'
+import client from './client'
 import company from './company'
+import useOrders from './order'
 import product from './product'
-import terminal from './terminal'
+import useTerminals from './terminal'
 import ticket from './ticket'
 import user from './user'
 
-const functions = {
-  ...cashier,
-  ...client,
-  ...company,
-  ...product,
-  ...terminal,
-  ...ticket,
-  ...user,
+const useServices = () => {
+  return {
+    ...cashier,
+    ...client,
+    ...company,
+    ...useOrders(),
+    ...product,
+    ...useTerminals(),
+    ...ticket,
+    ...user,
+  }
 }
 
-export default functions
+export default useServices

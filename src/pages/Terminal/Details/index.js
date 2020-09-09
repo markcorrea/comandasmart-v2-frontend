@@ -1,36 +1,48 @@
 import React, {useCallback, useEffect, useState} from 'react'
+
 import {useParams, useHistory} from 'react-router-dom'
+import {useStore} from 'store'
 
 import {Paper} from 'components'
-import {useStore} from 'store'
 import TerminalForm from 'forms/TerminalForm'
 
-import terminalResponse from 'mocks/terminal'
+import useServices from 'services'
 
 import styles from './index.module.scss'
 
 const TerminalDetails = () => {
-  const store = useStore()
+  const {showMenu, loading} = useStore()
   const {terminalId} = useParams()
   const history = useHistory()
 
-  const [terminal, setTerminal] = useState({})
+  const {getTerminalById, saveTerminal} = useServices()
 
-  const fetchTerminal = useCallback(id => {
-    const result = terminalResponse.data.find(item => item.id === id)
-    return result
-  }, [])
+  const [terminal, setTerminal] = useState({name: ''})
 
   useEffect(() => {
-    store.showMenu()
-  }, [store])
+    showMenu()
+  }, [showMenu])
 
   useEffect(() => {
-    if (terminalId && terminalId !== terminal.id) {
-      const newTerminal = fetchTerminal(terminalId)
-      setTerminal(newTerminal)
+    const fetchTerminal = async () => {
+      const result = await getTerminalById(terminalId)
+      if (result) setTerminal(result)
     }
-  }, [terminal, fetchTerminal, setTerminal, terminalId])
+
+    if (terminalId) fetchTerminal(terminalId)
+  }, [terminalId, getTerminalById])
+
+  const postTerminal = useCallback(
+    async body => {
+      const payload = {
+        ...body,
+        ...(terminalId ? {id: terminalId} : {}),
+      }
+      const result = await saveTerminal(payload)
+      if (result) history.push(`/terminals`)
+    },
+    [terminalId, saveTerminal, history]
+  )
 
   return (
     <>
@@ -40,8 +52,9 @@ const TerminalDetails = () => {
       <Paper className={styles.paper}>
         <TerminalForm
           terminal={terminal}
-          onSubmit={data => console.log('SUBMIT', data)}
+          onSubmit={data => postTerminal(data)}
           onCancel={() => history.push('/terminals')}
+          loading={loading}
         />
       </Paper>
     </>

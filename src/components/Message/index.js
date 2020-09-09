@@ -13,8 +13,9 @@ const MessageComponent = ({children}) => {
     enqueueSnackbar(message, {variant: type})
   }
 
-  const showLoading = key => {
-    key = enqueueSnackbar(
+  let loading
+  const showLoading = () => {
+    loading = enqueueSnackbar(
       <>
         <Spinner />
         &nbsp;&nbsp;Loading&nbsp;...
@@ -23,7 +24,7 @@ const MessageComponent = ({children}) => {
     )
   }
 
-  const hideLoading = key => closeSnackbar(key)
+  const hideLoading = () => closeSnackbar(loading)
 
   return <MessageContext.Provider value={{show, showLoading, hideLoading}}>{children}</MessageContext.Provider>
 }
@@ -31,6 +32,7 @@ const MessageComponent = ({children}) => {
 const MessageWrapper = ({children}) => (
   <SnackbarProvider
     maxSnack={10}
+    autoHideDuration={2000}
     anchorOrigin={{
       vertical: 'top',
       horizontal: 'right',
