@@ -76,11 +76,28 @@ const useTickets = () => {
     [setLoading, show]
   )
 
+  const removeProductFromTicket = useCallback(
+    (ticketId, productId) => {
+      const ticket = tickets.data.find(ticket => ticket.id === ticketId)
+
+      return new Promise(resolve => {
+        setLoading(true)
+        setTimeout(() => {
+          setLoading(false)
+          show('Produto removido com sucesso!')
+          return resolve({...ticket, items: [...ticket.items.filter(item => item.id !== productId)]})
+        }, 1000)
+      })
+    },
+    [setLoading, show]
+  )
+
   return {
     getTickets,
     getTicketById,
     addProductsToTicketByCode,
     addProductsToTicketById,
+    removeProductFromTicket,
   }
 }
 

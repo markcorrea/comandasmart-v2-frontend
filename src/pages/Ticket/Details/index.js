@@ -10,7 +10,13 @@ import useServices from 'services'
 import styles from './index.module.scss'
 
 const TicketDetails = () => {
-  const {searchProducts, getTicketById, addProductsToTicketByCode, addProductsToTicketById} = useServices()
+  const {
+    searchProducts,
+    getTicketById,
+    addProductsToTicketByCode,
+    addProductsToTicketById,
+    removeProductFromTicket,
+  } = useServices()
   const {showMenu} = useStore()
   const {ticketId} = useParams()
 
@@ -45,6 +51,14 @@ const TicketDetails = () => {
     [ticketId, addProductsToTicketById, setProducts]
   )
 
+  const removeProduct = useCallback(
+    async productId => {
+      const result = await removeProductFromTicket(ticketId, productId)
+      if (result) setProducts(result.items)
+    },
+    [ticketId, removeProductFromTicket, setProducts]
+  )
+
   return (
     <>
       <header className={styles.header}>
@@ -59,7 +73,7 @@ const TicketDetails = () => {
         {products.length ? (
           products.map((product, index) => (
             <div key={`item_${index}`} className={styles.flexCell}>
-              <ProductCard product={product} onDeleteClick={() => console.log('delete')} />
+              <ProductCard product={product} onDeleteClick={() => removeProduct(product.id)} />
             </div>
           ))
         ) : (
