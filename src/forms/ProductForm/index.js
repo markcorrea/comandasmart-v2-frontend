@@ -31,10 +31,10 @@ const defaultValues = {
   stock: '',
   price: '',
   pricePerUnit: '',
-  terminal: '',
+  terminalId: '',
 }
 
-const ProductForm = ({product, terminals, unitTypes, onSubmit, onCancel}) => {
+const ProductForm = ({product, terminals, unitTypes, onSubmit, onCancel, loading}) => {
   const mediaQuerySmall = useMediaQuery('min', mediaQuerySM)
   const headerButtonClass = {
     root: {
@@ -49,9 +49,7 @@ const ProductForm = ({product, terminals, unitTypes, onSubmit, onCancel}) => {
   })
 
   useEffect(() => {
-    if (product) {
-      reset(product)
-    }
+    if (product) reset(product)
   }, [reset, product])
 
   return (
@@ -64,6 +62,7 @@ const ProductForm = ({product, terminals, unitTypes, onSubmit, onCancel}) => {
           label='Nome'
           error={Boolean(errors.name)}
           helperText={getErrorMessage(errors.name)}
+          disabled={loading}
         />
         <Controller
           as={NumberInput}
@@ -72,8 +71,9 @@ const ProductForm = ({product, terminals, unitTypes, onSubmit, onCancel}) => {
           label='Código Único'
           error={Boolean(errors.uniqueCode)}
           helperText={getErrorMessage(errors.uniqueCode)}
+          disabled={loading}
         />
-        <Controller as={Input} name='brand' control={control} label={'Marca'} />
+        <Controller as={Input} name='brand' control={control} label={'Marca'} disabled={loading} />
         <Controller
           as={NumberInput}
           name='barCode'
@@ -81,8 +81,17 @@ const ProductForm = ({product, terminals, unitTypes, onSubmit, onCancel}) => {
           label='Código de Barras'
           error={Boolean(errors.barCode)}
           helperText={getErrorMessage(errors.barCode)}
+          disabled={loading}
         />
-        <Controller as={Select} name='unitType' items={unitTypes} control={control} label='Unidades de Medida' showEmptyOption />
+        <Controller
+          as={Select}
+          name='unitType'
+          items={unitTypes}
+          control={control}
+          label='Unidades de Medida'
+          showEmptyOption
+          disabled={loading}
+        />
         <Controller
           as={NumberInput}
           name='volumePerUnit'
@@ -90,6 +99,7 @@ const ProductForm = ({product, terminals, unitTypes, onSubmit, onCancel}) => {
           thousandSeparator
           control={control}
           label='Quantidade por Unidade'
+          disabled={loading}
         />
         <Controller
           as={NumberInput}
@@ -100,6 +110,7 @@ const ProductForm = ({product, terminals, unitTypes, onSubmit, onCancel}) => {
           thousandSeparator
           error={Boolean(errors.stock)}
           helperText={getErrorMessage(errors.stock)}
+          disabled={loading}
         />
         <Controller
           as={NumberInput}
@@ -111,6 +122,7 @@ const ProductForm = ({product, terminals, unitTypes, onSubmit, onCancel}) => {
           thousandSeparator
           decimalScale={2}
           prefix='$ '
+          disabled={loading}
         />
         <Controller
           as={NumberInput}
@@ -121,23 +133,27 @@ const ProductForm = ({product, terminals, unitTypes, onSubmit, onCancel}) => {
           thousandSeparator
           error={Boolean(errors.pricePerUnit)}
           helperText={getErrorMessage(errors.pricePerUnit)}
+          disabled={loading}
         />
         <Controller
           as={Select}
-          name='terminal'
+          name='terminalId'
           items={terminals}
           control={control}
           label='Terminal'
-          error={Boolean(errors.terminal)}
-          helperText={getErrorMessage(errors.terminal)}
+          error={Boolean(errors.terminalId)}
+          helperText={getErrorMessage(errors.terminalId)}
           showEmptyOption
+          disabled={loading}
         />
       </div>
       <div className={styles.buttons}>
-        <Button onClick={() => onCancel()} type='button' color='cancel' classes={headerButtonClass}>
+        <Button onClick={() => onCancel()} type='button' color='cancel' classes={headerButtonClass} disabled={loading}>
           Cancelar
         </Button>
-        <Button classes={headerButtonClass}>Salvar</Button>
+        <Button classes={headerButtonClass} disabled={loading}>
+          Salvar
+        </Button>
       </div>
     </form>
   )
@@ -149,6 +165,7 @@ ProductForm.propTypes = {
   onCancel: PropTypes.func,
   terminals: PropTypes.array,
   unitTypes: PropTypes.array,
+  loading: PropTypes.bool,
 }
 
 ProductForm.defaultProps = {

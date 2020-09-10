@@ -1,20 +1,20 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useCallback} from 'react'
 import {useParams} from 'react-router-dom'
 
 import {Paper, ProductCard, ProductSearch} from 'components'
 
 import {useStore} from 'store'
 
-import services from 'services'
+import useServices from 'services'
 
 import styles from './index.module.scss'
 
 const TicketDetails = () => {
-  const {searchProducts, getTicketById} = services
-  const {showMenu, setLoading} = useStore()
+  const {searchProducts, getTicketById, addProductsToTicketByCode, addProductsToTicketById} = useServices()
+  const {showMenu} = useStore()
   const {ticketId} = useParams()
 
-  const [ticket, setTicket] = useState(null)
+  const [products, setProducts] = useState([])
 
   useEffect(() => {
     showMenu()
@@ -22,16 +22,28 @@ const TicketDetails = () => {
 
   useEffect(() => {
     const fetchTicket = async () => {
-      setLoading(true)
       const result = await getTicketById(ticketId)
-      if (result) {
-        setTicket(result)
-      }
-      setLoading(false)
+      if (result && result.items.length) setProducts(result.items)
     }
 
     fetchTicket(ticketId)
-  }, [ticketId, getTicketById, setLoading])
+  }, [ticketId, getTicketById, setProducts])
+
+  const addProductByCode = useCallback(
+    async uniqueCode => {
+      const result = await addProductsToTicketByCode(ticketId, uniqueCode)
+      if (result) setProducts(result.items)
+    },
+    [ticketId, addProductsToTicketByCode, setProducts]
+  )
+
+  const addProductByClick = useCallback(
+    async ({product, quantity}) => {
+      const result = await addProductsToTicketById(ticketId, product.id, quantity)
+      if (result) setProducts(result.items)
+    },
+    [ticketId, addProductsToTicketById, setProducts]
+  )
 
   return (
     <>
@@ -41,13 +53,13 @@ const TicketDetails = () => {
       <Paper className={styles.paper}>
         <ProductSearch
           searchProducts={searchProducts}
-          onEnterPress={message => console.log('enter here', message)}
-          onConfirm={() => console.log('confirming')}
+          onEnterPress={uniqueCode => addProductByCode(uniqueCode)}
+          onConfirm={productData => addProductByClick(productData)}
         />
-        {ticket && ticket.items.length ? (
-          ticket.items.map((product, index) => (
+        {products.length ? (
+          products.map((product, index) => (
             <div key={`item_${index}`} className={styles.flexCell}>
-              <ProductCard product={product} onDeleteClick={() => console.log('HERE')} />
+              <ProductCard product={product} onDeleteClick={() => console.log('delete')} />
             </div>
           ))
         ) : (

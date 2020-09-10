@@ -20,7 +20,18 @@ const getErrorMessage = error => {
   return (error && error.message) || ''
 }
 
-const ClientForm = ({client: defaultValues, onSubmit, onCancel}) => {
+const defaultValues = {
+  name: '',
+  email: '',
+  cpf: '',
+  birthDate: new Date(),
+  phone: '',
+  address: '',
+  city: '',
+  state: '',
+}
+
+const ClientForm = ({client, onSubmit, onCancel, loading}) => {
   const mediaQuerySmall = useMediaQuery('min', mediaQuerySM)
   const headerButtonClass = {
     root: {
@@ -35,10 +46,10 @@ const ClientForm = ({client: defaultValues, onSubmit, onCancel}) => {
   })
 
   useEffect(() => {
-    if (defaultValues) {
-      reset(defaultValues)
+    if (client) {
+      reset(client)
     }
-  }, [reset, defaultValues])
+  }, [reset, client])
 
   return (
     <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
@@ -50,6 +61,7 @@ const ClientForm = ({client: defaultValues, onSubmit, onCancel}) => {
           label='Nome'
           error={Boolean(errors.name)}
           helperText={getErrorMessage(errors.name)}
+          disabled={loading}
         />
         <Controller
           as={Input}
@@ -58,6 +70,7 @@ const ClientForm = ({client: defaultValues, onSubmit, onCancel}) => {
           label={'E-mail'}
           error={Boolean(errors.email)}
           helperText={getErrorMessage(errors.email)}
+          disabled={loading}
         />
         <Controller
           as={Input}
@@ -66,6 +79,7 @@ const ClientForm = ({client: defaultValues, onSubmit, onCancel}) => {
           label={'CPF'}
           error={Boolean(errors.cpf)}
           helperText={getErrorMessage(errors.cpf)}
+          disabled={loading}
         />
         <Controller
           as={Datepicker}
@@ -74,6 +88,7 @@ const ClientForm = ({client: defaultValues, onSubmit, onCancel}) => {
           label='Data de Nascimento'
           error={Boolean(errors.birthDate)}
           helperText={getErrorMessage(errors.birthDate)}
+          disabled={loading}
         />
         <Controller
           as={MaskInput}
@@ -83,6 +98,7 @@ const ClientForm = ({client: defaultValues, onSubmit, onCancel}) => {
           error={Boolean(errors.phone)}
           helperText={getErrorMessage(errors.phone)}
           mask={['(', /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+          disabled={loading}
         />
         <Controller
           as={Input}
@@ -91,6 +107,7 @@ const ClientForm = ({client: defaultValues, onSubmit, onCancel}) => {
           label='Endereço'
           error={Boolean(errors.address)}
           helperText={getErrorMessage(errors.address)}
+          disabled={loading}
         />
         <Controller
           as={Input}
@@ -99,6 +116,7 @@ const ClientForm = ({client: defaultValues, onSubmit, onCancel}) => {
           label='Cidade'
           error={Boolean(errors.city)}
           helperText={getErrorMessage(errors.city)}
+          disabled={loading}
         />
         <Controller
           as={Input}
@@ -107,37 +125,26 @@ const ClientForm = ({client: defaultValues, onSubmit, onCancel}) => {
           label='Estado'
           error={Boolean(errors.state)}
           helperText={getErrorMessage(errors.state)}
+          disabled={loading}
         />
       </div>
       <div className={styles.buttons}>
-        <Button type='button' color='cancel' classes={headerButtonClass} onClick={onCancel}>
+        <Button type='button' color='cancel' classes={headerButtonClass} onClick={onCancel} disabled={loading}>
           Cancelar
         </Button>
-        <Button classes={headerButtonClass}>Salvar</Button>
+        <Button classes={headerButtonClass} disabled={loading}>
+          Salvar
+        </Button>
       </div>
     </form>
   )
-}
-
-const defaultValues = {
-  name: '',
-  email: '',
-  cpf: '',
-  birthDate: new Date(),
-  phone: '',
-  address: '',
-  city: '',
-  state: '',
 }
 
 ClientForm.propTypes = {
   client: PropTypes.object,
   onSubmit: PropTypes.func,
   onCancel: PropTypes.func,
-}
-
-ClientForm.defaultProps = {
-  client: defaultValues,
+  loading: PropTypes.bool,
 }
 
 export default ClientForm

@@ -20,7 +20,15 @@ const getErrorMessage = error => {
   return (error && error.message) || ''
 }
 
-const UserForm = ({user: defaultValues, onSubmit, onCancel}) => {
+const defaultValues = {
+  name: '',
+  uniqueCode: '',
+  email: '',
+  role: '',
+  password: '',
+}
+
+const UserForm = ({user, onSubmit, onCancel, loading}) => {
   const mediaQuerySmall = useMediaQuery('min', mediaQuerySM)
   const headerButtonClass = {
     root: {
@@ -35,10 +43,10 @@ const UserForm = ({user: defaultValues, onSubmit, onCancel}) => {
   })
 
   useEffect(() => {
-    if (defaultValues) {
-      reset(defaultValues)
+    if (user) {
+      reset(user)
     }
-  }, [reset, defaultValues])
+  }, [reset, user])
 
   return (
     <form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
@@ -50,6 +58,7 @@ const UserForm = ({user: defaultValues, onSubmit, onCancel}) => {
           label='Nome'
           error={Boolean(errors.name)}
           helperText={getErrorMessage(errors.name)}
+          disabled={loading}
         />
         <Controller
           as={Input}
@@ -58,6 +67,7 @@ const UserForm = ({user: defaultValues, onSubmit, onCancel}) => {
           label={'Código Único'}
           error={Boolean(errors.uniqueCode)}
           helperText={getErrorMessage(errors.uniqueCode)}
+          disabled={loading}
         />
         <Controller
           as={Input}
@@ -66,14 +76,16 @@ const UserForm = ({user: defaultValues, onSubmit, onCancel}) => {
           label={'E-mail'}
           error={Boolean(errors.email)}
           helperText={getErrorMessage(errors.email)}
+          disabled={loading}
         />
         <Controller
           as={Input}
-          name='permission'
+          name='role'
           control={control}
           label='Nível de Acesso'
           error={Boolean(errors.birthDate)}
           helperText={getErrorMessage(errors.birthDate)}
+          disabled={loading}
         />
         <Controller
           as={Input}
@@ -82,34 +94,26 @@ const UserForm = ({user: defaultValues, onSubmit, onCancel}) => {
           label='Senha'
           error={Boolean(errors.password)}
           helperText={getErrorMessage(errors.password)}
+          disabled={loading}
         />
       </div>
       <div className={styles.buttons}>
-        <Button type='button' color='cancel' classes={headerButtonClass} onClick={onCancel}>
+        <Button type='button' color='cancel' classes={headerButtonClass} onClick={onCancel} disabled={loading}>
           Cancelar
         </Button>
-        <Button classes={headerButtonClass}>Salvar</Button>
+        <Button classes={headerButtonClass} disabled={loading}>
+          Salvar
+        </Button>
       </div>
     </form>
   )
-}
-
-const defaultValues = {
-  name: '',
-  uniqueCode: '',
-  email: '',
-  permission: '',
-  password: '',
 }
 
 UserForm.propTypes = {
   user: PropTypes.object,
   onSubmit: PropTypes.func,
   onCancel: PropTypes.func,
-}
-
-UserForm.defaultProps = {
-  user: defaultValues,
+  loading: PropTypes.bool,
 }
 
 export default UserForm

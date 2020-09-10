@@ -1,12 +1,27 @@
+import {useCallback} from 'react'
 import cashiers from 'mocks/cashier'
 
-const getCashiers = () =>
-  new Promise(resolve => {
-    setTimeout(() => {
-      resolve(cashiers)
-    }, 1000)
-  })
+import {useStore} from 'store'
 
-export default {
-  getCashiers,
+const useCashiers = () => {
+  const {setLoading} = useStore()
+
+  const getCashiers = useCallback(
+    () =>
+      new Promise(resolve => {
+        setLoading(true)
+
+        setTimeout(() => {
+          setLoading(false)
+          resolve(cashiers)
+        }, 1000)
+      }),
+    [setLoading]
+  )
+
+  return {
+    getCashiers,
+  }
 }
+
+export default useCashiers

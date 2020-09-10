@@ -1,11 +1,11 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useCallback} from 'react'
 import {useHistory} from 'react-router-dom'
 
-import {Paper, ResponsiveTable} from 'components'
+import {Paper, ResponsiveTable, SpeedDial} from 'components'
 
 import {useStore} from 'store'
 
-import services from 'services'
+import useServices from 'services'
 
 import styles from './index.module.scss'
 
@@ -28,12 +28,24 @@ export const columns = [
 ]
 
 const ClientList = () => {
-  const {showMenu, setLoading, loading} = useStore()
+  const {showMenu, loading} = useStore()
   const history = useHistory()
 
-  const {getClients} = services
+  const {getClients, deleteClientById} = useServices()
 
-  const [clients, setClients] = useState([])
+  const [clients, setClients] = useState({
+    data: [],
+    count: 0,
+    page: 0,
+    rowsPerPage: 0,
+  })
+
+  const tableButtons = [
+    {
+      label: 'Novo Cliente',
+      onClick: () => history.push(`/client/`),
+    },
+  ]
 
   useEffect(() => {
     showMenu()
@@ -41,15 +53,19 @@ const ClientList = () => {
 
   useEffect(() => {
     const fetchClients = async () => {
-      setLoading(true)
       const result = await getClients()
-      if (result) {
-        setClients(result.data)
-      }
-      setLoading(false)
+      if (result) setClients(result)
     }
     fetchClients()
-  }, [getClients, setClients, setLoading])
+  }, [getClients, setClients])
+
+  const deleteClient = useCallback(
+    async id => {
+      const result = await deleteClientById(id)
+      if (result) setClients(result)
+    },
+    [deleteClientById, setClients]
+  )
 
   return (
     <>
@@ -59,14 +75,17 @@ const ClientList = () => {
       <Paper className={styles.paper}>
         <ResponsiveTable
           columns={columns}
-          rows={clients}
+          rows={clients.data || []}
           titleColumn='name'
           onEditClick={row => history.push(`/client/${row.id}`)}
-          onDeleteClick={row => console.log('delete', row)}
+          onDeleteClick={row => deleteClient(row.id)}
           rowClickable={row => history.push(`/client/${row.id}`)}
           emptyTableMessage='Não há clientes registrados.'
           loading={loading}
         />
+        <div style={{padding: '20px'}}>
+          <SpeedDial buttons={tableButtons} />
+        </div>
       </Paper>
     </>
   )

@@ -1,36 +1,46 @@
-import React, {useCallback, useEffect, useState} from 'react'
+import React, {useEffect, useState, useCallback} from 'react'
 import {useParams, useHistory} from 'react-router-dom'
 
 import {Paper} from 'components'
 import {useStore} from 'store'
 import ClientForm from 'forms/ClientForm'
 
-import clientResponse from 'mocks/client'
+import useServices from 'services'
 
 import styles from './index.module.scss'
 
 const ClientDetails = () => {
-  const store = useStore()
+  const {showMenu, loading} = useStore()
   const {clientId} = useParams()
   const history = useHistory()
+  const {getClientById, saveClient} = useServices()
 
   const [client, setClient] = useState({})
 
-  const fetchClient = useCallback(id => {
-    const result = clientResponse.data.find(item => item.id === id)
-    return result
-  }, [])
-
   useEffect(() => {
-    store.showMenu()
-  }, [store])
-
-  useEffect(() => {
-    if (clientId && clientId !== client.id) {
-      const newClient = fetchClient(clientId)
-      setClient(newClient)
+    const fetchClient = async () => {
+      const result = await getClientById(clientId)
+      if (result) setClient(result.data)
     }
-  }, [client, fetchClient, setClient, clientId])
+
+    if (clientId) fetchClient()
+  }, [clientId, getClientById, setClient])
+
+  useEffect(() => {
+    showMenu()
+  }, [showMenu])
+
+  const postClient = useCallback(
+    async body => {
+      const payload = {
+        ...body,
+        ...(clientId ? {id: clientId} : {}),
+      }
+      const result = await saveClient(payload)
+      if (result) history.push(`/clients`)
+    },
+    [clientId, saveClient, history]
+  )
 
   return (
     <>
@@ -38,7 +48,12 @@ const ClientDetails = () => {
         <h1>{clientId ? 'Editar' : 'Criar'} Cliente</h1>
       </header>
       <Paper className={styles.paper}>
-        <ClientForm client={client} onSubmit={data => console.log('SUBMIT', data)} onCancel={() => history.push('/clients')}/>
+        <ClientForm
+          client={client}
+          onSubmit={data => postClient(data)}
+          onCancel={() => history.push('/clients')}
+          loading={loading}
+        />
       </Paper>
     </>
   )

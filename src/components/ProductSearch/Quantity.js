@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useCallback, useMemo, memo} from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 
@@ -7,8 +7,11 @@ import NumberInput from 'components/NumberInput'
 import styles from './index.module.scss'
 
 const Quantity = ({quantity, setQuantity, disabled}) => {
-  const decrement = () => (quantity > 0 ? setQuantity(parseInt(quantity) - 1) : null)
-  const increment = () => setQuantity(parseInt(quantity) + 1)
+  const handleSetQuantity = useCallback(input => setQuantity(parseInt(input)), [setQuantity])
+  const quantityInString = useMemo(() => quantity.toString(), [quantity])
+
+  const decrement = () => (quantity > 0 ? handleSetQuantity(parseInt(quantity) - 1) : null)
+  const increment = () => handleSetQuantity(parseInt(quantity) + 1)
 
   const Minus = () => (
     <i
@@ -25,8 +28,8 @@ const Quantity = ({quantity, setQuantity, disabled}) => {
 
   return (
     <NumberInput
-      value={quantity}
-      onChange={setQuantity}
+      value={quantityInString}
+      onChange={handleSetQuantity}
       disabled={disabled}
       label=' '
       thousandSeparator
@@ -46,4 +49,4 @@ Quantity.defaultProps = {
   disabled: false,
 }
 
-export default Quantity
+export default memo(Quantity)

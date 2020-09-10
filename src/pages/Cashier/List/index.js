@@ -3,7 +3,7 @@ import {useHistory} from 'react-router-dom'
 
 import {Paper, ResponsiveTable} from 'components'
 
-import services from 'services'
+import useServices from 'services'
 
 import {useStore} from 'store'
 
@@ -33,10 +33,10 @@ export const columns = [
 ]
 
 const CashierList = () => {
-  const {showMenu, setLoading, loading} = useStore()
+  const {showMenu, loading} = useStore()
   const history = useHistory()
 
-  const {getCashiers} = services
+  const {getCashiers} = useServices()
 
   const [cashiers, setCashiers] = useState([])
 
@@ -46,15 +46,11 @@ const CashierList = () => {
 
   useEffect(() => {
     const fetchCashiers = async () => {
-      setLoading(true)
       const result = await getCashiers()
-      if (result) {
-        setCashiers(result.data)
-      }
-      setLoading(false)
+      if (result) setCashiers(result.data)
     }
     fetchCashiers()
-  }, [getCashiers, setCashiers, setLoading])
+  }, [getCashiers, setCashiers])
 
   return (
     <>

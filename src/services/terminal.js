@@ -63,7 +63,7 @@ const useTerminals = () => {
         setTimeout(() => {
           setLoading(false)
           show('Terminal removido com sucesso!')
-          resolve({data: terminals.data.filter(terminal => terminal.id !== id)})
+          resolve({...terminals, data: terminals.data.filter(terminal => terminal.id !== id)})
         }, 1000)
       }),
     [setLoading, show]

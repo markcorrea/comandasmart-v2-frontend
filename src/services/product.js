@@ -1,20 +1,94 @@
+import {useCallback} from 'react'
 import products from 'mocks/product'
 
-const searchProducts = search =>
-  new Promise(resolve => {
-    setTimeout(() => {
-      resolve(products.data.filter(item => item.name.toLowerCase().includes(search.toLowerCase())))
-    }, 1000)
-  })
+import {useStore} from 'store'
+import {useMessage} from 'components/Message'
 
-const getProducts = () =>
-  new Promise(resolve => {
-    setTimeout(() => {
-      resolve(products)
-    }, 1000)
-  })
+const useProducts = () => {
+  const {setLoading} = useStore()
+  const {show} = useMessage()
 
-export default {
-  searchProducts,
-  getProducts
+  const searchProducts = useCallback(
+    search =>
+      new Promise(resolve => {
+        setLoading(true)
+        setTimeout(() => {
+          setLoading(false)
+          resolve(products.data.filter(item => item.name.toLowerCase().includes(search.toLowerCase())))
+        }, 1000)
+      }),
+    [setLoading]
+  )
+
+  const getProducts = useCallback(
+    () =>
+      new Promise(resolve => {
+        setLoading(true)
+        setTimeout(() => {
+          setLoading(false)
+          resolve(products)
+        }, 1000)
+      }),
+    [setLoading]
+  )
+
+  const getProductById = useCallback(
+    id =>
+      new Promise(resolve => {
+        setLoading(true)
+        setTimeout(() => {
+          setLoading(false)
+          resolve({data: products.data.find(product => product.id === id)})
+        }, 1000)
+      }),
+    [setLoading]
+  )
+
+  const saveProduct = useCallback(
+    body => {
+      if (body.id) {
+        // is updating
+        return new Promise(resolve => {
+          setLoading(true)
+          setTimeout(() => {
+            show('Produto salvo com sucesso!')
+            setLoading(false)
+            resolve(body)
+          }, 1000)
+        })
+      }
+      // is creating
+      return new Promise(resolve => {
+        setLoading(true)
+        setTimeout(() => {
+          show('Produto criado com sucesso!')
+          setLoading(false)
+          resolve(body)
+        }, 1000)
+      })
+    },
+    [setLoading, show]
+  )
+
+  const deleteProductById = useCallback(
+    id =>
+      new Promise(resolve => {
+        setLoading(true)
+        setTimeout(() => {
+          setLoading(false)
+          show('Produto removido com sucesso!')
+          resolve({...products, data: products.data.filter(product => product.id !== id)})
+        }, 1000)
+      }),
+    [setLoading, show]
+  )
+  return {
+    searchProducts,
+    getProducts,
+    getProductById,
+    saveProduct,
+    deleteProductById,
+  }
 }
+
+export default useProducts

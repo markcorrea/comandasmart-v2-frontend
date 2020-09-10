@@ -118,7 +118,7 @@ const ProductSearch = ({onConfirm, onEnterPress, searchProducts}) => {
         <Quantity quantity={quantity} setQuantity={setQuantity} disabled={!product} />
       </div>
       <div>
-        <Button classes={buttonClass} onClick={onConfirm} disabled={!product || quantity < 1}>
+        <Button classes={buttonClass} onClick={() => onConfirm({product, quantity})} disabled={!product || quantity < 1}>
           Adicionar
         </Button>
       </div>

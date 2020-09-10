@@ -5,17 +5,17 @@ import {Paper, TicketCard, SpeedDial} from 'components'
 
 import {useStore} from 'store'
 
-import services from 'services'
+import useServices from 'services'
 
 import styles from './index.module.scss'
 
 const CashierFront = () => {
-  const {showMenu, setLoading} = useStore()
+  const {showMenu} = useStore()
   const history = useHistory()
   const {cashierId} = useParams()
   const [tickets, setTickets] = useState([])
 
-  const {getTickets} = services
+  const {getTickets} = useServices()
 
   useEffect(() => {
     showMenu()
@@ -23,15 +23,11 @@ const CashierFront = () => {
 
   useEffect(() => {
     const fetchTickets = async () => {
-      setLoading(true)
       const result = await getTickets()
-      if (result) {
-        setTickets(result.data)
-      }
-      setLoading(false)
+      if (result) setTickets(result.data)
     }
     fetchTickets()
-  }, [getTickets, setTickets, setLoading])
+  }, [getTickets, setTickets])
 
   const tableButtons = [
     {

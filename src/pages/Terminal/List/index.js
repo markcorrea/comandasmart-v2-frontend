@@ -22,7 +22,12 @@ const TerminalList = () => {
   const history = useHistory()
   const {getTerminals, deleteTerminalById} = useServices()
 
-  const [terminals, setTerminals] = useState([])
+  const [terminals, setTerminals] = useState({
+    data: [],
+    count: 0,
+    page: 0,
+    rowsPerPage: 0,
+  })
 
   const tableButtons = [
     {
@@ -38,7 +43,7 @@ const TerminalList = () => {
   useEffect(() => {
     const fetchTerminals = async () => {
       const result = await getTerminals()
-      if (result) setTerminals(result.data)
+      if (result) setTerminals(result)
     }
     fetchTerminals()
   }, [getTerminals, setTerminals])
@@ -46,7 +51,7 @@ const TerminalList = () => {
   const deleteTerminal = useCallback(
     async id => {
       const result = await deleteTerminalById(id)
-      if (result) setTerminals(result.data)
+      if (result) setTerminals(result)
     },
     [deleteTerminalById]
   )
@@ -59,7 +64,7 @@ const TerminalList = () => {
       <Paper className={styles.paper}>
         <ResponsiveTable
           columns={columns}
-          rows={terminals}
+          rows={terminals.data || []}
           titleColumn='name'
           onDeleteClick={row => deleteTerminal(row.id)}
           onViewClick={row => history.push(`/terminal/${row.id}/view`)}

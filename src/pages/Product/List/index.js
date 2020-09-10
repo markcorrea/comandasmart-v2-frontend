@@ -1,11 +1,11 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useCallback} from 'react'
 import {useHistory} from 'react-router-dom'
 
-import {Paper, ResponsiveTable} from 'components'
+import {Paper, ResponsiveTable, SpeedDial} from 'components'
 
 import {useStore} from 'store'
 
-import services from 'services'
+import useServices from 'services'
 
 import styles from './index.module.scss'
 
@@ -33,15 +33,21 @@ export const columns = [
 const ProductList = () => {
   const {showMenu, setLoading, loading} = useStore()
   const history = useHistory()
+  const {getProducts, deleteProductById} = useServices()
 
-  const {getProducts} = services
-
-  const [response, setResponse] = useState({
+  const [products, setProducts] = useState({
     data: [],
     count: 0,
     page: 0,
     rowsPerPage: 0,
   })
+
+  const tableButtons = [
+    {
+      label: 'Novo Produto',
+      onClick: () => history.push(`/product/`),
+    },
+  ]
 
   useEffect(() => {
     showMenu()
@@ -49,15 +55,19 @@ const ProductList = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      setLoading(true)
       const result = await getProducts()
-      if (result) {
-        setResponse(result)
-      }
-      setLoading(false)
+      if (result) setProducts(result)
     }
     fetchProducts()
-  }, [getProducts, setResponse, setLoading])
+  }, [getProducts, setProducts, setLoading])
+
+  const deleteProduct = useCallback(
+    async id => {
+      const result = await deleteProductById(id)
+      if (result) setProducts(result)
+    },
+    [deleteProductById, setProducts]
+  )
 
   return (
     <>
@@ -67,15 +77,18 @@ const ProductList = () => {
       <Paper className={styles.paper}>
         <ResponsiveTable
           columns={columns}
-          rows={response.data || []}
+          rows={products.data || []}
           titleColumn='name'
           onEditClick={row => history.push(`/product/${row.id}`)}
-          onDeleteClick={row => console.log('delete', row)}
+          onDeleteClick={row => deleteProduct(row.id)}
           rowClickable={row => history.push(`/product/${row.id}`)}
           emptyTableMessage='Não há produtos registrados.'
           loading={loading}
           pagination={{count: 0, page: 0, rowsPerPage: 0, onChangePage: () => {}}}
         />
+        <div style={{padding: '20px'}}>
+          <SpeedDial buttons={tableButtons} />
+        </div>
       </Paper>
     </>
   )

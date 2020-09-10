@@ -4,34 +4,45 @@ import {useParams, useHistory} from 'react-router-dom'
 import {Paper} from 'components'
 
 import {useStore} from 'store'
-import companyResponse from 'mocks/company'
+
+import useServices from 'services'
 
 import CompanyForm from 'forms/CompanyForm'
 
 import styles from './index.module.scss'
 
 const CompanyDetails = () => {
-  const store = useStore()
+  const {showMenu, loading} = useStore()
   const {companyId} = useParams()
   const history = useHistory()
+  const {getCompanyById, saveCompany} = useServices()
 
   const [company, setCompany] = useState({})
 
-  const fetchCompany = useCallback(id => {
-    const result = companyResponse.data.find(item => item.id === id)
-    return result
-  }, [])
-
   useEffect(() => {
-    store.showMenu()
-  }, [store])
-
-  useEffect(() => {
-    if (companyId && companyId !== company.id) {
-      const newCompany = fetchCompany(companyId)
-      setCompany(newCompany)
+    const fetchCompany = async () => {
+      const result = await getCompanyById(companyId)
+      if (result) setCompany(result.data)
     }
-  }, [company, fetchCompany, setCompany, companyId])
+
+    if (companyId) fetchCompany()
+  }, [companyId, getCompanyById, setCompany])
+
+  useEffect(() => {
+    showMenu()
+  }, [showMenu])
+
+  const postCompany = useCallback(
+    async body => {
+      const payload = {
+        ...body,
+        ...(companyId ? {id: companyId} : {}),
+      }
+      const result = await saveCompany(payload)
+      if (result) history.push(`/companies`)
+    },
+    [companyId, saveCompany, history]
+  )
 
   return (
     <>
@@ -41,8 +52,9 @@ const CompanyDetails = () => {
       <Paper className={styles.paper}>
         <CompanyForm
           company={company}
-          onSubmit={data => console.log('SUBMIT', data)}
+          onSubmit={data => postCompany(data)}
           onCancel={() => history.push('/companies')}
+          loading={loading}
         />
       </Paper>
     </>

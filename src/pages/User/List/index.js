@@ -1,11 +1,11 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useCallback} from 'react'
 import {useHistory} from 'react-router-dom'
 
-import {Paper, ResponsiveTable} from 'components'
+import {Paper, ResponsiveTable, SpeedDial} from 'components'
 
 import {useStore} from 'store'
 
-import services from 'services'
+import useServices from 'services'
 
 import styles from './index.module.scss'
 
@@ -23,12 +23,24 @@ export const columns = [
 ]
 
 const UserList = () => {
-  const {showMenu, setLoading, loading} = useStore()
+  const {showMenu, loading} = useStore()
   const history = useHistory()
 
-  const {getUsers} = services
+  const {getUsers, deleteUserById} = useServices()
 
-  const [users, setUsers] = useState([])
+  const [users, setUsers] = useState({
+    data: [],
+    count: 0,
+    page: 0,
+    rowsPerPage: 0,
+  })
+
+  const tableButtons = [
+    {
+      label: 'Novo Usuário',
+      onClick: () => history.push(`/user/`),
+    },
+  ]
 
   useEffect(() => {
     showMenu()
@@ -36,15 +48,19 @@ const UserList = () => {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      setLoading(true)
       const result = await getUsers()
-      if (result) {
-        setUsers(result.data)
-      }
-      setLoading(false)
+      if (result) setUsers(result)
     }
     fetchUsers()
-  }, [getUsers, setUsers, setLoading])
+  }, [getUsers, setUsers])
+
+  const deleteUser = useCallback(
+    async id => {
+      const result = await deleteUserById(id)
+      if (result) setUsers(result)
+    },
+    [deleteUserById, setUsers]
+  )
 
   return (
     <>
@@ -54,14 +70,17 @@ const UserList = () => {
       <Paper className={styles.paper}>
         <ResponsiveTable
           columns={columns}
-          rows={users}
+          rows={users.data || []}
           titleColumn='name'
           onEditClick={row => history.push(`/user/${row.id}`)}
           rowClickable={row => history.push(`/user/${row.id}`)}
-          onDeleteClick={row => console.log('delete', row)}
+          onDeleteClick={row => deleteUser(row.id)}
           emptyTableMessage='Não há usuários registrados.'
           loading={loading}
         />
+        <div style={{padding: '20px'}}>
+          <SpeedDial buttons={tableButtons} />
+        </div>
       </Paper>
     </>
   )

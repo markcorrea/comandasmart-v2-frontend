@@ -1,22 +1,22 @@
-import cashier from './cashier'
-import client from './client'
-import company from './company'
+import useCashiers from './cashier'
+import useClients from './client'
+import useCompanies from './company'
 import useOrders from './order'
-import product from './product'
+import useProducts from './product'
 import useTerminals from './terminal'
-import ticket from './ticket'
-import user from './user'
+import useTickets from './ticket'
+import useUsers from './user'
 
 const useServices = () => {
   return {
-    ...cashier,
-    ...client,
-    ...company,
+    ...useCashiers(),
+    ...useClients(),
+    ...useCompanies(),
     ...useOrders(),
-    ...product,
+    ...useProducts(),
     ...useTerminals(),
-    ...ticket,
-    ...user,
+    ...useTickets(),
+    ...useUsers(),
   }
 }
 

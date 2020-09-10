@@ -6,7 +6,7 @@ import {Paper, ProductSearch, ResponsiveTable} from 'components'
 
 import {useStore} from 'store'
 
-import services from 'services'
+import useServices from 'services'
 
 import styles from './index.module.scss'
 
@@ -48,7 +48,7 @@ TotalPrice.propTypes = {
 }
 
 const CashierTicket = () => {
-  const {searchProducts, getTicketById} = services
+  const {searchProducts, getTicketById} = useServices()
   const {ticketId} = useParams()
   const store = useStore()
 
@@ -60,10 +60,8 @@ const CashierTicket = () => {
 
   useEffect(() => {
     const fetchTicket = async () => {
-      const result = await getTicketById()
-      if (result) {
-        setTicket(result)
-      }
+      const result = await getTicketById(ticketId)
+      if (result) setTicket(result)
     }
 
     fetchTicket(ticketId)
