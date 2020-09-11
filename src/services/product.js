@@ -44,6 +44,26 @@ const useProducts = () => {
     [setLoading]
   )
 
+  const getProductByCode = useCallback(
+    uniqueCode => {
+      const newProduct = products.data.find(product => product.uniqueCode === uniqueCode)
+
+      return new Promise(resolve => {
+        setLoading(true)
+        setTimeout(() => {
+          setLoading(false)
+          if (newProduct) {
+            show('Produto encontrado com sucesso!')
+            return resolve({data: newProduct})
+          }
+          show('Produto não encontrado', 'error')
+          return resolve(undefined)
+        }, 1000)
+      })
+    },
+    [setLoading, show]
+  )
+
   const saveProduct = useCallback(
     body => {
       if (body.id) {
@@ -86,6 +106,7 @@ const useProducts = () => {
     searchProducts,
     getProducts,
     getProductById,
+    getProductByCode,
     saveProduct,
     deleteProductById,
   }

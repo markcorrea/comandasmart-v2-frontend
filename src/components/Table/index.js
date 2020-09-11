@@ -211,13 +211,16 @@ const Table = ({
           {hasButtons &&
             hasButtons.map((button, index) => {
               const {label, onClick, classes} = button
-              const returnRows = hasCheckbox ? rows.filter(row => row.checked) : rows
+              const checkedRows = rows.filter(row => row.checked)
+              const returnRows = hasCheckbox ? checkedRows : rows
+
+              const disableButton = loading || !rows.length || (hasCheckbox && !checkedRows.length)
 
               return (
                 <Button
                   key={`button_${index}`}
                   classes={buttonClasses(classes)}
-                  disabled={loading}
+                  disabled={disableButton}
                   onClick={() => onClick(returnRows)}>
                   {label}
                 </Button>

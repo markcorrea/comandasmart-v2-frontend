@@ -36,7 +36,7 @@ const CashierFront = () => {
     },
     {
       label: 'Fechar Caixa',
-      onClick: selectedItems => console.log('Fechar Caixa', selectedItems),
+      onClick: () => history.push(`/cashier/${cashierId}/balance`),
     },
   ]
 

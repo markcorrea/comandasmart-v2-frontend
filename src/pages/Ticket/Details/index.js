@@ -20,7 +20,7 @@ const TicketDetails = () => {
   const {showMenu} = useStore()
   const {ticketId} = useParams()
 
-  const [products, setProducts] = useState([])
+  const [ticket, setTicket] = useState(null)
 
   useEffect(() => {
     showMenu()
@@ -29,40 +29,40 @@ const TicketDetails = () => {
   useEffect(() => {
     const fetchTicket = async () => {
       const result = await getTicketById(ticketId)
-      if (result && result.items.length) setProducts(result.items)
+      if (result) setTicket(result)
     }
 
     fetchTicket(ticketId)
-  }, [ticketId, getTicketById, setProducts])
+  }, [ticketId, getTicketById, setTicket])
 
   const addProductByCode = useCallback(
     async uniqueCode => {
       const result = await addProductsToTicketByCode(ticketId, uniqueCode)
-      if (result) setProducts(result.items)
+      if (result) setTicket(result)
     },
-    [ticketId, addProductsToTicketByCode, setProducts]
+    [ticketId, addProductsToTicketByCode, setTicket]
   )
 
   const addProductByClick = useCallback(
     async ({product, quantity}) => {
       const result = await addProductsToTicketById(ticketId, product.id, quantity)
-      if (result) setProducts(result.items)
+      if (result) setTicket(result)
     },
-    [ticketId, addProductsToTicketById, setProducts]
+    [ticketId, addProductsToTicketById, setTicket]
   )
 
   const removeProduct = useCallback(
     async productId => {
       const result = await removeProductFromTicket(ticketId, productId)
-      if (result) setProducts(result.items)
+      if (result) setTicket(result)
     },
-    [ticketId, removeProductFromTicket, setProducts]
+    [ticketId, removeProductFromTicket, setTicket]
   )
 
   return (
     <>
       <header className={styles.header}>
-        <h1>Comanda 450</h1>
+        <h1>Comanda - {ticket ? ticket.number : '--'}</h1>
       </header>
       <Paper className={styles.paper}>
         <ProductSearch
@@ -70,8 +70,8 @@ const TicketDetails = () => {
           onEnterPress={uniqueCode => addProductByCode(uniqueCode)}
           onConfirm={productData => addProductByClick(productData)}
         />
-        {products.length ? (
-          products.map((product, index) => (
+        {ticket && ticket.items.length ? (
+          ticket.items.map((product, index) => (
             <div key={`item_${index}`} className={styles.flexCell}>
               <ProductCard product={product} onDeleteClick={() => removeProduct(product.id)} />
             </div>

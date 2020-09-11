@@ -77,6 +77,11 @@ const ProductSearch = ({onConfirm, onEnterPress, searchProducts}) => {
     searchTerm && searchTerm !== '' && setShowOptions(true)
   }
 
+  const handleConfirm = productData => {
+    setQuantity(0)
+    return onConfirm(productData)
+  }
+
   return (
     <div className={styles.container}>
       <div className={styles.searchContainer}>
@@ -118,7 +123,7 @@ const ProductSearch = ({onConfirm, onEnterPress, searchProducts}) => {
         <Quantity quantity={quantity} setQuantity={setQuantity} disabled={!product} />
       </div>
       <div>
-        <Button classes={buttonClass} onClick={() => onConfirm({product, quantity})} disabled={!product || quantity < 1}>
+        <Button classes={buttonClass} onClick={() => handleConfirm({product, quantity})} disabled={!product || quantity < 1}>
           Adicionar
         </Button>
       </div>

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, memo} from 'react'
+import React, {useState, useEffect, useCallback} from 'react'
 import PropTypes from 'prop-types'
 import {useParams} from 'react-router-dom'
 
@@ -27,20 +27,6 @@ const columns = [
   },
 ]
 
-const tableButtons = [
-  {
-    label: 'Receber',
-    onClick: selectedItems => console.log('PURCHASING', selectedItems),
-  },
-  {
-    label: 'Remover',
-    onClick: selectedItems => console.log('DELETING', selectedItems),
-    classes: {
-      backgroundColor: 'red',
-    },
-  },
-]
-
 const TotalPrice = ({ticket}) => <div className={styles.totalPrice}>{`Total: ${(ticket && ticket.price) || 0}`}</div>
 
 TotalPrice.propTypes = {
@@ -48,15 +34,22 @@ TotalPrice.propTypes = {
 }
 
 const CashierTicket = () => {
-  const {searchProducts, getTicketById} = useServices()
-  const {ticketId} = useParams()
-  const store = useStore()
+  const {
+    searchProducts,
+    getTicketById,
+    addProductsToTicketByCode,
+    addProductsToTicketById,
+    removeProductsFromTicket,
+    payProductsByTicketAndCashier,
+  } = useServices()
+  const {ticketId, cashierId} = useParams()
+  const {showMenu} = useStore()
 
   const [ticket, setTicket] = useState(null)
 
   useEffect(() => {
-    store.showMenu()
-  }, [store])
+    showMenu()
+  }, [showMenu])
 
   useEffect(() => {
     const fetchTicket = async () => {
@@ -67,16 +60,64 @@ const CashierTicket = () => {
     fetchTicket(ticketId)
   }, [ticketId, getTicketById])
 
+  const addProductByCode = useCallback(
+    async uniqueCode => {
+      const result = await addProductsToTicketByCode(ticketId, uniqueCode)
+      if (result) setTicket(result)
+    },
+    [ticketId, addProductsToTicketByCode, setTicket]
+  )
+
+  const addProductByClick = useCallback(
+    async ({product, quantity}) => {
+      const result = await addProductsToTicketById(ticketId, product.id, quantity)
+      if (result) setTicket(result)
+    },
+    [ticketId, addProductsToTicketById, setTicket]
+  )
+
+  const removeProducts = useCallback(
+    async products => {
+      const ids = products.map(product => product.id)
+      const result = await removeProductsFromTicket(ticketId, ids)
+      if (result) setTicket(result)
+    },
+    [ticketId, removeProductsFromTicket, setTicket]
+  )
+
+  const payProducts = useCallback(
+    async products => {
+      const ids = products.map(product => product.id)
+      const result = await payProductsByTicketAndCashier(ticketId, cashierId, ids)
+      if (result) setTicket(result)
+    },
+    [ticketId, cashierId, payProductsByTicketAndCashier, setTicket]
+  )
+
+  const tableButtons = [
+    {
+      label: 'Receber',
+      onClick: selectedItems => payProducts(selectedItems),
+    },
+    {
+      label: 'Remover',
+      onClick: selectedItems => removeProducts(selectedItems),
+      classes: {
+        backgroundColor: 'red',
+      },
+    },
+  ]
+
   return (
     <>
       <header className={styles.header}>
-        <h1>Comanda - {(ticket && ticket.number.toString()) || '--'}</h1>
+        <h1>Comanda - {ticket ? ticket.number.toString() : '--'}</h1>
       </header>
       <Paper className={styles.paper}>
         <ProductSearch
           searchProducts={searchProducts}
-          onEnterPress={message => console.log('enter here', message)}
-          onConfirm={() => console.log('confirming')}
+          onEnterPress={uniqueCode => addProductByCode(uniqueCode)}
+          onConfirm={productData => addProductByClick(productData)}
         />
         <div className={styles.responsiveTable}>
           <ResponsiveTable
@@ -94,4 +135,4 @@ const CashierTicket = () => {
   )
 }
 
-export default memo(CashierTicket)
+export default CashierTicket

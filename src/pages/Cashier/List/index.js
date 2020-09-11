@@ -1,7 +1,7 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useCallback} from 'react'
 import {useHistory} from 'react-router-dom'
 
-import {Paper, ResponsiveTable} from 'components'
+import {Paper, ResponsiveTable, SpeedDial} from 'components'
 
 import useServices from 'services'
 
@@ -36,7 +36,7 @@ const CashierList = () => {
   const {showMenu, loading} = useStore()
   const history = useHistory()
 
-  const {getCashiers} = useServices()
+  const {getCashiers, openCashier} = useServices()
 
   const [cashiers, setCashiers] = useState([])
 
@@ -52,6 +52,18 @@ const CashierList = () => {
     fetchCashiers()
   }, [getCashiers, setCashiers])
 
+  const openNewCashier = useCallback(async () => {
+    const result = await openCashier()
+    if (result) history.push(`/cashier/${cashiers[0].id}/`)
+  }, [history, cashiers, openCashier])
+
+  const tableButtons = [
+    {
+      label: 'Novo Caixa',
+      onClick: openNewCashier,
+    },
+  ]
+
   return (
     <>
       <header className={styles.header}>
@@ -66,6 +78,9 @@ const CashierList = () => {
           emptyTableMessage='Não há caixas registrados.'
           loading={loading}
         />
+        <div style={{padding: '20px'}}>
+          <SpeedDial buttons={tableButtons} />
+        </div>
       </Paper>
     </>
   )

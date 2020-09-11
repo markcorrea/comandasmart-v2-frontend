@@ -8,6 +8,7 @@ import LoadableRoute from 'utils/LoadableRoute'
 const Login = lazy(() => import(/* webpackChunkName: "Login" */ '../pages/Login'))
 
 const CashierList = lazy(() => import(/* webpackChunkName: "CashierList" */ '../pages/Cashier/List'))
+const CashierBalance = lazy(() => import(/* webpackChunkName: "CashierBalance" */ '../pages/Cashier/Balance'))
 const CashierFront = lazy(() => import(/* webpackChunkName: "CashierFront" */ '../pages/Cashier/Front'))
 const CashierTicket = lazy(() => import(/* webpackChunkName: "CashierTicket" */ '../pages/Cashier/Ticket'))
 const CashierSale = lazy(() => import(/* webpackChunkName: "CashierSale" */ '../pages/Cashier/Sale'))
@@ -36,6 +37,7 @@ const AppRouter = () => {
         <LoadableRoute path='/cashiers' component={CashierList} layout={Layout} />
         <LoadableRoute exact path='/cashier/:cashierId' component={CashierFront} layout={Layout} />
         <LoadableRoute exact path='/cashier/:cashierId/ticket/:ticketId' component={CashierTicket} layout={Layout} />
+        <LoadableRoute exact path='/cashier/:cashierId/balance' component={CashierBalance} layout={Layout} />
         <LoadableRoute exact path='/cashier/:cashierId/sale' component={CashierSale} layout={Layout} />
         <LoadableRoute path='/clients' component={ClientList} layout={Layout} />
         <LoadableRoute exact path='/client/:clientId' component={ClientDetails} layout={Layout} />

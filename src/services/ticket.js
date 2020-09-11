@@ -92,12 +92,32 @@ const useTickets = () => {
     [setLoading, show]
   )
 
+  const removeProductsFromTicket = useCallback(
+    (ticketId, productIdArray) => {
+      const ticket = tickets.data.find(ticket => ticket.id === ticketId)
+
+      return new Promise(resolve => {
+        setLoading(true)
+        setTimeout(() => {
+          setLoading(false)
+          show('Produtos removidos com sucesso!')
+          const responseProducts = ticket.items.filter(product => {
+            return !productIdArray.some(item => item === product.id)
+          })
+          return resolve({...ticket, items: responseProducts})
+        }, 1000)
+      })
+    },
+    [setLoading, show]
+  )
+
   return {
     getTickets,
     getTicketById,
     addProductsToTicketByCode,
     addProductsToTicketById,
     removeProductFromTicket,
+    removeProductsFromTicket,
   }
 }
 
