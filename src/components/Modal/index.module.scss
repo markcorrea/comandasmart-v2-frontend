@@ -1,5 +1,18 @@
-.title {
-  border: solid thin blue;
+@import '~assets/styles/_typography.scss';
+@import '~assets/styles/_colors.scss';
+
+.container {
+  padding: 16px 24px
+}
+
+.header {
   width: 100%;
-  color: yellow;
+  font-family: $defaultFontFamily;
+  font-weight: 600;
+  font-size: $defaultFontSize;
+}
+
+.buttons {
+  text-align: right;
+  margin-top: 20px;
 }

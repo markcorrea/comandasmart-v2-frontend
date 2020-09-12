@@ -43,7 +43,6 @@ const getMaxIndex = array => {
       array.map(item => item.index)
     )
   }
-
   return 0
 }
 

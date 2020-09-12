@@ -1,5 +1,6 @@
-@import '~assets/styles/_mediaQueries.scss';
 @import '~assets/styles/_colors.scss';
+@import '~assets/styles/_mediaQueries.scss';
+@import '~assets/styles/_typography.scss';
 
 .header {
   height: 68px;
@@ -29,4 +30,14 @@
 .noTickets {
   width: 100%;
   text-align: center;
+}
+
+.modalBody {
+  margin: 15px 0 25px;
+}
+
+.codeWarning {
+  font-size: $smallFontSize;
+  color: $red;
+  margin-left: 10px;
 }

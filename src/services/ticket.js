@@ -111,6 +111,20 @@ const useTickets = () => {
     [setLoading, show]
   )
 
+  const createTicketByCode = useCallback(
+    code => {
+      return new Promise(resolve => {
+        setLoading(true)
+        setTimeout(() => {
+          setLoading(false)
+          show('Ticket criado com sucesso!')
+          return resolve({data: tickets.data[0]})
+        }, 1000)
+      })
+    },
+    [setLoading, show]
+  )
+
   return {
     getTickets,
     getTicketById,
@@ -118,6 +132,7 @@ const useTickets = () => {
     addProductsToTicketById,
     removeProductFromTicket,
     removeProductsFromTicket,
+    createTicketByCode,
   }
 }
 
