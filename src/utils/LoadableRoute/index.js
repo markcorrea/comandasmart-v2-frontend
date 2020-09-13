@@ -5,6 +5,8 @@ import {Route} from 'react-router-dom'
 import ErrorBoundary from './ErrorBoundary'
 import DelayedFallback from './DelayedFallback'
 
+import {ConfirmDialog} from 'components'
+
 import Store from 'store'
 
 const EmptyLayout = ({children}) => <>{children}</>
@@ -26,11 +28,14 @@ const LoadableRoute = ({component: Component, routeComponent: RouteComponent, la
     <Store>
       <ErrorBoundary>
         <Layout {...options}>
-          <ErrorBoundary>
-            <Suspense fallback={<DelayedFallback />}>
-              <Component />
-            </Suspense>
-          </ErrorBoundary>
+          <>
+            <ConfirmDialog />
+            <ErrorBoundary>
+              <Suspense fallback={<DelayedFallback />}>
+                <Component />
+              </Suspense>
+            </ErrorBoundary>
+          </>
         </Layout>
       </ErrorBoundary>
     </Store>

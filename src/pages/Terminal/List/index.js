@@ -18,7 +18,7 @@ const columns = [
 ]
 
 const TerminalList = () => {
-  const {showMenu} = useStore()
+  const {showMenu, confirmationDialog} = useStore()
   const history = useHistory()
   const {getTerminals, deleteTerminalById} = useServices()
 
@@ -48,12 +48,12 @@ const TerminalList = () => {
     fetchTerminals()
   }, [getTerminals, setTerminals])
 
-  const deleteTerminal = useCallback(
-    async id => {
+  const confirmDelete = useCallback(
+    async ({id}) => {
       const result = await deleteTerminalById(id)
       if (result) setTerminals(result)
     },
-    [deleteTerminalById]
+    [setTerminals, deleteTerminalById]
   )
 
   return (
@@ -66,10 +66,16 @@ const TerminalList = () => {
           columns={columns}
           rows={terminals.data || []}
           titleColumn='name'
-          onDeleteClick={row => deleteTerminal(row.id)}
           onViewClick={row => history.push(`/terminal/${row.id}/view`)}
           onEditClick={row => history.push(`/terminal/${row.id}`)}
           rowClickable={row => history.push(`/terminal/${row.id}`)}
+          onDeleteClick={row =>
+            confirmationDialog({
+              header: 'Remover terminal',
+              body: `Deseja realmente excluir o terminal "${row.name}?"`,
+              onConfirm: () => confirmDelete(row),
+            })
+          }
           emptyTableMessage='Não há comandas registradas.'
         />
         <div style={{padding: '20px'}}>

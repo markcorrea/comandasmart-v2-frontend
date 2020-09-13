@@ -31,7 +31,7 @@ export const columns = [
 ]
 
 const ProductList = () => {
-  const {showMenu, setLoading, loading} = useStore()
+  const {showMenu, setLoading, loading, confirmationDialog} = useStore()
   const history = useHistory()
   const {getProducts, deleteProductById} = useServices()
 
@@ -80,7 +80,13 @@ const ProductList = () => {
           rows={products.data || []}
           titleColumn='name'
           onEditClick={row => history.push(`/product/${row.id}`)}
-          onDeleteClick={row => deleteProduct(row.id)}
+          onDeleteClick={row =>
+            confirmationDialog({
+              header: 'Excluir produto',
+              body: `Deseja realmente excluir "${row.name}"?`,
+              onConfirm: () => deleteProduct(row.id),
+            })
+          }
           rowClickable={row => history.push(`/product/${row.id}`)}
           emptyTableMessage='Não há produtos registrados.'
           loading={loading}

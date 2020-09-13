@@ -23,7 +23,7 @@ export const columns = [
 ]
 
 const UserList = () => {
-  const {showMenu, loading} = useStore()
+  const {showMenu, loading, confirmationDialog} = useStore()
   const history = useHistory()
 
   const {getUsers, deleteUserById} = useServices()
@@ -74,7 +74,13 @@ const UserList = () => {
           titleColumn='name'
           onEditClick={row => history.push(`/user/${row.id}`)}
           rowClickable={row => history.push(`/user/${row.id}`)}
-          onDeleteClick={row => deleteUser(row.id)}
+          onDeleteClick={row =>
+            confirmationDialog({
+              header: 'Excluir usuário',
+              body: `Deseja realmente excluir "${row.name}"?`,
+              onConfirm: () => deleteUser(row.id),
+            })
+          }
           emptyTableMessage='Não há usuários registrados.'
           loading={loading}
         />

@@ -16,6 +16,12 @@ const initialState = {
   // loggedUser: null,
   sideMenu: false,
   loading: false,
+  dialog: {
+    open: false,
+    header: '',
+    body: null,
+    onConfirm: null,
+  },
 }
 
 const Store = ({children}) => {
@@ -37,7 +43,20 @@ const Store = ({children}) => {
     [hideLoading, loadingStack, showLoading]
   )
 
-  return <StoreContext.Provider value={{...state, showMenu, setLoading}}>{children}</StoreContext.Provider>
+  const confirmationDialog = useCallback(
+    ({header, body, onConfirm}) => updateState(prevState => ({...prevState, dialog: {open: true, header, body, onConfirm}})),
+    [updateState]
+  )
+
+  const closeDialog = useCallback(() => {
+    updateState(prevState => ({...prevState, dialog: {open: false, header: '', body: '', onConfirm: null}}))
+  }, [updateState])
+
+  return (
+    <StoreContext.Provider value={{...state, showMenu, setLoading, confirmationDialog, closeDialog}}>
+      {children}
+    </StoreContext.Provider>
+  )
 }
 
 Store.propTypes = {

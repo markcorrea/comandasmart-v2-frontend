@@ -21,7 +21,7 @@ const Views = ({orders, completeOrder}) => {
 }
 
 const TerminalView = () => {
-  const {showMenu} = useStore()
+  const {showMenu, confirmationDialog} = useStore()
   const {terminalId} = useParams()
   const {getOrdersByTerminalId, completeOrderById, completeAllOrdersByTerminalId} = useServices()
 
@@ -56,7 +56,12 @@ const TerminalView = () => {
   const tableButtons = [
     {
       label: 'Completar todos',
-      onClick: () => completeAllOrders(),
+      onClick: () =>
+        confirmationDialog({
+          header: 'Completar todos os pedidos?',
+          body: 'Todos os pedidos serão considerados entregues.',
+          onConfirm: () => completeAllOrders(),
+        }),
     },
   ]
 

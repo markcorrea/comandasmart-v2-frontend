@@ -29,7 +29,6 @@ const NumberInput = forwardRef(({value, onChange, prefix, thousandSeparator, dec
   return (
     <Input
       {...rest}
-      ref={ref}
       value={value}
       onChange={onChange}
       name='numberformat'

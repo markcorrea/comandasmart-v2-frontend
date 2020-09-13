@@ -30,7 +30,7 @@ const columns = [
 const CashierBalance = () => {
   const {getCashierById, closeCashierById} = useServices()
 
-  const {showMenu} = useStore()
+  const {showMenu, confirmationDialog} = useStore()
   const {cashierId} = useParams()
   const history = useHistory()
   const [cashier, setCashier] = useState(null)
@@ -55,7 +55,8 @@ const CashierBalance = () => {
   const tableButtons = [
     {
       label: 'Fechar',
-      onClick: closeCashier,
+      onClick: () =>
+        confirmationDialog({header: 'Fechar caixa', body: 'Confirma fechamento do caixa atual?', onConfirm: closeCashier}),
     },
     {
       label: 'Cancelar',

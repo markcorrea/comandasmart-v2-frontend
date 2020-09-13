@@ -17,7 +17,7 @@ const TicketDetails = () => {
     addProductsToTicketById,
     removeProductFromTicket,
   } = useServices()
-  const {showMenu} = useStore()
+  const {showMenu, confirmationDialog} = useStore()
   const {ticketId} = useParams()
 
   const [ticket, setTicket] = useState(null)
@@ -73,7 +73,16 @@ const TicketDetails = () => {
         {ticket && ticket.items.length ? (
           ticket.items.map((product, index) => (
             <div key={`item_${index}`} className={styles.flexCell}>
-              <ProductCard product={product} onDeleteClick={() => removeProduct(product.id)} />
+              <ProductCard
+                product={product}
+                onDeleteClick={() =>
+                  confirmationDialog({
+                    header: 'Remover produto',
+                    body: `Deseja realmente remover "${product.name}?"`,
+                    onConfirm: () => removeProduct(product.id),
+                  })
+                }
+              />
             </div>
           ))
         ) : (

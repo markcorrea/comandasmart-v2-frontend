@@ -1,5 +1,6 @@
 export {default as Button} from './Button'
 export {default as CardList} from './CardList'
+export {default as ConfirmDialog} from './ConfirmDialog'
 export {default as Datepicker} from './Datepicker'
 export {default as Drawer} from './Drawer'
 export {default as Footer} from './Footer'

@@ -23,7 +23,7 @@ export const columns = [
 ]
 
 const CompanyList = () => {
-  const {showMenu, loading} = useStore()
+  const {showMenu, loading, confirmationDialog} = useStore()
   const history = useHistory()
 
   const {getCompanies, deleteCompanyById} = useServices()
@@ -73,7 +73,13 @@ const CompanyList = () => {
           titleColumn='name'
           onEditClick={row => history.push(`/company/${row.id}`)}
           rowClickable={row => history.push(`/company/${row.id}`)}
-          onDeleteClick={row => deleteCompany(row.id)}
+          onDeleteClick={row =>
+            confirmationDialog({
+              header: 'Excluir empresa',
+              body: `Deseja realmente excluir ${row.name}?`,
+              onConfirm: () => deleteCompany(row.id),
+            })
+          }
           emptyTableMessage='Não há empresas registradas.'
           loading={loading}
         />

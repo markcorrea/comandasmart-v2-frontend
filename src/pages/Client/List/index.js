@@ -28,7 +28,7 @@ export const columns = [
 ]
 
 const ClientList = () => {
-  const {showMenu, loading} = useStore()
+  const {showMenu, loading, confirmationDialog} = useStore()
   const history = useHistory()
 
   const {getClients, deleteClientById} = useServices()
@@ -78,7 +78,13 @@ const ClientList = () => {
           rows={clients.data || []}
           titleColumn='name'
           onEditClick={row => history.push(`/client/${row.id}`)}
-          onDeleteClick={row => deleteClient(row.id)}
+          onDeleteClick={row =>
+            confirmationDialog({
+              header: 'Excluir cliente',
+              body: `Deseja realmente excluir "${row.name}"?`,
+              onConfirm: () => deleteClient(row.id),
+            })
+          }
           rowClickable={row => history.push(`/client/${row.id}`)}
           emptyTableMessage='Não há clientes registrados.'
           loading={loading}
