@@ -7,6 +7,8 @@ import LoadableRoute from 'utils/LoadableRoute'
 
 const Login = lazy(() => import(/* webpackChunkName: "Login" */ '../pages/Login'))
 
+const ForgotPassword = lazy(() => import(/* webpackChunkName: "ForgotPassword" */ '../pages/Password/ForgotPassword'))
+const RedefinePassweord = lazy(() => import(/* webpackChunkName: "RedefinePassword" */ '../pages/Password/RedefinePassword'))
 const CashierList = lazy(() => import(/* webpackChunkName: "CashierList" */ '../pages/Cashier/List'))
 const CashierBalance = lazy(() => import(/* webpackChunkName: "CashierBalance" */ '../pages/Cashier/Balance'))
 const CashierFront = lazy(() => import(/* webpackChunkName: "CashierFront" */ '../pages/Cashier/Front'))
@@ -34,6 +36,8 @@ const AppRouter = () => {
         <Redirect path='/' exact to='/login' />
 
         <LoadableRoute path='/login' component={Login} layout={Layout} />
+        <LoadableRoute path='/forgot_password' component={ForgotPassword} layout={Layout} />
+        <LoadableRoute path='/redefine_password' component={RedefinePassweord} layout={Layout} />
         <LoadableRoute path='/cashiers' component={CashierList} layout={Layout} />
         <LoadableRoute exact path='/cashier/:cashierId' component={CashierFront} layout={Layout} />
         <LoadableRoute exact path='/cashier/:cashierId/ticket/:ticketId' component={CashierTicket} layout={Layout} />

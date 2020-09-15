@@ -1,62 +1,44 @@
-import React, {useState} from 'react'
+import React, {useState, useCallback} from 'react'
 import {useHistory} from 'react-router-dom'
 
-import {Button, Drawer, Input, LoginMenu, Paper, PasswordInput} from 'components'
+import {Drawer, LoginMenu, Paper} from 'components'
+
+import LoginForm from 'forms/LoginForm'
 
 import logo from 'assets/images/logo_login_mobile.svg'
 import {mediaQuerySM} from 'assets/styles/_mediaQueries.scss'
 import useMediaQuery from 'utils/mediaQuery'
 
-import menu from './menu'
+import useServices from 'services'
 
-import {defaultFontFamily, smallerFontSize} from 'assets/styles/main.module.scss'
+import menu from 'mocks/menu'
+
 import styles from './index.module.scss'
-
-const classes = {
-  input: {
-    fontSize: smallerFontSize,
-    textTransform: 'uppercase',
-  },
-  buttonRoot: {
-    fontFamily: defaultFontFamily,
-    margin: '0 auto',
-    display: 'block',
-  },
-}
-
-const PasswordForgot = () => (
-  <a href='http://www.google.com.br' className={styles.passwordForgot}>
-    Esqueci minha Senha
-  </a>
-)
 
 const Login = () => {
   const history = useHistory()
   const mediaSM = useMediaQuery('min', mediaQuerySM)
   const [open, setOpen] = useState(false)
+  const {login} = useServices()
 
-  const Form = () => (
-    <>
-      {mediaSM ? (
-        <div className={styles.title}>Digite Seu Email E Senha</div>
-      ) : (
-        <img className={styles.logo} alt='logo' src={logo} />
-      )}
-      <div className={styles.inputFields}>
-        <Input classes={{input: classes.input}} />
-        <PasswordInput className={styles.passwordInput} />
-        {!mediaSM && <PasswordForgot />}
+  const loginUser = useCallback(async () => {
+    const result = await login()
+    if (result) history.push(`/tickets`)
+  }, [history, login])
+
+  const Forms = () => (
+    <div className={styles.fields}>
+      <LoginForm onSubmit={loginUser} />
+      <div onClick={() => history.push(`/forgot_password/`)} className={styles.passwordForgot}>
+        Esqueci minha Senha
       </div>
-      <Button type='submit' classes={{root: classes.buttonRoot}} onClick={() => history.push('/tickets')}>
-        Entrar
-      </Button>
-    </>
+    </div>
   )
 
   const Desktop = () => (
     <Paper className={styles.paper}>
-      <Form />
-      <PasswordForgot />
+      <div className={styles.title}>Digite Seu Email E Senha</div>
+      <Forms />
     </Paper>
   )
 
@@ -66,7 +48,8 @@ const Login = () => {
         <i className='fas fa-bars'></i>
       </div>
       <div className={styles.containerMobile}>
-        <Form />
+        <img className={styles.logo} alt='logo' src={logo} />
+        <Forms />
       </div>
     </>
   )

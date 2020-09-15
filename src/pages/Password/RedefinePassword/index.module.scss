@@ -12,20 +12,25 @@
   font-size: $smallFontSize;
 }
 
-.inputFields {
-  margin: 30px 0;
-
-  .passwordInput {
-    margin-top: 15px;
-  }
+.mediumText {
+  display: block;
+  margin: 20px 0 0;
+  color: $darkGray;
+  text-decoration: none;
+  font-size: $smallFontSize;
+  text-align: center;
 }
 
-.button {
-  margin: 0 auto;
-  border: solid thin blue;
+.smallText {
+  display: block;
+  margin: 20px 0 0;
+  color: $darkGray;
+  text-decoration: none;
+  font-size: $miniFontSize;
+  cursor: pointer;
 }
 
-.passwordForgot {
+.goToLogin {
   display: block;
   margin: 30px auto 0;
   width: 160px;
@@ -35,6 +40,29 @@
   text-decoration: none;
   font-size: $miniFontSize;
   cursor: pointer;
+}
+
+.checkIcon {
+  margin-top: 20px;
+  width: 100%;
+  text-align: center;
+  i {
+    font-size: 70px;
+    color: $ronchi;
+  }
+}
+
+.inputFields {
+  margin: 5px 0 30px;
+
+  .passwordInput {
+    margin-top: 15px;
+  }
+}
+
+.button {
+  margin: 0 auto;
+  border: solid thin blue;
 }
 
 .burgerMenu {
@@ -53,11 +81,15 @@
     flex-grow: 1;
   }
 
-  .fields {
-    flex-grow: 2;
+  .inputFields {
+    margin: 0;
   }
 
   .passwordForgot {
-    margin: 25px auto 0;
+    margin: 20px auto 0;
   }
+}
+
+.fields {
+  flex-grow: 2;
 }
