@@ -22,7 +22,7 @@ const ForgotPassword = () => {
   const {sendRecoverEmail} = useServices()
 
   const sendEmail = useCallback(async () => {
-    let result = await sendRecoverEmail()
+    const result = await sendRecoverEmail()
     if (result) setMailSent(true)
   }, [sendRecoverEmail, setMailSent])
 

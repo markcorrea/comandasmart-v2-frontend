@@ -46,7 +46,6 @@ const ResetPasswordForm = ({onSubmit}) => {
           className={styles.passwordInput}
           name='password'
           control={control}
-          label=''
           error={Boolean(errors.password)}
           helperText={getErrorMessage(errors.password)}
         />
@@ -56,7 +55,6 @@ const ResetPasswordForm = ({onSubmit}) => {
           className={styles.passwordInput}
           name='passwordConfirm'
           control={control}
-          label=''
           error={Boolean(errors.passwordConfirm)}
           helperText={getErrorMessage(errors.passwordConfirm)}
         />
