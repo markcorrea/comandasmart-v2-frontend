@@ -8,7 +8,7 @@ const useProducts = () => {
   const {setLoading} = useStore()
   const {show} = useMessage()
 
-  const searchProducts = useCallback(
+  const searchProductsByName = useCallback(
     search =>
       new Promise(resolve => {
         setLoading(true)
@@ -103,7 +103,7 @@ const useProducts = () => {
     [setLoading, show]
   )
   return {
-    searchProducts,
+    searchProductsByName,
     getProducts,
     getProductById,
     getProductByCode,

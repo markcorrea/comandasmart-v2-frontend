@@ -11,9 +11,9 @@ import styles from './index.module.scss'
 
 const TicketDetails = () => {
   const {
-    searchProducts,
+    searchProductsByName,
     getTicketById,
-    addProductsToTicketByCode,
+    addProductToTicketByCode,
     addProductsToTicketById,
     removeProductFromTicket,
   } = useServices()
@@ -37,10 +37,10 @@ const TicketDetails = () => {
 
   const addProductByCode = useCallback(
     async uniqueCode => {
-      const result = await addProductsToTicketByCode(ticketId, uniqueCode)
+      const result = await addProductToTicketByCode(ticketId, uniqueCode)
       if (result) setTicket(result)
     },
-    [ticketId, addProductsToTicketByCode, setTicket]
+    [ticketId, addProductToTicketByCode, setTicket]
   )
 
   const addProductByClick = useCallback(
@@ -66,7 +66,7 @@ const TicketDetails = () => {
       </header>
       <Paper className={styles.paper}>
         <ProductSearch
-          searchProducts={searchProducts}
+          searchProductsByName={searchProductsByName}
           onEnterPress={uniqueCode => addProductByCode(uniqueCode)}
           onConfirm={productData => addProductByClick(productData)}
         />

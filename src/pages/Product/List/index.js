@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useCallback} from 'react'
 import {useHistory} from 'react-router-dom'
 
-import {Paper, ResponsiveTable, SpeedDial} from 'components'
+import {Input, Paper, ResponsiveTable, SpeedDial} from 'components'
 
 import {useStore} from 'store'
 
@@ -31,9 +31,9 @@ export const columns = [
 ]
 
 const ProductList = () => {
-  const {showMenu, setLoading, loading, confirmationDialog} = useStore()
+  const {showMenu, loading, confirmationDialog} = useStore()
   const history = useHistory()
-  const {getProducts, deleteProductById} = useServices()
+  const {searchProductsByName, getProducts, deleteProductById} = useServices()
 
   const [products, setProducts] = useState({
     data: [],
@@ -41,6 +41,8 @@ const ProductList = () => {
     page: 0,
     rowsPerPage: 0,
   })
+
+  const [searchTerm, setSearchTerm] = useState('')
 
   const tableButtons = [
     {
@@ -59,7 +61,7 @@ const ProductList = () => {
       if (result) setProducts(result)
     }
     fetchProducts()
-  }, [getProducts, setProducts, setLoading])
+  }, [getProducts, setProducts])
 
   const deleteProduct = useCallback(
     async id => {
@@ -69,12 +71,40 @@ const ProductList = () => {
     [deleteProductById, setProducts]
   )
 
+  const searchProducts = useCallback(async () => {
+    if (searchTerm) {
+      const result = await searchProductsByName(searchTerm)
+      if (result) setProducts({data: result})
+    }
+  }, [searchProductsByName, setProducts, searchTerm])
+
+  const handleKeyPress = useCallback(
+    event => {
+      if (event.key === 'Enter') searchProducts()
+    },
+    [searchProducts]
+  )
+
   return (
     <>
       <header className={styles.header}>
         <h1>Produtos</h1>
       </header>
       <Paper className={styles.paper}>
+        <div className={styles.search}>
+          <Input
+            onKeyPress={handleKeyPress}
+            value={searchTerm}
+            onChange={event => setSearchTerm(event.target.value)}
+            placeholder='Buscar por produto...'
+            disabled={loading}
+            endIcon={
+              <div className={styles.searchButton} onClick={!loading ? searchProducts : () => {}}>
+                <i className='fa fa-search' />
+              </div>
+            }
+          />
+        </div>
         <ResponsiveTable
           columns={columns}
           rows={products.data || []}
@@ -90,7 +120,7 @@ const ProductList = () => {
           rowClickable={row => history.push(`/product/${row.id}`)}
           emptyTableMessage='Não há produtos registrados.'
           loading={loading}
-          pagination={{count: 0, page: 0, rowsPerPage: 0, onChangePage: () => {}}}
+          pagination={{count: 0, page: 0, rowsPerPage: 10, onChangePage: () => {}}}
         />
         <div style={{padding: '20px'}}>
           <SpeedDial buttons={tableButtons} />

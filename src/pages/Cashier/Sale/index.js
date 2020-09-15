@@ -47,7 +47,7 @@ const getMaxIndex = array => {
 }
 
 const CashierSale = () => {
-  const {searchProducts, getProductByCode, payProductsByCashier} = useServices()
+  const {searchProductsByName, getProductByCode, payProductsByCashier} = useServices()
 
   const {showMenu} = useStore()
   const {cashierId} = useParams()
@@ -120,7 +120,7 @@ const CashierSale = () => {
       </header>
       <Paper className={styles.paper}>
         <ProductSearch
-          searchProducts={searchProducts}
+          searchProductsByName={searchProductsByName}
           onEnterPress={uniqueCode => addProductByCode(uniqueCode)}
           onConfirm={productData => addProductByClick(productData)}
         />

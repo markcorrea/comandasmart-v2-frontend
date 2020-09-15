@@ -60,6 +60,11 @@ const Layout = ({children}) => {
       onClick: () => history.push('/companies'),
     },
     {
+      label: 'Relatórios',
+      icon: 'fa fa-scroll',
+      onClick: () => history.push('/reports'),
+    },
+    {
       label: 'Ajuda',
       icon: 'fa fa-question-circle',
       onClick: () => console.log('Ajuda'),

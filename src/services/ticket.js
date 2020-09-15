@@ -33,7 +33,7 @@ const useTickets = () => {
     [setLoading]
   )
 
-  const addProductsToTicketByCode = useCallback(
+  const addProductToTicketByCode = useCallback(
     (ticketId, uniqueCode) => {
       const ticket = tickets.data.find(ticket => ticket.id === ticketId)
       const newProduct = products.data.find(product => product.uniqueCode === uniqueCode)
@@ -128,7 +128,7 @@ const useTickets = () => {
   return {
     getTickets,
     getTicketById,
-    addProductsToTicketByCode,
+    addProductToTicketByCode,
     addProductsToTicketById,
     removeProductFromTicket,
     removeProductsFromTicket,

@@ -35,9 +35,9 @@ TotalPrice.propTypes = {
 
 const CashierTicket = () => {
   const {
-    searchProducts,
+    searchProductsByName,
     getTicketById,
-    addProductsToTicketByCode,
+    addProductToTicketByCode,
     addProductsToTicketById,
     removeProductsFromTicket,
     payProductsByTicketAndCashier,
@@ -62,10 +62,10 @@ const CashierTicket = () => {
 
   const addProductByCode = useCallback(
     async uniqueCode => {
-      const result = await addProductsToTicketByCode(ticketId, uniqueCode)
+      const result = await addProductToTicketByCode(ticketId, uniqueCode)
       if (result) setTicket(result)
     },
-    [ticketId, addProductsToTicketByCode, setTicket]
+    [ticketId, addProductToTicketByCode, setTicket]
   )
 
   const addProductByClick = useCallback(
@@ -115,7 +115,7 @@ const CashierTicket = () => {
       </header>
       <Paper className={styles.paper}>
         <ProductSearch
-          searchProducts={searchProducts}
+          searchProductsByName={searchProductsByName}
           onEnterPress={uniqueCode => addProductByCode(uniqueCode)}
           onConfirm={productData => addProductByClick(productData)}
         />
