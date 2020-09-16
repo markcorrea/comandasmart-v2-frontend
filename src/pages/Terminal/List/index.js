@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react'
+import React, {useState, useEffect, useCallback, useMemo, memo} from 'react'
 import {useHistory} from 'react-router-dom'
 
 import {Paper, ResponsiveTable, SpeedDial} from 'components'
@@ -29,12 +29,15 @@ const TerminalList = () => {
     rowsPerPage: 0,
   })
 
-  const tableButtons = [
-    {
-      label: 'Novo Terminal',
-      onClick: () => history.push(`/terminal/`),
-    },
-  ]
+  const speedDialButtons = useMemo(
+    () => [
+      {
+        label: 'Novo Terminal',
+        onClick: () => history.push(`/terminal/`),
+      },
+    ],
+    [history]
+  )
 
   useEffect(() => {
     showMenu()
@@ -78,12 +81,12 @@ const TerminalList = () => {
           }
           emptyTableMessage='Não há comandas registradas.'
         />
-        <div style={{padding: '20px'}}>
-          <SpeedDial buttons={tableButtons} />
-        </div>
       </Paper>
+      <div className={styles.speedDialContainer}>
+        <SpeedDial buttons={speedDialButtons} />
+      </div>
     </>
   )
 }
 
-export default TerminalList
+export default memo(TerminalList)

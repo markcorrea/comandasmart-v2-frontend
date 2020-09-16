@@ -59,7 +59,7 @@ const TicketList = () => {
     [createTicketByCode, history]
   )
 
-  const tableButtons = useMemo(
+  const speedDialButtons = useMemo(
     () => [
       {
         label: 'Nova Comanda',
@@ -98,11 +98,10 @@ const TicketList = () => {
         ) : (
           <div className={styles.noTickets}>Não há comandas abertas.</div>
         )}
-
-        <div style={{padding: '20px'}}>
-          <SpeedDial buttons={tableButtons} />
-        </div>
       </Paper>
+      <div className={styles.speedDialContainer}>
+        <SpeedDial buttons={speedDialButtons} />
+      </div>
       <Modal header='Digite um código para a nova comanda.' onConfirm={modalConfirm} onCancel={modalCancel} open={modalOpen}>
         <ModalBody value={code} onChange={value => setCode(value)} />
       </Modal>

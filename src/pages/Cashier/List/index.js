@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react'
+import React, {useState, useEffect, useCallback, useMemo, memo} from 'react'
 import {useHistory} from 'react-router-dom'
 
 import {Paper, ResponsiveTable, SpeedDial} from 'components'
@@ -57,12 +57,15 @@ const CashierList = () => {
     if (result) history.push(`/cashier/${cashiers[0].id}/`)
   }, [history, cashiers, openCashier])
 
-  const tableButtons = [
-    {
-      label: 'Novo Caixa',
-      onClick: openNewCashier,
-    },
-  ]
+  const speedDialButtons = useMemo(
+    () => [
+      {
+        label: 'Novo Caixa',
+        onClick: openNewCashier,
+      },
+    ],
+    [openNewCashier]
+  )
 
   return (
     <>
@@ -78,12 +81,12 @@ const CashierList = () => {
           emptyTableMessage='Não há caixas registrados.'
           loading={loading}
         />
-        <div style={{padding: '20px'}}>
-          <SpeedDial buttons={tableButtons} />
-        </div>
       </Paper>
+      <div className={styles.speedDialContainer}>
+        <SpeedDial buttons={speedDialButtons} />
+      </div>
     </>
   )
 }
 
-export default CashierList
+export default memo(CashierList)

@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useMemo, memo} from 'react'
 import {useHistory, useParams} from 'react-router-dom'
 
 import {Paper, TicketCard, SpeedDial} from 'components'
@@ -29,16 +29,19 @@ const CashierFront = () => {
     fetchTickets()
   }, [getTickets, setTickets])
 
-  const tableButtons = [
-    {
-      label: 'Registrar Venda',
-      onClick: () => history.push(`/cashier/${cashierId}/sale`),
-    },
-    {
-      label: 'Fechar Caixa',
-      onClick: () => history.push(`/cashier/${cashierId}/balance`),
-    },
-  ]
+  const speedDialButtons = useMemo(
+    () => [
+      {
+        label: 'Registrar Venda',
+        onClick: () => history.push(`/cashier/${cashierId}/sale`),
+      },
+      {
+        label: 'Fechar Caixa',
+        onClick: () => history.push(`/cashier/${cashierId}/balance`),
+      },
+    ],
+    [history, cashierId]
+  )
 
   const ticketClick = ticket => history.push(`/cashier/${cashierId}/ticket/${ticket.id}`)
 
@@ -57,12 +60,12 @@ const CashierFront = () => {
         ) : (
           <div className={styles.noTickets}>Não há comandas abertas.</div>
         )}
-        <div style={{padding: '20px'}}>
-          <SpeedDial buttons={tableButtons} />
-        </div>
       </Paper>
+      <div className={styles.speedDialContainer}>
+        <SpeedDial buttons={speedDialButtons} />
+      </div>
     </>
   )
 }
 
-export default CashierFront
+export default memo(CashierFront)

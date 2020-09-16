@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react'
+import React, {useState, useEffect, useCallback, useMemo, memo} from 'react'
 import {useHistory} from 'react-router-dom'
 
 import {Input, Paper, ResponsiveTable, SpeedDial} from 'components'
@@ -44,12 +44,15 @@ const ProductList = () => {
 
   const [searchTerm, setSearchTerm] = useState('')
 
-  const tableButtons = [
-    {
-      label: 'Novo Produto',
-      onClick: () => history.push(`/product/`),
-    },
-  ]
+  const speedDialButtons = useMemo(
+    () => [
+      {
+        label: 'Novo Produto',
+        onClick: () => history.push(`/product/`),
+      },
+    ],
+    [history]
+  )
 
   useEffect(() => {
     showMenu()
@@ -122,12 +125,12 @@ const ProductList = () => {
           loading={loading}
           pagination={{count: 0, page: 0, rowsPerPage: 10, onChangePage: () => {}}}
         />
-        <div style={{padding: '20px'}}>
-          <SpeedDial buttons={tableButtons} />
-        </div>
       </Paper>
+      <div className={styles.speedDialContainer}>
+        <SpeedDial buttons={speedDialButtons} />
+      </div>
     </>
   )
 }
 
-export default ProductList
+export default memo(ProductList)

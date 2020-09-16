@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react'
+import React, {useState, useEffect, useCallback, useMemo, memo} from 'react'
 import {useHistory} from 'react-router-dom'
 
 import {Paper, ResponsiveTable, SpeedDial} from 'components'
@@ -40,12 +40,15 @@ const ClientList = () => {
     rowsPerPage: 0,
   })
 
-  const tableButtons = [
-    {
-      label: 'Novo Cliente',
-      onClick: () => history.push(`/client/`),
-    },
-  ]
+  const speedDialButtons = useMemo(
+    () => [
+      {
+        label: 'Novo Cliente',
+        onClick: () => history.push(`/client/`),
+      },
+    ],
+    [history]
+  )
 
   useEffect(() => {
     showMenu()
@@ -89,12 +92,12 @@ const ClientList = () => {
           emptyTableMessage='Não há clientes registrados.'
           loading={loading}
         />
-        <div style={{padding: '20px'}}>
-          <SpeedDial buttons={tableButtons} />
-        </div>
       </Paper>
+      <div className={styles.speedDialContainer}>
+        <SpeedDial buttons={speedDialButtons} />
+      </div>
     </>
   )
 }
 
-export default ClientList
+export default memo(ClientList)
