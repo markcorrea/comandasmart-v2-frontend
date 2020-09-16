@@ -7,15 +7,10 @@ import {Button, Paper} from 'components'
 import {makeStyles} from '@material-ui/core/styles'
 import Dialog from '@material-ui/core/Dialog'
 
-import styles from './index.module.scss'
+import {mediaQuerySM} from 'assets/styles/_mediaQueries.scss'
+import useMediaQuery from 'utils/mediaQuery'
 
-const rightButton = {
-  root: {
-    minWidth: 'initial',
-    maxWidth: '200px',
-    marginLeft: '15px',
-  },
-}
+import styles from './index.module.scss'
 
 const useStyles = makeStyles({
   paper: {
@@ -26,6 +21,16 @@ const useStyles = makeStyles({
 const Modal = ({children, header, onCancel, onConfirm, onUnderstood, open}) => {
   const modalContainer = document.getElementById('modalContainer')
   const classes = useStyles()
+  const mediaQuerySmall = useMediaQuery('min', mediaQuerySM)
+
+  const rightButton = {
+    root: {
+      minWidth: 'initial',
+      maxWidth: '200px',
+      margin: '5px 0 5px 15px',
+      float: mediaQuerySmall ? 'right' : 'none',
+    },
+  }
 
   return ReactDOM.createPortal(
     <Dialog
@@ -39,19 +44,19 @@ const Modal = ({children, header, onCancel, onConfirm, onUnderstood, open}) => {
         <div className={styles.header}>{header}</div>
         <div className={styles.body}>{children}</div>
         <div className={styles.buttons}>
-          {onCancel && (
-            <Button color='cancel' classes={rightButton} onClick={onCancel}>
-              Cancel
-            </Button>
-          )}
           {onConfirm && (
             <Button classes={rightButton} onClick={onConfirm}>
-              Confirm
+              Confirmar
+            </Button>
+          )}
+          {onCancel && (
+            <Button color='cancel' classes={rightButton} onClick={onCancel}>
+              Cancelar
             </Button>
           )}
           {onUnderstood && (
             <Button classes={rightButton} onClick={onUnderstood}>
-              Understood
+              Entendido
             </Button>
           )}
         </div>

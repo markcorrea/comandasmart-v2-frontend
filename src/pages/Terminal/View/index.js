@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react'
+import React, {useState, useEffect, useCallback, useMemo, memo} from 'react'
 import SwipeableViews from 'react-swipeable-views'
 
 import {OrderCard, SpeedDial} from 'components'
@@ -53,17 +53,20 @@ const TerminalView = () => {
     if (result) setOrders(result.data)
   }, [terminalId, completeAllOrdersByTerminalId])
 
-  const tableButtons = [
-    {
-      label: 'Completar todos',
-      onClick: () =>
-        confirmationDialog({
-          header: 'Completar todos os pedidos?',
-          body: 'Todos os pedidos serão considerados entregues.',
-          onConfirm: () => completeAllOrders(),
-        }),
-    },
-  ]
+  const speedDialButtons = useMemo(
+    () => [
+      {
+        label: 'Completar todos',
+        onClick: () =>
+          confirmationDialog({
+            header: 'Completar todos os pedidos?',
+            body: 'Todos os pedidos serão considerados entregues.',
+            onConfirm: () => completeAllOrders(),
+          }),
+      },
+    ],
+    [confirmationDialog, completeAllOrders]
+  )
 
   return (
     <>
@@ -76,12 +79,12 @@ const TerminalView = () => {
         ) : (
           <div className={styles.noOrders}>Não há pedidos pendentes</div>
         )}
-        <div style={{padding: '20px'}}>
-          <SpeedDial buttons={tableButtons} />
-        </div>
+      </div>
+      <div className={styles.speedDialContainer}>
+        <SpeedDial buttons={speedDialButtons} />
       </div>
     </>
   )
 }
 
-export default TerminalView
+export default memo(TerminalView)
