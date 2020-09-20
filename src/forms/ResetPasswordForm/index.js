@@ -10,9 +10,27 @@ import {defaultFontFamily, smallerFontSize} from 'assets/styles/main.module.scss
 
 import styles from './index.module.scss'
 
+const containsCapitalLetterSchema = yup.string().matches(/[A-Z]/, 'Senha precisa ter ao menos 1 letra MAIUSCULA.')
+const containsNumberSchema = yup.string().matches(/\d/, 'Senha precisa incluir ao menos 1 numero.')
+
+const containsSpecificCharactersSchema = yup
+  .string()
+  .matches(/[@|#|!|$|%|*]/, 'Senha precisa incluir ao menos um destes caracteres especiais: @ # ! $ % *')
+
+const minLengthSchema = yup.string().min(6)
+
 const validationRules = yup.object().shape({
-  password: yup.string().required('Senha é um campo obrigatório'),
-  passwordConfirm: yup.string().required('Confirmação de Senha é um campo obrigatório'),
+  password: yup
+    .string()
+    .required('Senha é um campo obrigatório')
+    .concat(minLengthSchema)
+    .concat(containsCapitalLetterSchema)
+    .concat(containsNumberSchema)
+    .concat(containsSpecificCharactersSchema),
+  passwordConfirm: yup
+    .string()
+    .oneOf([yup.ref('password'), null], 'Senhas devem ser iguais.')
+    .required('Confirmação de senha é um campo obrigatório.'),
 })
 
 const getErrorMessage = error => {

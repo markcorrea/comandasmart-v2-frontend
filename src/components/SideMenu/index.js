@@ -2,12 +2,30 @@ import React from 'react'
 import clsx from 'clsx'
 import PropTypes from 'prop-types'
 
+import userImage from 'assets/images/user.png'
+
+import useMediaQuery from 'utils/mediaQuery'
+import {mediaQueryLG} from 'assets/styles/_mediaQueries.scss'
+
 import styles from './index.module.scss'
 
 const SideMenu = ({items, className}) => {
+  const mediaLG = useMediaQuery('min', mediaQueryLG)
+
   return (
     <div className={clsx(styles.container, className)}>
-      <div className={styles.title}>Menu</div>
+      {!mediaLG ? (
+        <div className={styles.userInfo}>
+          <div alt='user' className={styles.userImage} style={{backgroundImage: `url(${userImage})`}}>
+            {!userImage && <i className='fa fa-user' />}
+          </div>
+          <span>Savio Canova</span> - Admin
+          <br />
+          Kanova Revistaria
+        </div>
+      ) : (
+        <div className={styles.title}>Menu</div>
+      )}
       <ul>
         {items.map((item, index) => {
           return (

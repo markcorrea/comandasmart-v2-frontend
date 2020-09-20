@@ -3,22 +3,22 @@ import clsx from 'clsx'
 import PropTypes from 'prop-types'
 
 import logo from 'assets/images/comandasmart_white.svg'
-import logoMobile from 'assets/images/logo_white.svg'
 import userImage from 'assets/images/user.png'
-
-import useMediaQuery from 'utils/mediaQuery'
 
 import HeaderButton from './HeaderButton'
 import LoggedUserInfo from './LoggedUserInfo'
 
 import {useStore} from 'store'
 
-import {mediaQueryLG} from 'assets/styles/_mediaQueries.scss'
+import useMediaQuery from 'utils/mediaQuery'
+import {mediaQueryMD, mediaQueryLG} from 'assets/styles/_mediaQueries.scss'
+
 import styles from './index.module.scss'
 
-const Header = ({className}) => {
+const Header = ({className, toggleMenu}) => {
   const store = useStore()
 
+  const mediaMD = useMediaQuery('min', mediaQueryMD)
   const mediaLG = useMediaQuery('min', mediaQueryLG)
 
   const UserIsLoggedComponents = () => {
@@ -30,7 +30,7 @@ const Header = ({className}) => {
       return (
         <>
           <HeaderButton icon='sign-out-alt' label='sair' onClick={() => console.log('clicked info')} />
-          <LoggedUserInfo userName={firstName} userImage={userImage} company={companyName} />
+          {mediaMD && <LoggedUserInfo userName={firstName} userImage={userImage} company={companyName} />}
         </>
       )
     }
@@ -43,9 +43,19 @@ const Header = ({className}) => {
     )
   }
 
+  const Logo = () => <img alt='logo' src={logo} className={styles.logo} />
+
   return (
     <div className={clsx(styles.container, className)}>
-      <img alt='logo' src={mediaLG ? logo : logoMobile} className={styles.logo} />
+      {mediaLG ? (
+        <Logo />
+      ) : store.sideMenu ? (
+        <div className={styles.burgerMenu} onClick={toggleMenu}>
+          <i className='fas fa-bars'></i>
+        </div>
+      ) : (
+        <Logo />
+      )}
       <UserIsLoggedComponents />
     </div>
   )
@@ -53,6 +63,7 @@ const Header = ({className}) => {
 
 Header.propTypes = {
   className: PropTypes.string,
+  toggleMenu: PropTypes.func,
 }
 
 Header.defaultProps = {

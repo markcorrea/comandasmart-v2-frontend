@@ -6,8 +6,6 @@ import {useStore} from 'store'
 
 import useServices from 'services'
 
-import {lightGray} from 'assets/styles/main.module.scss'
-
 import styles from './index.module.scss'
 
 const columns = [
@@ -54,23 +52,16 @@ const CashierBalance = () => {
 
   const tableButtons = [
     {
-      label: 'Fechar',
+      label: 'Fechar Caixa',
       onClick: () =>
         confirmationDialog({header: 'Fechar caixa', body: 'Confirma fechamento do caixa atual?', onConfirm: closeCashier}),
-    },
-    {
-      label: 'Cancelar',
-      onClick: () => history.push(`/cashier/${cashierId}/`),
-      classes: {
-        backgroundColor: lightGray,
-      },
     },
   ]
 
   return (
     <>
       <header className={styles.header}>
-        <h1>Fechamento de Caixa</h1>
+        <h1> Controle de Caixa</h1>
       </header>
       <Paper className={styles.paper}>
         <div className={styles.info}>

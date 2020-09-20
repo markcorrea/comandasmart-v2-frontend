@@ -11,7 +11,10 @@ import {defaultFontFamily, smallerFontSize} from 'assets/styles/main.module.scss
 import styles from './index.module.scss'
 
 const validationRules = yup.object().shape({
-  email: yup.string().required('Digite um e-mail válido'),
+  email: yup
+    .string()
+    .email('Digite um e-mail válido, ex: john@gmail.com')
+    .required('E-mail é um campo obrigatório'),
 })
 
 const getErrorMessage = error => {

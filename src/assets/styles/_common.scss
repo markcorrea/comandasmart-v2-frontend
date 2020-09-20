@@ -1,3 +1,5 @@
+@import '~assets/styles/_mediaQueries.scss';
+
 /* Change the white to any color ;) */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
@@ -30,14 +32,18 @@ p {
   color: $darkGray;
 }
 
-div, section {
+div,
+section {
   box-sizing: border-box;
 }
 
 h1 {
   font-family: $robotoBoldFontFamily;
-  font-size: $h1FontSize;
+  font-size: $bigFontSize;
   color: $darkGray;
   line-height: 38px;
   margin: 0;
+  @include media-breakpoint-up(sm) {
+    font-size: $h1FontSize;
+  }
 }

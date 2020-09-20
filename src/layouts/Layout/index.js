@@ -1,22 +1,38 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {useHistory} from 'react-router-dom'
 import PropTypes from 'prop-types'
 
-import {Footer, Header, SideMenu} from 'components'
+import {Drawer, Footer, Header, SideMenu} from 'components'
 
 import useMediaQuery from 'utils/mediaQuery'
 
 import {useStore} from 'store'
 
-import {mediaQueryLG, mediaQuerySM} from 'assets/styles/_mediaQueries.scss'
+import {mediaQueryLG} from 'assets/styles/_mediaQueries.scss'
 import styles from './index.module.scss'
+
+const ShowSideMenu = ({open, setOpen, ...props}) => {
+  const mediaQueryLarge = useMediaQuery('min', mediaQueryLG)
+
+  return mediaQueryLarge ? (
+    <SideMenu {...props} />
+  ) : (
+    <Drawer open={open} setOpen={setOpen}>
+      <SideMenu {...props} />
+    </Drawer>
+  )
+}
+
+ShowSideMenu.propTypes = {
+  open: PropTypes.bool,
+  setOpen: PropTypes.func,
+}
 
 const Layout = ({children}) => {
   const history = useHistory()
   const store = useStore()
 
-  const mediaQueryLarge = useMediaQuery('min', mediaQueryLG)
-  const mediaQuerySmall = useMediaQuery('min', mediaQuerySM)
+  const [open, setOpen] = useState(false)
 
   const items = [
     {
@@ -73,12 +89,12 @@ const Layout = ({children}) => {
 
   return (
     <div className={styles.container}>
-      {mediaQuerySmall && <Header className={styles.header} />}
+      <Header className={styles.header} toggleMenu={() => setOpen(!open)} />
       <div className={styles.content}>
-        {store.sideMenu && mediaQueryLarge && <SideMenu items={items} className={styles.sideMenu} />}
+        {store.sideMenu && <ShowSideMenu items={items} className={styles.sideMenu} open={open} setOpen={setOpen} />}
         <div className={styles.children}>{children}</div>
       </div>
-      {mediaQuerySmall && <Footer className={styles.footer} />}
+      <Footer className={styles.footer} />
     </div>
   )
 }

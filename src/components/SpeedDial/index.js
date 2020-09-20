@@ -22,11 +22,16 @@ const buttonClasses = classes => ({
   },
 })
 
-const SpeedDialOptions = ({buttons}) => {
+const SpeedDialOptions = ({buttons, setOpen}) => {
   return buttons.map((button, index) => {
     const {label, onClick, classes} = button
+
+    const clickAndClose = onClick => {
+      onClick()
+      setOpen(false)
+    }
     return (
-      <Button key={`speed_dial_button_${index}`} classes={buttonClasses(classes)} onClick={onClick}>
+      <Button key={`speed_dial_button_${index}`} classes={buttonClasses(classes)} onClick={() => clickAndClose(onClick)}>
         {label}
       </Button>
     )
@@ -75,7 +80,7 @@ const SpeedDial = ({buttons, positionFixed}) => {
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
         open={open}>
-        <SpeedDialOptions buttons={buttons} />
+        <SpeedDialOptions buttons={buttons} setOpen={setOpen} />
       </UISpeedDial>
     </>
   )

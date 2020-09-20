@@ -38,6 +38,9 @@ const CardList = ({
   hasCheckbox,
   hasButtons,
   displayColumns,
+  emptyTableMessage,
+  loading,
+  additionalRow,
 }) => {
   const classes = useStyles()
   const [rows, setRows] = useState([])
@@ -49,13 +52,14 @@ const CardList = ({
 
   const checkRow = useCallback(
     (row, index) => {
+      if (loading) return null
       const newRow = {...row, checked: !row.checked}
       setRows(rows => {
         rows.splice(index, 1, newRow)
         return [...rows]
       })
     },
-    [setRows]
+    [setRows, loading]
   )
 
   const toggleAll = useCallback(
@@ -76,64 +80,89 @@ const CardList = ({
 
   const buttons = useMemo(() => {
     const returnRows = hasCheckbox ? rows.filter(row => row.checked) : rows
-    const newButtons = hasButtons ? hasButtons.map(button => ({...button, onClick: () => button.onClick(returnRows)})) : []
+    const newButtons = hasButtons
+      ? hasButtons.map(button => ({...button, onClick: !loading ? () => button.onClick(returnRows) : null}))
+      : []
 
-    return [...(hasCheckbox ? [{label: 'Select All', onClick: toggleAll}] : []), ...newButtons]
-  }, [hasCheckbox, hasButtons, rows, toggleAll])
+    return [...(hasCheckbox ? [{label: 'Select All', onClick: !loading ? toggleAll : null}] : []), ...newButtons]
+  }, [hasCheckbox, hasButtons, rows, toggleAll, loading])
 
   return (
     <div className={styles.container}>
-      {rows.map((row, rowIndex) => (
-        <Card key={`card_item_${rowIndex}`} className={clsx(classes.root, className)}>
+      {rows.length ? (
+        rows.map((row, rowIndex) => (
+          <Card key={`card_item_${rowIndex}`} className={clsx(classes.root, className)}>
+            <CardActionArea>
+              <CardContent>
+                {hasCheckbox && (
+                  <Checkbox
+                    className={styles.checkbox}
+                    color='primary'
+                    checked={row.checked}
+                    onChange={() => checkRow(row, rowIndex)}
+                    inputProps={{'aria-label': 'primary checkbox'}}
+                  />
+                )}
+                {titleColumn ? <div className={styles.title}>{row[titleColumn]}</div> : <div className={styles.emptyRow} />}
+                {columnsToDisplay.map((column, columnIndex) => {
+                  const {key, value} = column
+                  if (key !== titleColumn) {
+                    return (
+                      <div key={`card_item_row_${rowIndex}_${columnIndex}`} className={styles.row}>
+                        <div className={styles.name}>{value}</div>
+                        <div className={styles.value}>{row[key] || '-'}</div>
+                      </div>
+                    )
+                  }
+                  return null
+                })}
+              </CardContent>
+            </CardActionArea>
+            <CardActions className={styles.buttons}>
+              {onViewClick && (
+                <Button
+                  className={clsx(styles.button, styles.view)}
+                  size='small'
+                  color='primary'
+                  onClick={() => onViewClick(row)}>
+                  <i className='far fa-eye' />
+                </Button>
+              )}
+              {onEditClick && (
+                <Button
+                  className={clsx(styles.button, styles.edit)}
+                  size='small'
+                  color='primary'
+                  onClick={() => onEditClick(row)}>
+                  <i className='far fa-edit' />
+                </Button>
+              )}
+              {onDeleteClick && (
+                <Button
+                  className={clsx(styles.button, styles.delete)}
+                  size='small'
+                  color='primary'
+                  onClick={() => onDeleteClick(row)}>
+                  <i className='fas fa-trash-alt' />
+                </Button>
+              )}
+            </CardActions>
+          </Card>
+        ))
+      ) : (
+        <div className={styles.emptyTableMessage}>{emptyTableMessage}</div>
+      )}
+      {additionalRow && (
+        <Card className={clsx(classes.root, className)}>
           <CardActionArea>
             <CardContent>
-              {hasCheckbox && (
-                <Checkbox
-                  className={styles.checkbox}
-                  color='primary'
-                  checked={row.checked}
-                  onChange={() => checkRow(row, rowIndex)}
-                  inputProps={{'aria-label': 'primary checkbox'}}
-                />
-              )}
-              {titleColumn ? <div className={styles.title}>{row[titleColumn]}</div> : <div className={styles.emptyRow} />}
-              {columnsToDisplay.map((column, columnIndex) => {
-                const {key, value} = column
-                if (key !== titleColumn) {
-                  return (
-                    <div key={`card_item_row_${rowIndex}_${columnIndex}`} className={styles.row}>
-                      <div className={styles.name}>{value}</div>
-                      <div className={styles.value}>{row[key]}</div>
-                    </div>
-                  )
-                }
-                return null
-              })}
+              <div className={styles.row}>
+                <div className={styles.value}>{additionalRow}</div>
+              </div>
             </CardContent>
           </CardActionArea>
-          <CardActions className={styles.buttons}>
-            {onViewClick && (
-              <Button className={clsx(styles.button, styles.view)} size='small' color='primary' onClick={() => onViewClick(row)}>
-                <i className='far fa-eye' />
-              </Button>
-            )}
-            {onEditClick && (
-              <Button className={clsx(styles.button, styles.edit)} size='small' color='primary' onClick={() => onEditClick(row)}>
-                <i className='far fa-edit' />
-              </Button>
-            )}
-            {onDeleteClick && (
-              <Button
-                className={clsx(styles.button, styles.delete)}
-                size='small'
-                color='primary'
-                onClick={() => onDeleteClick(row)}>
-                <i className='fas fa-trash-alt' />
-              </Button>
-            )}
-          </CardActions>
         </Card>
-      ))}
+      )}
       {(hasButtons || hasCheckbox) && <SpeedDial positionFixed buttons={buttons} />}
     </div>
   )
@@ -150,11 +179,16 @@ CardList.propTypes = {
   hasCheckbox: PropTypes.bool,
   hasButtons: PropTypes.array,
   displayColumns: PropTypes.array,
+  emptyTableMessage: PropTypes.string,
+  loading: PropTypes.bool,
+  additionalRow: PropTypes.any,
 }
 
 CardList.defaultProps = {
   hasCheckbox: false,
   displayColumns: [],
+  emptyTableMessage: 'Não há itens cadastrados.',
+  loading: false,
 }
 
 export default memo(CardList)

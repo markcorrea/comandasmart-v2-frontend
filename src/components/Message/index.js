@@ -4,6 +4,9 @@ import PropTypes from 'prop-types'
 
 import {Spinner} from 'components'
 
+import {mediaQuerySM} from 'assets/styles/_mediaQueries.scss'
+import useMediaQuery from 'utils/mediaQuery'
+
 const MessageContext = React.createContext(null)
 
 const MessageComponent = ({children}) => {
@@ -29,17 +32,20 @@ const MessageComponent = ({children}) => {
   return <MessageContext.Provider value={{show, showLoading, hideLoading}}>{children}</MessageContext.Provider>
 }
 
-const MessageWrapper = ({children}) => (
-  <SnackbarProvider
-    maxSnack={10}
-    autoHideDuration={2000}
-    anchorOrigin={{
-      vertical: 'top',
-      horizontal: 'right',
-    }}>
-    <MessageComponent>{children}</MessageComponent>
-  </SnackbarProvider>
-)
+const MessageWrapper = ({children}) => {
+  const mediaQuerySmall = useMediaQuery('min', mediaQuerySM)
+  return (
+    <SnackbarProvider
+      maxSnack={10}
+      autoHideDuration={2000}
+      anchorOrigin={{
+        vertical: 'top',
+        horizontal: mediaQuerySmall ? 'right' : 'center',
+      }}>
+      <MessageComponent>{children}</MessageComponent>
+    </SnackbarProvider>
+  )
+}
 
 export default MessageWrapper
 

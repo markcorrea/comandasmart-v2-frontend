@@ -33,7 +33,7 @@ export const columns = [
 ]
 
 const CashierList = () => {
-  const {showMenu, loading} = useStore()
+  const {showMenu, loading, confirmationDialog} = useStore()
   const history = useHistory()
 
   const {getCashiers, openCashier} = useServices()
@@ -61,10 +61,15 @@ const CashierList = () => {
     () => [
       {
         label: 'Novo Caixa',
-        onClick: openNewCashier,
+        onClick: () =>
+          confirmationDialog({
+            header: 'Abrir caixa',
+            body: `Deseja abrir novo caixa com o usuário atual?`,
+            onConfirm: openNewCashier,
+          }),
       },
     ],
-    [openNewCashier]
+    [openNewCashier, confirmationDialog]
   )
 
   return (
@@ -77,6 +82,7 @@ const CashierList = () => {
           columns={columns}
           rows={cashiers}
           titleColumn='name'
+          onViewClick={row => history.push(`/cashier/${row.id}`)}
           rowClickable={row => history.push(`/cashier/${row.id}`)}
           emptyTableMessage='Não há caixas registrados.'
           loading={loading}
