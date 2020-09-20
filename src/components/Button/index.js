@@ -9,7 +9,7 @@ import {useStore} from 'store'
 import {darkGray, lightestGray, mediumGray, robotoBoldFontFamily, ronchi, smallFontSize} from 'assets/styles/main.module.scss'
 
 const Button = ({className, children, classes: {root}, onClick, color: buttonColor, type, disabled, ...rest}) => {
-  const {showMenu, loading, confirmationDialog} = useStore()
+  const {loading} = useStore()
 
   const backgroundColor = useMemo(() => {
     if (buttonColor === 'cancel') return lightestGray
@@ -58,6 +58,7 @@ Button.propTypes = {
   color: PropTypes.string,
   type: PropTypes.string,
   className: PropTypes.string,
+  disabled: PropTypes.bool,
 }
 
 Button.defaultProps = {
@@ -66,6 +67,7 @@ Button.defaultProps = {
   onClick: () => {},
   color: 'default',
   type: 'submit',
+  disabled: false,
 }
 
 export default memo(Button)
