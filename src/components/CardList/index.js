@@ -124,7 +124,7 @@ const CardList = ({
                   className={clsx(styles.button, styles.view)}
                   size='small'
                   color='primary'
-                  onClick={() => onViewClick(row)}>
+                  onClick={!loading ? () => onViewClick(row) : null}>
                   <i className='far fa-eye' />
                 </Button>
               )}
@@ -133,7 +133,7 @@ const CardList = ({
                   className={clsx(styles.button, styles.edit)}
                   size='small'
                   color='primary'
-                  onClick={() => onEditClick(row)}>
+                  onClick={!loading ? () => onEditClick(row) : null}>
                   <i className='far fa-edit' />
                 </Button>
               )}
@@ -142,7 +142,7 @@ const CardList = ({
                   className={clsx(styles.button, styles.delete)}
                   size='small'
                   color='primary'
-                  onClick={() => onDeleteClick(row)}>
+                  onClick={!loading ? () => onDeleteClick(row) : null}>
                   <i className='fas fa-trash-alt' />
                 </Button>
               )}

@@ -14,6 +14,7 @@ import styles from './index.module.scss'
 
 const validationRules = yup.object().shape({
   name: yup.string().required('Nome é um campo obrigatório'),
+  email: yup.string().email('Digite um e-mail válido, ex: john@gmail.com'),
 })
 
 const getErrorMessage = error => {
@@ -59,6 +60,7 @@ const UserForm = ({user, onSubmit, onCancel, loading}) => {
           error={Boolean(errors.name)}
           helperText={getErrorMessage(errors.name)}
           disabled={loading}
+          isRequired
         />
         <Controller
           as={Input}

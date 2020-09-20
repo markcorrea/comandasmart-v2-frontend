@@ -66,6 +66,7 @@ const ResetPasswordForm = ({onSubmit}) => {
           control={control}
           error={Boolean(errors.password)}
           helperText={getErrorMessage(errors.password)}
+          isRequired
         />
         <Controller
           as={PasswordInput}
@@ -75,6 +76,7 @@ const ResetPasswordForm = ({onSubmit}) => {
           control={control}
           error={Boolean(errors.passwordConfirm)}
           helperText={getErrorMessage(errors.passwordConfirm)}
+          isRequired
         />
       </div>
       <Button type='submit' classes={{root: classes.buttonRoot}}>

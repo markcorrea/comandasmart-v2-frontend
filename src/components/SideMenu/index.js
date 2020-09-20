@@ -4,6 +4,8 @@ import PropTypes from 'prop-types'
 
 import userImage from 'assets/images/user.png'
 
+import {useStore} from 'store'
+
 import useMediaQuery from 'utils/mediaQuery'
 import {mediaQueryLG} from 'assets/styles/_mediaQueries.scss'
 
@@ -11,6 +13,7 @@ import styles from './index.module.scss'
 
 const SideMenu = ({items, className}) => {
   const mediaLG = useMediaQuery('min', mediaQueryLG)
+  const {loading} = useStore()
 
   return (
     <div className={clsx(styles.container, className)}>
@@ -30,7 +33,7 @@ const SideMenu = ({items, className}) => {
         {items.map((item, index) => {
           return (
             <li key={`menu_item_${index}`}>
-              <div onClick={item.onClick}>
+              <div onClick={!loading ? item.onClick : null}>
                 <i className={item.icon} />
                 <span>{item.label}</span>
               </div>

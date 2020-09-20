@@ -7,6 +7,8 @@ import Input from 'components/Input'
 
 import Quantity from './Quantity'
 
+import {useStore} from 'store'
+
 import useDebounce from './debounce'
 
 import styles from './index.module.scss'
@@ -19,6 +21,8 @@ const ProductSearch = ({onConfirm, onEnterPress, searchProductsByName}) => {
   const [showOptions, setShowOptions] = useState(false)
   const [loadingList, setLoadingList] = useState(false)
   const wrapperRef = useRef(null)
+
+  const {loading} = useStore()
 
   const buttonClass = {
     root: {
@@ -66,6 +70,7 @@ const ProductSearch = ({onConfirm, onEnterPress, searchProductsByName}) => {
   }
 
   const handleKeyPress = event => {
+    if (loading) return null
     if (event.key === 'Enter' && !!searchTerm) {
       onEnterPress(searchTerm)
       setSearchTerm('')
@@ -91,6 +96,7 @@ const ProductSearch = ({onConfirm, onEnterPress, searchProductsByName}) => {
           onChange={handleInputChange}
           onKeyPress={handleKeyPress}
           onFocus={handleOnFocus}
+          disabled={loading}
         />
         <div className={clsx(styles.selectedProductName, product ? styles.selected : '')}>
           {product ? product.name : 'No product selected'}
@@ -120,7 +126,7 @@ const ProductSearch = ({onConfirm, onEnterPress, searchProductsByName}) => {
         )}
       </div>
       <div className={styles.counterContainer}>
-        <Quantity quantity={quantity} setQuantity={setQuantity} disabled={!product} />
+        <Quantity quantity={quantity} setQuantity={setQuantity} disabled={!product || loading} />
       </div>
       <div>
         <Button classes={buttonClass} onClick={() => handleConfirm({product, quantity})} disabled={!product || quantity < 1}>

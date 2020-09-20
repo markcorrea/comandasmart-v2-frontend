@@ -43,7 +43,7 @@ const CashierTicket = () => {
     payProductsByTicketAndCashier,
   } = useServices()
   const {ticketId, cashierId} = useParams()
-  const {showMenu} = useStore()
+  const {showMenu, loading} = useStore()
 
   const [ticket, setTicket] = useState(null)
 
@@ -128,6 +128,7 @@ const CashierTicket = () => {
             hasButtons={tableButtons}
             additionalRow={<TotalPrice ticket={ticket} />}
             emptyTableMessage='Não há produtos registrados.'
+            disabled={loading}
           />
         </div>
       </Paper>

@@ -18,7 +18,7 @@ const columns = [
 ]
 
 const TerminalList = () => {
-  const {showMenu, confirmationDialog} = useStore()
+  const {showMenu, loading, confirmationDialog} = useStore()
   const history = useHistory()
   const {getTerminals, deleteTerminalById} = useServices()
 
@@ -80,6 +80,7 @@ const TerminalList = () => {
             })
           }
           emptyTableMessage='Não há comandas registradas.'
+          loading={loading}
         />
       </Paper>
       <div className={styles.speedDialContainer}>

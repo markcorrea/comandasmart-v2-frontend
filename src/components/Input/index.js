@@ -7,7 +7,7 @@ import UIInputAdornment from '@material-ui/core/InputAdornment'
 
 import {gray} from 'assets/styles/main.module.scss'
 
-const Input = ({label, startIcon, endIcon, classes: {input}, InputProps, ...rest}) => {
+const Input = ({label, startIcon, endIcon, isRequired, classes: {input}, InputProps, ...rest}) => {
   const useStyles = makeStyles(() => ({
     root: {
       width: '100%',
@@ -64,7 +64,7 @@ const Input = ({label, startIcon, endIcon, classes: {input}, InputProps, ...rest
   return (
     <div>
       <TextField
-        label={label}
+        label={`${label} ${isRequired ? '*' : ''}`}
         classes={{root: classes.root}}
         InputProps={{
           ...InputProps,
@@ -96,11 +96,13 @@ Input.propTypes = {
   endIcon: iconProps,
   classes: PropTypes.object,
   InputProps: PropTypes.object,
+  isRequired: PropTypes.bool,
 }
 
 Input.defaultProps = {
   label: null,
   classes: {},
+  isRequired: false,
 }
 
 export default Input

@@ -4,9 +4,13 @@ import PropTypes from 'prop-types'
 import UIButton from '@material-ui/core/Button'
 import {makeStyles} from '@material-ui/core/styles'
 
+import {useStore} from 'store'
+
 import {darkGray, lightestGray, mediumGray, robotoBoldFontFamily, ronchi, smallFontSize} from 'assets/styles/main.module.scss'
 
-const Button = ({className, children, classes: {root}, onClick, color: buttonColor, type, ...rest}) => {
+const Button = ({className, children, classes: {root}, onClick, color: buttonColor, type, disabled, ...rest}) => {
+  const {showMenu, loading, confirmationDialog} = useStore()
+
   const backgroundColor = useMemo(() => {
     if (buttonColor === 'cancel') return lightestGray
     return ronchi
@@ -35,7 +39,13 @@ const Button = ({className, children, classes: {root}, onClick, color: buttonCol
   const buttonClasses = useStyles()
 
   return (
-    <UIButton className={className} type={type} classes={buttonClasses} onClick={onClick} {...rest}>
+    <UIButton
+      className={className}
+      type={type}
+      classes={buttonClasses}
+      onClick={onClick}
+      disabled={loading || disabled}
+      {...rest}>
       {children}
     </UIButton>
   )

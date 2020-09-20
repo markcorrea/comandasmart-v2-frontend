@@ -18,7 +18,7 @@ const ModalBody = ({value, onChange}) => {
 
   return (
     <div className={styles.modalBody}>
-      <NumberInput ref={ref} value={value} onChange={onChange} />
+      <NumberInput ref={ref} label={''} value={value} onChange={onChange} />
       {!value && <span className={styles.codeWarning}>Only numbers and cannot be empty.</span>}
     </div>
   )

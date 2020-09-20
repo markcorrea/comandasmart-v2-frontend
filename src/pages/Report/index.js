@@ -18,7 +18,7 @@ export const columns = [
 ]
 
 const Reports = () => {
-  const {showMenu} = useStore()
+  const {showMenu, loading} = useStore()
   const history = useHistory()
 
   useEffect(() => {
@@ -38,6 +38,7 @@ const Reports = () => {
           onViewClick={({url}) => history.push(`/${url}`)}
           rowClickable={({url}) => history.push(`/${url}`)}
           emptyTableMessage='Não há relatórios disponíveis.'
+          loading={loading}
         />
       </Paper>
     </>

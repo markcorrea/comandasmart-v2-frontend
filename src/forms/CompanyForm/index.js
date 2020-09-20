@@ -13,7 +13,10 @@ import useMediaQuery from 'utils/mediaQuery'
 import styles from './index.module.scss'
 
 const validationRules = yup.object().shape({
-  name: yup.string().required('Nome é um campo obrigatório'),
+  name: yup.string().required('Nome é um campo obrigatório.'),
+  admin: yup.object().shape({
+    name: yup.string().required('Nome é um campo obrigatório.'),
+  }),
 })
 
 const getErrorMessage = error => {
@@ -69,6 +72,7 @@ const CompanyForm = ({company, onSubmit, onCancel, loading}) => {
           error={Boolean(errors.name)}
           helperText={getErrorMessage(errors.name)}
           disabled={loading}
+          isRequired
         />
         <Controller
           as={Input}
@@ -144,6 +148,7 @@ const CompanyForm = ({company, onSubmit, onCancel, loading}) => {
           error={Boolean(errors.admin && errors.admin.name)}
           helperText={getErrorMessage(errors.admin && errors.admin.name)}
           disabled={loading}
+          isRequired
         />
         <Controller
           as={Input}

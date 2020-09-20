@@ -101,6 +101,7 @@ const ProductList = () => {
             onChange={event => setSearchTerm(event.target.value)}
             placeholder='Buscar por produto...'
             disabled={loading}
+            label=''
             endIcon={
               <div className={styles.searchButton} onClick={!loading ? searchProducts : () => {}}>
                 <i className='fa fa-search' />

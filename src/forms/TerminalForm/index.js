@@ -51,6 +51,7 @@ const TerminalForm = ({terminal: defaultValues, onSubmit, onCancel, loading}) =>
           label='Nome'
           error={Boolean(errors.name)}
           helperText={getErrorMessage(errors.name)}
+          isRequired
         />
       </div>
       <div className={styles.buttons}>
