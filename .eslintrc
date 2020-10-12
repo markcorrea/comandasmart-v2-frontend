@@ -1,18 +1,7 @@
 {
-  "extends": [
-    "eslint:recommended",
-    "plugin:react/recommended",
-    "react-app",
-    "google"
-  ],
+  "extends": ["eslint:recommended", "plugin:react/recommended", "react-app", "google"],
 
-  "ignorePatterns": [
-    "artifacts/",
-    "build/",
-    "node_modules/",
-    "test/polyfills/",
-    "storybook-static/"
-  ],
+  "ignorePatterns": ["artifacts/", "build/", "node_modules/", "test/polyfills/", "storybook-static/"],
 
   "rules": {
     "no-invalid-this": 0,
@@ -31,11 +20,8 @@
     "indent": ["error", 2],
     "arrow-parens": ["error", "as-needed"],
     "semi": ["error", "never", {"beforeStatementContinuationChars": "always"}],
-    "operator-linebreak": [
-      "error",
-      "after",
-      {"overrides": {"?": "before", ":": "before"}}
-    ],
+    "camelcase": 0,
+    "operator-linebreak": ["error", "after", {"overrides": {"?": "before", ":": "before"}}],
     "quote-props": 0
   }
 }

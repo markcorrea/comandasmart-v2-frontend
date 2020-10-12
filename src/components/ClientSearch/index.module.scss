@@ -1,0 +1,98 @@
+@import '~assets/styles/_mediaQueries.scss';
+@import '~assets/styles/_colors.scss';
+@import '~assets/styles/_typography.scss';
+
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+
+  @include media-breakpoint-up(xl) {
+    flex-direction: row;
+  }
+}
+
+.searchContainer {
+  width: 100%;
+  position: relative;
+
+  .selectedClientName {
+    padding: 3px 0 0 15px;
+    font-size: $smallerFontSize;
+    color: $lightGray;
+    &.selected {
+      color: $gray;
+    }
+  }
+
+  .listContainer {
+    border: solid thin $gray;
+    box-shadow: 10px 10px 5px -9px rgba(0, 0, 0, 0.41);
+    width: 100%;
+    max-height: 300px;
+    position: absolute;
+    top: 71px;
+    right: 0;
+    left: 0;
+    border-radius: 10px;
+    overflow: scroll;
+    z-index: 1;
+
+    .listOptions {
+      min-width: 100%;
+      border-radius: 10px;
+      background-color: white;
+
+      ul {
+        margin: 0;
+        padding: 10px 0;
+        list-style-type: none;
+        li {
+          width: 100%;
+          padding: 10px 10px;
+          cursor: pointer;
+
+          &:hover {
+            background-color: lightgray;
+          }
+
+          &.emptyList {
+            color: $gray;
+
+            &:hover {
+              background-color: transparent;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.counterContainer {
+  max-width: 200px;
+  width: 100%;
+  @include media-breakpoint-up(xl) {
+    padding: 0 10px;
+  }
+}
+.buttonContainer {
+  margin-top: 25px;
+  text-align: right;
+}
+
+.counterButton {
+  cursor: pointer;
+
+  &:hover {
+    color: $ronchi;
+  }
+
+  &.disabled {
+    color: $lightGray;
+    cursor: default;
+    &:hover {
+      color: $lightGray;
+    }
+  }
+}

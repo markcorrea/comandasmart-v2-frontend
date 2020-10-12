@@ -6,11 +6,15 @@ import {Paper} from 'components'
 import styles from './index.module.scss'
 
 const OrderCard = ({order}) => {
-  const {name, ticket} = order
+  const {
+    product: {name, unit_type},
+    ticket_id,
+    quantity,
+  } = order
   return (
     <Paper inset className={styles.container}>
-      <div className={styles.productNumber}>{ticket}</div>
-      <div className={styles.productName}>{name}</div>
+      <div className={styles.productNumber}>{`Comanda ${ticket_id}`}</div>
+      <div className={styles.productName}>{`${name} - (${quantity}${unit_type ? unit_type : ''})`}</div>
     </Paper>
   )
 }

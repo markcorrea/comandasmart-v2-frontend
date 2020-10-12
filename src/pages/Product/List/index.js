@@ -61,7 +61,7 @@ const ProductList = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       const result = await getProducts()
-      if (result) setProducts(result)
+      if (result) setProducts(result.data)
     }
     fetchProducts()
   }, [getProducts, setProducts])
@@ -69,9 +69,14 @@ const ProductList = () => {
   const deleteProduct = useCallback(
     async id => {
       const result = await deleteProductById(id)
-      if (result) setProducts(result)
+      if (result) {
+        const newProducts = await getProducts()
+        if (newProducts) {
+          setProducts(newProducts.data)
+        }
+      }
     },
-    [deleteProductById, setProducts]
+    [deleteProductById, setProducts, getProducts]
   )
 
   const searchProducts = useCallback(async () => {

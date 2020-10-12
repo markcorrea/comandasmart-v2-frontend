@@ -42,15 +42,15 @@ const TerminalView = () => {
 
   const completeOrder = useCallback(
     async id => {
-      const result = await completeOrderById(id, terminalId)
+      const result = await completeOrderById(id)
       if (result) setOrders(result.data)
     },
-    [terminalId, completeOrderById]
+    [setOrders, completeOrderById]
   )
 
   const completeAllOrders = useCallback(async () => {
     const result = await completeAllOrdersByTerminalId(terminalId)
-    if (result) setOrders(result.data)
+    if (result) setOrders([])
   }, [terminalId, completeAllOrdersByTerminalId])
 
   const speedDialButtons = useMemo(

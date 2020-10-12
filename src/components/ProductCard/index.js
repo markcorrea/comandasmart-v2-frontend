@@ -5,23 +5,23 @@ import {Paper} from 'components'
 
 import styles from './index.module.scss'
 
-const ProductCard = ({product, onDeleteClick}) => {
-  const {number, name, price} = product
+const ProductCard = ({order, onDeleteClick}) => {
+  const {
+    product: {unique_code, name, unit_type},
+    price,
+    quantity,
+  } = order
   return (
     <Paper inset className={styles.container}>
-      <div className={styles.trash} onClick={onDeleteClick}>
-        <i className='fas fa-trash' />
-      </div>
-
-      <div className={styles.productNumber}>{number}</div>
-      <div className={styles.productName}>{name}</div>
+      <div className={styles.productNumber}>{unique_code}</div>
+      <div className={styles.productName}>{`${name} - (${quantity}${unit_type ? unit_type : ''})`}</div>
       <div className={styles.price}>{price}</div>
     </Paper>
   )
 }
 
 ProductCard.propTypes = {
-  product: PropTypes.object.isRequired,
+  order: PropTypes.object.isRequired,
   onDeleteClick: PropTypes.func,
 }
 

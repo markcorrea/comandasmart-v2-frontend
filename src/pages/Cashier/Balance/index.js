@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react'
+import React, {useState, useEffect, useCallback, useMemo, memo} from 'react'
 import {Paper, ResponsiveTable} from 'components'
 
 import {useParams, useHistory} from 'react-router-dom'
@@ -6,11 +6,13 @@ import {useStore} from 'store'
 
 import useServices from 'services'
 
+import {datetimeToString} from 'utils/datetimeToString'
+
 import styles from './index.module.scss'
 
 const columns = [
   {
-    key: 'uniqueCode',
+    key: 'unique_code',
     value: 'Código',
     textAlign: 'left',
   },
@@ -21,7 +23,17 @@ const columns = [
   },
   {
     key: 'price',
-    value: 'Preço',
+    value: 'Valor',
+    textAlign: 'left',
+  },
+  {
+    key: 'quantity',
+    value: 'Quantidade',
+    textAlign: 'right',
+  },
+  {
+    key: 'total_price',
+    value: 'Valor Total',
   },
 ]
 
@@ -40,7 +52,7 @@ const CashierBalance = () => {
   useEffect(() => {
     const fetchCashier = async () => {
       const result = await getCashierById(cashierId)
-      if (result) setCashier(result)
+      if (result) setCashier({...result.data})
     }
     if (cashierId) fetchCashier()
   }, [cashierId, getCashierById, setCashier])
@@ -58,6 +70,19 @@ const CashierBalance = () => {
     },
   ]
 
+  const formattedOrders = useMemo(() => {
+    if (cashier && cashier.sales) {
+      return cashier.sales.map(sale => ({
+        unique_code: sale.product.unique_code,
+        name: sale.product.name,
+        price: sale.product.price,
+        quantity: sale.quantity,
+        total_price: sale.price,
+      }))
+    }
+    return []
+  }, [cashier])
+
   return (
     <>
       <header className={styles.header}>
@@ -65,17 +90,17 @@ const CashierBalance = () => {
       </header>
       <Paper className={styles.paper}>
         <div className={styles.info}>
-          <strong>Operador:</strong> {cashier?.user?.name || '-'} <br />
-          <strong>Abertura:</strong> {cashier?.opened || '-'} <br />
-          <strong>Fechamento:</strong> {cashier?.closed || '-'} <br />
+          <strong>Operador:</strong> {cashier?.user?.first_name || '-'} <br />
+          <strong>Abertura:</strong> {(cashier?.created && datetimeToString(cashier.created)) || '-'} <br />
+          <strong>Fechamento:</strong> {(cashier?.close_date && datetimeToString(cashier.close_date)) || '-'} <br />
         </div>
         <div className={styles.responsiveTable}>
           <ResponsiveTable
             columns={columns}
-            rows={cashier?.products || []}
+            rows={formattedOrders}
             titleColumn='name'
             hasButtons={tableButtons}
-            additionalRow={<div className={styles.totalPrice}>{`Total: ${cashier?.totalValue || '-'}`}</div>}
+            additionalRow={<div className={styles.totalPrice}>{`Total: R$${cashier?.total_price || '-'}`}</div>}
             emptyTableMessage='Não há produtos registrados.'
           />
         </div>
@@ -84,4 +109,4 @@ const CashierBalance = () => {
   )
 }
 
-export default CashierBalance
+export default memo(CashierBalance)

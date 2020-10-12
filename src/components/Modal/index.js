@@ -15,10 +15,11 @@ import styles from './index.module.scss'
 const useStyles = makeStyles({
   paper: {
     borderRadius: '5px',
+    overflowY: 'unset',
   },
 })
 
-const Modal = ({children, header, onCancel, onConfirm, onUnderstood, open}) => {
+const Modal = ({children, header, onCancel, onConfirm, onUnderstood, open, hideButtons}) => {
   const modalContainer = document.getElementById('modalContainer')
   const classes = useStyles()
   const mediaQuerySmall = useMediaQuery('min', mediaQuerySM)
@@ -40,21 +41,21 @@ const Modal = ({children, header, onCancel, onConfirm, onUnderstood, open}) => {
       fullWidth
       onBackdropClick={onCancel || onUnderstood}
       onEscapeKeyDown={onCancel || onUnderstood}>
-      <Paper className={styles.container}>
+      <Paper noShadow className={styles.container}>
         <div className={styles.header}>{header}</div>
         <div className={styles.body}>{children}</div>
         <div className={styles.buttons}>
-          {onConfirm && (
+          {!hideButtons && onConfirm && (
             <Button classes={rightButton} onClick={onConfirm}>
               Confirmar
             </Button>
           )}
-          {onCancel && (
+          {!hideButtons && onCancel && (
             <Button color='cancel' classes={rightButton} onClick={onCancel}>
               Cancelar
             </Button>
           )}
-          {onUnderstood && (
+          {!hideButtons && onUnderstood && (
             <Button classes={rightButton} onClick={onUnderstood}>
               Entendido
             </Button>
@@ -71,6 +72,7 @@ Modal.propTypes = {
   onCancel: PropTypes.func,
   onConfirm: PropTypes.func,
   onDiscard: PropTypes.func,
+  hideButton: PropTypes.bool,
 }
 
 Modal.defaultProps = {
@@ -78,6 +80,7 @@ Modal.defaultProps = {
   onCancel: null,
   onConfirm: null,
   onUnderstood: null,
+  hideButtons: false,
 }
 
 export default Modal

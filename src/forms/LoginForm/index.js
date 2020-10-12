@@ -11,7 +11,7 @@ import {defaultFontFamily, smallerFontSize} from 'assets/styles/main.module.scss
 import styles from './index.module.scss'
 
 const validationRules = yup.object().shape({
-  login: yup.string().required('Login é um campo obrigatório'),
+  username: yup.string().required('Usuário é um campo obrigatório'),
   password: yup.string().required('Senha é um campo obrigatório'),
 })
 
@@ -33,7 +33,7 @@ const classes = {
 
 const LoginForm = ({onSubmit}) => {
   const {handleSubmit, control, errors} = useForm({
-    defaultValues: {login: '', password: ''},
+    defaultValues: {username: '', password: ''},
     resolver: yupResolver(validationRules),
   })
 
@@ -43,11 +43,11 @@ const LoginForm = ({onSubmit}) => {
         <Controller
           as={Input}
           classes={{input: classes.input}}
-          name='login'
+          name='username'
           control={control}
           label=''
-          error={Boolean(errors.login)}
-          helperText={getErrorMessage(errors.login)}
+          error={Boolean(errors.username)}
+          helperText={getErrorMessage(errors.username)}
         />
         <Controller
           as={PasswordInput}

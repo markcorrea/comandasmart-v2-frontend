@@ -1,6 +1,6 @@
-import React, {useState, useEffect, useCallback} from 'react'
+import React, {useState, useEffect, useCallback, useMemo, memo} from 'react'
 import PropTypes from 'prop-types'
-import {useParams} from 'react-router-dom'
+import {useParams, useHistory} from 'react-router-dom'
 
 import {Paper, ProductSearch, ResponsiveTable} from 'components'
 
@@ -12,7 +12,7 @@ import styles from './index.module.scss'
 
 const columns = [
   {
-    key: 'uniqueCode',
+    key: 'unique_code',
     value: 'Código',
     textAlign: 'left',
   },
@@ -24,6 +24,10 @@ const columns = [
   {
     key: 'price',
     value: 'Preço',
+  },
+  {
+    key: 'quantity',
+    value: 'Quantidade',
   },
 ]
 
@@ -39,11 +43,13 @@ const CashierTicket = () => {
     getTicketById,
     addProductToTicketByCode,
     addProductsToTicketById,
-    removeProductsFromTicket,
-    payProductsByTicketAndCashier,
+    payOrdersByTicketAndCashier,
+    payAllOrdersAndCloseTicket,
+    removeOrdersByTicketAndCashier,
   } = useServices()
   const {ticketId, cashierId} = useParams()
-  const {showMenu, loading} = useStore()
+  const {showMenu, loading, confirmationDialog} = useStore()
+  const history = useHistory()
 
   const [ticket, setTicket] = useState(null)
 
@@ -54,64 +60,86 @@ const CashierTicket = () => {
   useEffect(() => {
     const fetchTicket = async () => {
       const result = await getTicketById(ticketId)
-      if (result) setTicket(result)
+      if (result) setTicket({...result.data})
     }
 
     fetchTicket(ticketId)
   }, [ticketId, getTicketById])
 
   const addProductByCode = useCallback(
-    async uniqueCode => {
-      const result = await addProductToTicketByCode(ticketId, uniqueCode)
-      if (result) setTicket(result)
+    async code => {
+      const result = await addProductToTicketByCode({ticket: ticketId, code})
+      if (result) setTicket({...result.data})
     },
     [ticketId, addProductToTicketByCode, setTicket]
   )
 
   const addProductByClick = useCallback(
     async ({product, quantity}) => {
-      const result = await addProductsToTicketById(ticketId, product.id, quantity)
-      if (result) setTicket(result)
+      const result = await addProductsToTicketById({ticket: ticketId, product: product.id, quantity})
+      if (result) setTicket({...result.data})
     },
     [ticketId, addProductsToTicketById, setTicket]
   )
 
-  const removeProducts = useCallback(
-    async products => {
-      const ids = products.map(product => product.id)
-      const result = await removeProductsFromTicket(ticketId, ids)
-      if (result) setTicket(result)
+  const removeOrder = useCallback(
+    async order => {
+      const result = await removeOrdersByTicketAndCashier({ticket: ticketId, order: order.id, quantity: order.quantity})
+      if (result) setTicket({...result.data})
     },
-    [ticketId, removeProductsFromTicket, setTicket]
+    [ticketId, removeOrdersByTicketAndCashier, setTicket]
   )
 
-  const payProducts = useCallback(
-    async products => {
-      const ids = products.map(product => product.id)
-      const result = await payProductsByTicketAndCashier(ticketId, cashierId, ids)
-      if (result) setTicket(result)
+  const payOrders = useCallback(
+    async orders => {
+      orders = orders.map(order => ({order: order.id, quantity: order.quantity}))
+      const result = await payOrdersByTicketAndCashier({ticket: ticketId, cashier: cashierId, orders})
+      if (result) setTicket({...result.data})
     },
-    [ticketId, cashierId, payProductsByTicketAndCashier, setTicket]
+    [ticketId, cashierId, payOrdersByTicketAndCashier, setTicket]
   )
+
+  const closeTicket = useCallback(async () => {
+    const result = await payAllOrdersAndCloseTicket({ticket: ticketId, cashier: cashierId})
+    if (result) history.push(`/cashier/${cashierId}`)
+  }, [history, ticketId, cashierId, payAllOrdersAndCloseTicket])
 
   const tableButtons = [
     {
-      label: 'Receber',
-      onClick: selectedItems => payProducts(selectedItems),
+      label: 'Fechar Comanda',
+      onClick: () =>
+        confirmationDialog({
+          header: 'Fechar Comanda',
+          body: `Deseja realmente encerrar comanda ${ticketId}?`,
+          onConfirm: () => closeTicket(),
+        }),
     },
     {
-      label: 'Remover',
-      onClick: selectedItems => removeProducts(selectedItems),
-      classes: {
-        backgroundColor: 'red',
-      },
+      label: 'Fechar Parcialmente',
+      onClick: orders =>
+        confirmationDialog({
+          header: 'Concluir Venda',
+          body: `Confirma venda dos valores selecionados?`,
+          onConfirm: () => payOrders(orders),
+        }),
     },
   ]
+
+  const formattedOrders = useMemo(() => {
+    if (!ticket?.orders) return []
+    return ticket.orders.map(order => ({
+      id: order.id,
+      unique_code: order.product.unique_code,
+      name: order.product.name,
+      quantity: 1,
+      price: order.product.price,
+    }))
+  }, [ticket])
 
   return (
     <>
       <header className={styles.header}>
-        <h1>Comanda - {ticket ? ticket.number.toString() : '--'}</h1>
+        <h1>Comanda - {ticket?.unique_code || '--'}</h1>
       </header>
       <Paper className={styles.paper}>
         <ProductSearch
@@ -122,10 +150,10 @@ const CashierTicket = () => {
         <div className={styles.responsiveTable}>
           <ResponsiveTable
             columns={columns}
-            rows={(ticket && ticket.items) || []}
+            rows={formattedOrders}
             titleColumn='name'
-            hasCheckbox
             hasButtons={tableButtons}
+            onDeleteClick={order => removeOrder(order)}
             additionalRow={<TotalPrice ticket={ticket} />}
             emptyTableMessage='Não há produtos registrados.'
             disabled={loading}
@@ -136,4 +164,4 @@ const CashierTicket = () => {
   )
 }
 
-export default CashierTicket
+export default memo(CashierTicket)

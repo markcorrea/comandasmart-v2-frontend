@@ -21,10 +21,14 @@ const Login = () => {
   const [open, setOpen] = useState(false)
   const {login} = useServices()
 
-  const loginUser = useCallback(async () => {
-    const result = await login()
-    if (result) history.push(`/tickets`)
-  }, [history, login])
+  const loginUser = useCallback(
+    async userdata => {
+      console.log('USERDATA', userdata)
+      const result = await login(userdata)
+      if (result) history.push(`/tickets`)
+    },
+    [history, login]
+  )
 
   const Forms = () => (
     <div className={styles.fields}>
@@ -37,7 +41,7 @@ const Login = () => {
 
   const Desktop = () => (
     <Paper className={styles.paper}>
-      <div className={styles.title}>Digite Seu Email E Senha</div>
+      <div className={styles.title}>Digite Seu Usuário E Senha</div>
       <Forms />
     </Paper>
   )

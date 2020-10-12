@@ -1,56 +1,67 @@
 import {useCallback} from 'react'
-import orders from 'mocks/order'
+import axios from 'axios'
+import server from 'services/server'
+import {verifyToken} from 'utils/authentication'
 
 import {useStore} from 'store'
-import {useMessage} from 'components/Message'
 
 const useOrders = () => {
   const {setLoading} = useStore()
-  const {show} = useMessage()
-
-  const getOrdersByTerminalId = useCallback(
-    terminalId => {
-      return new Promise(resolve => {
-        setLoading(true)
-        setTimeout(() => {
-          setLoading(false)
-          resolve({data: orders.data.filter(order => order.terminalId === terminalId)})
-        }, 1000)
-      })
-    },
-    [setLoading]
-  )
+  const token = `Token ${verifyToken()}`
 
   const completeOrderById = useCallback(
-    (id, terminalId) => {
-      return new Promise(resolve => {
-        setLoading(true)
-        setTimeout(() => {
-          setLoading(false)
-          show('Pedido preparado com sucesso!')
-          resolve({data: orders.data.filter(order => order.terminalId === terminalId && order.id !== id)})
-        }, 1000)
-      })
+    id => {
+      setLoading(true)
+      return axios
+        .post(
+          `${server}/orders/complete/${id}/`,
+          {},
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        )
+        .then(response => {
+          console.log('SUCCESS')
+          return response.data
+        })
+        .catch(error => {
+          console.log('ERROR', error)
+          return false
+        })
+        .finally(() => setLoading(false))
     },
-    [setLoading, show]
+    [setLoading, token]
   )
 
   const completeAllOrdersByTerminalId = useCallback(
-    terminalId => {
-      return new Promise(resolve => {
-        setLoading(true)
-        setTimeout(() => {
-          setLoading(false)
-          show('Pedidos preparados com sucesso!')
-          resolve({data: []})
-        }, 1000)
-      })
+    id => {
+      setLoading(true)
+      return axios
+        .post(
+          `${server}/orders/complete-all/${id}/`,
+          {},
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        )
+        .then(response => {
+          console.log('SUCCESS')
+          return response.data
+        })
+        .catch(error => {
+          console.log('ERROR', error)
+          return false
+        })
+        .finally(() => setLoading(false))
     },
-    [setLoading, show]
+    [setLoading, token]
   )
 
   return {
-    getOrdersByTerminalId,
     completeOrderById,
     completeAllOrdersByTerminalId,
   }

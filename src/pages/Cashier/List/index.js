@@ -7,6 +7,8 @@ import useServices from 'services'
 
 import {useStore} from 'store'
 
+import {datetimeToString} from 'utils/datetimeToString'
+
 import styles from './index.module.scss'
 
 export const columns = [
@@ -26,7 +28,7 @@ export const columns = [
     textAlign: 'left',
   },
   {
-    key: 'totalValue',
+    key: 'total_value',
     value: 'Valor Total',
     textAlign: 'left',
   },
@@ -47,15 +49,15 @@ const CashierList = () => {
   useEffect(() => {
     const fetchCashiers = async () => {
       const result = await getCashiers()
-      if (result) setCashiers(result.data)
+      if (result) setCashiers([...result.data])
     }
     fetchCashiers()
   }, [getCashiers, setCashiers])
 
   const openNewCashier = useCallback(async () => {
     const result = await openCashier()
-    if (result) history.push(`/cashier/${cashiers[0].id}/`)
-  }, [history, cashiers, openCashier])
+    if (result) history.push(`/cashier/${result.data.id}/`)
+  }, [history, openCashier])
 
   const speedDialButtons = useMemo(
     () => [
@@ -72,6 +74,18 @@ const CashierList = () => {
     [openNewCashier, confirmationDialog]
   )
 
+  const formattedCashiers = useMemo(() => {
+    return cashiers.map(cashier => {
+      return {
+        id: cashier.id,
+        name: cashier?.user?.first_name || '-',
+        opened: cashier.created ? datetimeToString(cashier.created) : '-',
+        closed: cashier.close_date ? datetimeToString(cashier.closeDate) : '-',
+        total_value: cashier.total_price,
+      }
+    })
+  }, [cashiers])
+
   return (
     <>
       <header className={styles.header}>
@@ -80,7 +94,7 @@ const CashierList = () => {
       <Paper className={styles.paper}>
         <ResponsiveTable
           columns={columns}
-          rows={cashiers}
+          rows={formattedCashiers}
           titleColumn='name'
           onViewClick={row => history.push(`/cashier/${row.id}`)}
           rowClickable={row => history.push(`/cashier/${row.id}`)}

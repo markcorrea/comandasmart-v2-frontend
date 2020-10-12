@@ -54,9 +54,12 @@ const TerminalList = () => {
   const confirmDelete = useCallback(
     async ({id}) => {
       const result = await deleteTerminalById(id)
-      if (result) setTerminals(result)
+      if (result) {
+        const newTerminals = await getTerminals()
+        if (newTerminals) setTerminals(newTerminals)
+      }
     },
-    [setTerminals, deleteTerminalById]
+    [getTerminals, setTerminals, deleteTerminalById]
   )
 
   return (
@@ -71,7 +74,7 @@ const TerminalList = () => {
           titleColumn='name'
           onViewClick={row => history.push(`/terminal/${row.id}/view`)}
           onEditClick={row => history.push(`/terminal/${row.id}`)}
-          rowClickable={row => history.push(`/terminal/${row.id}`)}
+          rowClickable={row => history.push(`/terminal/${row.id}/view`)}
           onDeleteClick={row =>
             confirmationDialog({
               header: 'Remover terminal',

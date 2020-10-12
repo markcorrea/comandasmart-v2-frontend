@@ -1,5 +1,7 @@
 import {useCallback} from 'react'
 import companies from 'mocks/company'
+import axios from 'axios'
+import server from 'services/server'
 
 import {useStore} from 'store'
 import {useMessage} from 'components/Message'
@@ -8,17 +10,19 @@ const useCompanies = () => {
   const {setLoading} = useStore()
   const {show} = useMessage()
 
-  const getCompanies = useCallback(
-    () =>
-      new Promise(resolve => {
-        setLoading(true)
-        setTimeout(() => {
-          setLoading(false)
-          resolve(companies)
-        }, 1000)
-      }),
-    [setLoading]
-  )
+  const getCompanies = useCallback(() => {
+    setLoading(true)
+    return axios
+      .get(`${server}/companies/`, {})
+      .then(response => {
+        return response
+      })
+      .catch(error => {
+        console.log('ERROR', error)
+        return false
+      })
+      .finally(() => setLoading(false))
+  }, [setLoading])
 
   const getCompanyById = useCallback(
     id =>
@@ -80,3 +84,17 @@ const useCompanies = () => {
 }
 
 export default useCompanies
+
+// MOCKS
+
+// const getCompanies = useCallback(
+//   () =>
+//     new Promise(resolve => {
+//       setLoading(true)
+//       setTimeout(() => {
+//         setLoading(false)
+//         resolve(companies)
+//       }, 1000)
+//     }),
+//   [setLoading]
+// )

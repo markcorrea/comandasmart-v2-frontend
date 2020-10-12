@@ -8,7 +8,7 @@ import {useStore} from 'store'
 import styles from './index.module.scss'
 
 const TicketCard = ({ticket, onClick, inset}) => {
-  const {number, userName, price, lastOrder} = ticket
+  const {unique_code, client, total_price, lastOrder} = ticket
 
   const {loading} = useStore()
   return (
@@ -19,9 +19,9 @@ const TicketCard = ({ticket, onClick, inset}) => {
         </div>
         <span>{lastOrder}</span>
       </div>
-      <div className={styles.ticketNumber}>{number}</div>
-      <div className={styles.userName}>{userName}</div>
-      <div className={styles.price}>{price}</div>
+      <div className={styles.ticketNumber}>{unique_code}</div>
+      <div className={styles.userName}>{(client && client.name) || '--'}</div>
+      <div className={styles.price}>{total_price}</div>
     </Paper>
   )
 }

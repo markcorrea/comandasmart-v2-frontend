@@ -21,16 +21,3 @@
   font-family: $defaultFontFamily;
   font-size: $biggerFontSize;
 }
-
-.trash {
-  float: right;
-  cursor: pointer;
-  i {
-    color: $red;
-    font-size: 19px;
-
-    &:hover {
-      color: $saffron;
-    }
-  }
-}

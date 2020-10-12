@@ -57,7 +57,7 @@ const ClientList = () => {
   useEffect(() => {
     const fetchClients = async () => {
       const result = await getClients()
-      if (result) setClients(result)
+      if (result) setClients(result.data)
     }
     fetchClients()
   }, [getClients, setClients])
@@ -65,9 +65,13 @@ const ClientList = () => {
   const deleteClient = useCallback(
     async id => {
       const result = await deleteClientById(id)
-      if (result) setClients(result)
+      if (result) {
+        setClients(result)
+        const newClients = await getClients()
+        if (newClients) setClients(newClients.data)
+      }
     },
-    [deleteClientById, setClients]
+    [deleteClientById, setClients, getClients]
   )
 
   return (

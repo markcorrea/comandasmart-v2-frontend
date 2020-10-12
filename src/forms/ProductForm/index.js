@@ -13,7 +13,6 @@ import styles from './index.module.scss'
 
 const validationRules = yup.object().shape({
   name: yup.string().required('Nome é um campo obrigatório'),
-  uniqueCode: yup.string().required('Código é um campo obrigatório'),
   stock: yup.string().required('Estoque é um campo obrigatório'),
   price: yup.string().required('Preço é um campo obrigatório'),
 })
@@ -24,15 +23,15 @@ const getErrorMessage = error => {
 
 const defaultValues = {
   name: '',
-  uniqueCode: '',
+  unique_code: '',
   brand: '',
-  barCode: '',
-  unitType: '',
-  volumePerUnit: '',
+  bar_code: '',
+  unit_type: '',
+  volume_per_unit: '',
   stock: '',
   price: '',
-  pricePerUnit: '',
-  terminalId: '',
+  price_per_unit: '',
+  terminal: '',
 }
 
 const ProductForm = ({product, terminals, unitTypes, onSubmit, onCancel, loading}) => {
@@ -66,29 +65,20 @@ const ProductForm = ({product, terminals, unitTypes, onSubmit, onCancel, loading
           disabled={loading}
           isRequired
         />
-        <Controller
-          as={NumberInput}
-          name='uniqueCode'
-          control={control}
-          label='Código Único'
-          error={Boolean(errors.uniqueCode)}
-          helperText={getErrorMessage(errors.uniqueCode)}
-          disabled={loading}
-          isRequired
-        />
+        <Controller as={NumberInput} name='unique_code' control={control} label='Código Único' disabled={loading} />
         <Controller as={Input} name='brand' control={control} label={'Marca'} disabled={loading} />
         <Controller
           as={NumberInput}
-          name='barCode'
+          name='bar_code'
           control={control}
           label='Código de Barras'
-          error={Boolean(errors.barCode)}
-          helperText={getErrorMessage(errors.barCode)}
+          error={Boolean(errors.bar_code)}
+          helperText={getErrorMessage(errors.bar_code)}
           disabled={loading}
         />
         <Controller
           as={Select}
-          name='unitType'
+          name='unit_type'
           items={unitTypes}
           control={control}
           label='Unidades de Medida'
@@ -97,7 +87,7 @@ const ProductForm = ({product, terminals, unitTypes, onSubmit, onCancel, loading
         />
         <Controller
           as={NumberInput}
-          name='volumePerUnit'
+          name='volume_per_unit'
           decimalScale={3}
           thousandSeparator
           control={control}
@@ -131,23 +121,23 @@ const ProductForm = ({product, terminals, unitTypes, onSubmit, onCancel, loading
         />
         <Controller
           as={NumberInput}
-          name='pricePerUnit'
+          name='price_per_unit'
           control={control}
           label='Preço Por Unidade'
           decimalScale={2}
           thousandSeparator
-          error={Boolean(errors.pricePerUnit)}
-          helperText={getErrorMessage(errors.pricePerUnit)}
+          error={Boolean(errors.price_per_unit)}
+          helperText={getErrorMessage(errors.price_per_unit)}
           disabled={loading}
         />
         <Controller
           as={Select}
-          name='terminalId'
+          name='terminal'
           items={terminals}
           control={control}
           label='Terminal'
-          error={Boolean(errors.terminalId)}
-          helperText={getErrorMessage(errors.terminalId)}
+          error={Boolean(errors.terminal)}
+          helperText={getErrorMessage(errors.terminal)}
           showEmptyOption
           disabled={loading}
         />

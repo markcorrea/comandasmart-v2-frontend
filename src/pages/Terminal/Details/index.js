@@ -26,7 +26,7 @@ const TerminalDetails = () => {
   useEffect(() => {
     const fetchTerminal = async () => {
       const result = await getTerminalById(terminalId)
-      if (result) setTerminal(result)
+      if (result) setTerminal(result.data)
     }
 
     if (terminalId) fetchTerminal(terminalId)

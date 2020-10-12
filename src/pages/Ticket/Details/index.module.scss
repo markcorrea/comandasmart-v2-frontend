@@ -1,9 +1,11 @@
+@import '~assets/styles/_typography.scss';
 @import '~assets/styles/_mediaQueries.scss';
 @import '~assets/styles/_colors.scss';
 
 .header {
   height: 68px;
 }
+
 .paper {
   min-height: calc(100% - 68px);
   padding: 15px;
@@ -11,6 +13,10 @@
   flex-wrap: wrap;
   align-content: flex-start;
   position: relative;
+}
+
+.info {
+  font-size: $smallerFontSize;
 }
 
 .flexCell {
@@ -26,23 +32,30 @@
   }
 }
 
-.addButton {
-  border: none;
-  border-radius: 50%;
-  padding: 0;
-  width: 86px;
-  height: 86px;
-  position: absolute;
-  bottom: 15px;
-  right: 15px;
-  cursor: pointer;
-  i {
-    font-size: 86px;
-    color: $saffron;
+.clientInfo {
+  font-family: $defaultFontFamily;
+  font-size: $smallerFontSize;
+  font-weight: normal;
+  padding-bottom: 8px;
+  line-height: 33px;
+  @include media-breakpoint-up(md) {
+    font-size: $mediumFontSize;
+    width: 33%;
   }
 }
 
 .emptyTicket {
   width: 100%;
   text-align: center;
+}
+
+.speedDialContainer {
+  position: sticky;
+  bottom: 0;
+}
+
+.codeWarning {
+  font-size: $smallFontSize;
+  color: $red;
+  margin-left: 10px;
 }

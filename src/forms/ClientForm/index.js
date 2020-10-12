@@ -25,7 +25,7 @@ const defaultValues = {
   name: '',
   email: '',
   cpf: '',
-  birthDate: new Date(),
+  birth_date: new Date(),
   phone: '',
   address: '',
   city: '',
@@ -85,11 +85,11 @@ const ClientForm = ({client, onSubmit, onCancel, loading}) => {
         />
         <Controller
           as={Datepicker}
-          name='birthDate'
+          name='birth_date'
           control={control}
           label='Data de Nascimento'
-          error={Boolean(errors.birthDate)}
-          helperText={getErrorMessage(errors.birthDate)}
+          error={Boolean(errors.birth_date)}
+          helperText={getErrorMessage(errors.birth_date)}
           disabled={loading}
         />
         <Controller
@@ -99,7 +99,7 @@ const ClientForm = ({client, onSubmit, onCancel, loading}) => {
           label='Telefone (apenas números)'
           error={Boolean(errors.phone)}
           helperText={getErrorMessage(errors.phone)}
-          mask={['(', /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+          mask={['+', /\d/, /\d/, '(', /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
           disabled={loading}
         />
         <Controller

@@ -53,7 +53,7 @@ const TicketList = () => {
 
   const createNewTicket = useCallback(
     async code => {
-      const result = await createTicketByCode(code)
+      const result = await createTicketByCode({unique_code: code})
       if (result) history.push(`/ticket/${result.data.id}`)
     },
     [createTicketByCode, history]

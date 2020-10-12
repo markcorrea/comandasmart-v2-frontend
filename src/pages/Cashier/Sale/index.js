@@ -11,13 +11,18 @@ import styles from './index.module.scss'
 
 const columns = [
   {
-    key: 'uniqueCode',
+    key: 'unique_code',
     value: 'Código',
     textAlign: 'left',
   },
   {
     key: 'name',
     value: 'Nome',
+    textAlign: 'left',
+  },
+  {
+    key: 'quantity',
+    value: 'Quantity',
     textAlign: 'left',
   },
   {
@@ -28,8 +33,7 @@ const columns = [
 
 const TotalPrice = ({products}) => {
   const sum = products.length ? products.reduce((item, {price}) => item + price, 0) : 0
-
-  return <div className={styles.totalPrice}>{`Total: ${sum}`}</div>
+  return <div className={styles.totalPrice}>{`Total: R$${sum}`}</div>
 }
 
 TotalPrice.propTypes = {
@@ -47,7 +51,7 @@ const getMaxIndex = array => {
 }
 
 const CashierSale = () => {
-  const {searchProductsByName, getProductByCode, payProductsByCashier} = useServices()
+  const {searchProductsByName, searchProductByCode, quickSale} = useServices()
 
   const {showMenu} = useStore()
   const {cashierId} = useParams()
@@ -61,30 +65,24 @@ const CashierSale = () => {
 
   const addProductByCode = useCallback(
     async uniqueCode => {
-      const result = await getProductByCode(uniqueCode)
+      const result = await searchProductByCode(uniqueCode)
       if (result) {
         setProducts(prevProducts => {
           const index = getMaxIndex(prevProducts)
-          const newProduct = {...result.data, index: index + 1}
+          const newProduct = {...result.data, quantity: 2, index: index + 1}
           return [...prevProducts, newProduct]
         })
       }
     },
-    [getProductByCode, setProducts]
+    [searchProductByCode, setProducts]
   )
 
   const addProductByClick = useCallback(
     async ({product, quantity}) => {
       setProducts(prevProducts => {
-        let index = getMaxIndex(prevProducts)
-
-        const newProducts = Array.from({length: quantity}).map(() => {
-          index++
-          const newProduct = {...product, index: index}
-          return newProduct
-        })
-
-        return [...prevProducts, ...newProducts]
+        const index = getMaxIndex(prevProducts)
+        const newProduct = {...product, quantity, index: index + 1}
+        return [...prevProducts, newProduct]
       })
     },
     [setProducts]
@@ -99,11 +97,11 @@ const CashierSale = () => {
 
   const payProducts = useCallback(
     async products => {
-      const ids = products.map(product => product.id)
-      const result = await payProductsByCashier(cashierId, ids)
+      products = products.map(product => ({product: product.id.toString(), quantity: product.quantity}))
+      const result = await quickSale({cashier: cashierId, products})
       if (result) history.push(`/cashier/${cashierId}`)
     },
-    [cashierId, payProductsByCashier, history]
+    [cashierId, quickSale, history]
   )
 
   const tableButtons = [

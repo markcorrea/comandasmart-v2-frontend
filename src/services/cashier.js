@@ -1,6 +1,8 @@
 import {useCallback} from 'react'
-import cashiers from 'mocks/cashier'
+import axios from 'axios'
+import server from 'services/server'
 import tickets from 'mocks/ticket'
+import {verifyToken} from 'utils/authentication'
 
 import {useStore} from 'store'
 import {useMessage} from 'components/Message'
@@ -8,29 +10,93 @@ import {useMessage} from 'components/Message'
 const useCashiers = () => {
   const {setLoading} = useStore()
   const {show} = useMessage()
+  const token = `Token ${verifyToken()}`
 
-  const getCashiers = useCallback(
-    () =>
-      new Promise(resolve => {
-        setLoading(true)
-        setTimeout(() => {
-          setLoading(false)
-          resolve(cashiers)
-        }, 1000)
-      }),
-    [setLoading]
-  )
+  const getCashiers = useCallback(() => {
+    setLoading(true)
+
+    return axios
+      .get(`${server}/cashiers/`, {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then(response => {
+        console.log('SUCCESS')
+        return response.data
+      })
+      .catch(error => {
+        console.log('ERROR', error)
+        return false
+      })
+      .finally(() => setLoading(false))
+  }, [setLoading, token])
+
+  const openCashier = useCallback(() => {
+    setLoading(true)
+    return axios
+      .post(
+        `${server}/cashiers/create/`,
+        {},
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      )
+      .then(response => {
+        console.log('SUCCESS')
+        return response.data
+      })
+      .catch(error => {
+        console.log('ERROR', error)
+        return false
+      })
+      .finally(() => setLoading(false))
+  }, [setLoading, token])
 
   const getCashierById = useCallback(
-    id =>
-      new Promise(resolve => {
-        setLoading(true)
-        setTimeout(() => {
-          setLoading(false)
-          resolve(cashiers.data.find(cashier => cashier.id === id))
-        }, 1000)
-      }),
-    [setLoading]
+    id => {
+      setLoading(true)
+      return axios
+        .get(`${server}/cashiers/${id}/`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then(response => {
+          console.log('SUCCESS')
+          return response.data
+        })
+        .catch(error => {
+          console.log('ERROR', error)
+          return false
+        })
+        .finally(() => setLoading(false))
+    },
+    [setLoading, token]
+  )
+
+  const quickSale = useCallback(
+    body => {
+      setLoading(true)
+      return axios
+        .post(`${server}/cashiers/quick-sale/`, body, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then(response => {
+          console.log('SUCCESS')
+          return response.data
+        })
+        .catch(error => {
+          console.log('ERROR', error)
+          return false
+        })
+        .finally(() => setLoading(false))
+    },
+    [setLoading, token]
   )
 
   const payProductsByTicketAndCashier = useCallback(
@@ -66,18 +132,70 @@ const useCashiers = () => {
     [setLoading, show]
   )
 
-  const openCashier = useCallback(
-    id => {
-      return new Promise(resolve => {
-        setLoading(true)
-        setTimeout(() => {
-          setLoading(false)
-          show('Caixa aberto com sucesso!')
-          return resolve(true)
-        }, 1000)
-      })
+  const payOrdersByTicketAndCashier = useCallback(
+    body => {
+      setLoading(true)
+      return axios
+        .post(`${server}/cashiers/ticket/sell/`, body, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then(response => {
+          console.log('SUCCESS')
+          return response.data
+        })
+        .catch(error => {
+          console.log('ERROR', error)
+          return false
+        })
+        .finally(() => setLoading(false))
     },
-    [setLoading, show]
+    [setLoading, token]
+  )
+
+  const removeOrdersByTicketAndCashier = useCallback(
+    body => {
+      setLoading(true)
+      return axios
+        .post(`${server}/cashiers/ticket/remove/`, body, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then(response => {
+          console.log('SUCCESS')
+          return response.data
+        })
+        .catch(error => {
+          console.log('ERROR', error)
+          return false
+        })
+        .finally(() => setLoading(false))
+    },
+    [setLoading, token]
+  )
+
+  const payAllOrdersAndCloseTicket = useCallback(
+    body => {
+      setLoading(true)
+      return axios
+        .post(`${server}/cashiers/ticket/close/`, body, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then(response => {
+          console.log('SUCCESS')
+          return response.data
+        })
+        .catch(error => {
+          console.log('ERROR', error)
+          return false
+        })
+        .finally(() => setLoading(false))
+    },
+    [setLoading, token]
   )
 
   const closeCashierById = useCallback(
@@ -99,9 +217,41 @@ const useCashiers = () => {
     getCashierById,
     payProductsByTicketAndCashier,
     payProductsByCashier,
+    payAllOrdersAndCloseTicket,
+    payOrdersByTicketAndCashier,
+    removeOrdersByTicketAndCashier,
+    quickSale,
     openCashier,
     closeCashierById,
   }
 }
 
 export default useCashiers
+
+// MOCKS
+
+// const getCashiers = useCallback(
+//   () =>
+//     new Promise(resolve => {
+//       setLoading(true)
+//       setTimeout(() => {
+//         setLoading(false)
+//         resolve(cashiers)
+//       }, 1000)
+//     }),
+//   [setLoading]
+// )
+
+// const openCashier = useCallback(
+//   id => {
+//     return new Promise(resolve => {
+//       setLoading(true)
+//       setTimeout(() => {
+//         setLoading(false)
+//         show('Caixa aberto com sucesso!')
+//         return resolve(true)
+//       }, 1000)
+//     })
+//   },
+//   [setLoading, show]
+// )

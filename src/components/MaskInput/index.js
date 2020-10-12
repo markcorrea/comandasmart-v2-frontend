@@ -12,7 +12,6 @@ const TextMaskCustom = ({inputRef, ...other}) => {
       ref={ref => {
         inputRef(ref ? ref.inputElement : null)
       }}
-      mask={['(', /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
       guide={false}
     />
   )

@@ -30,12 +30,23 @@ const ClientDetails = () => {
     showMenu()
   }, [showMenu])
 
+  const clearPhoneMask = phone =>
+    phone
+      .replace('(', '')
+      .replace(')', '')
+      .replace('-', '')
+      .replace(' ', '')
+      .trim()
+
   const postClient = useCallback(
     async body => {
       const payload = {
         ...body,
+        ...(body.birth_date ? {birth_date: new Date(body.birth_date)} : {}),
+        ...(body.phone ? {phone: clearPhoneMask(body.phone)} : {}),
         ...(clientId ? {id: clientId} : {}),
       }
+
       const result = await saveClient(payload)
       if (result) history.push(`/clients`)
     },

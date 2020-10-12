@@ -5,7 +5,8 @@ import clsx from 'clsx'
 import Button from 'components/Button'
 import Input from 'components/Input'
 
-import Quantity from './Quantity'
+import {mediaQuerySM} from 'assets/styles/_mediaQueries.scss'
+import useMediaQuery from 'utils/mediaQuery'
 
 import {useStore} from 'store'
 
@@ -13,20 +14,23 @@ import useDebounce from './debounce'
 
 import styles from './index.module.scss'
 
-const ProductSearch = ({onConfirm, onEnterPress, searchProductsByName}) => {
-  const [product, setProduct] = useState(null)
-  const [productList, setProductList] = useState([])
+const ClientSearch = ({onConfirm, onCancel, onEnterPress, searchClientsByName}) => {
+  const [client, setClient] = useState(null)
+  const [clientList, setClientList] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
-  const [quantity, setQuantity] = useState(0)
   const [showOptions, setShowOptions] = useState(false)
   const [loadingList, setLoadingList] = useState(false)
   const wrapperRef = useRef(null)
 
+  const mediaQuerySmall = useMediaQuery('min', mediaQuerySM)
   const {loading} = useStore()
 
-  const buttonClass = {
+  const rightButton = {
     root: {
-      marginTop: '25px',
+      minWidth: 'initial',
+      maxWidth: '200px',
+      margin: '5px 0 5px 15px',
+      float: mediaQuerySmall ? 'right' : 'none',
     },
   }
 
@@ -50,17 +54,17 @@ const ProductSearch = ({onConfirm, onEnterPress, searchProductsByName}) => {
       const fetch = async () => {
         setShowOptions(true)
         setLoadingList(true)
-        const result = await searchProductsByName(debouncedSearchTerm)
-        setProductList(result.data)
+        const result = await searchClientsByName(debouncedSearchTerm)
+        setClientList(result.data)
         setLoadingList(false)
       }
 
       fetch()
     }
-  }, [debouncedSearchTerm, searchProductsByName, setShowOptions, setLoadingList, setProductList])
+  }, [debouncedSearchTerm, searchClientsByName, setShowOptions, setLoadingList, setClientList])
 
-  const selectProduct = product => {
-    setProduct(product)
+  const selectClient = client => {
+    setClient(client)
     setShowOptions(false)
   }
 
@@ -82,42 +86,38 @@ const ProductSearch = ({onConfirm, onEnterPress, searchProductsByName}) => {
     searchTerm && searchTerm !== '' && setShowOptions(true)
   }
 
-  const handleConfirm = productData => {
-    setQuantity(0)
-    return onConfirm(productData)
-  }
-
   return (
     <div className={styles.container}>
       <div className={styles.searchContainer}>
         <Input
-          label='Search'
+          label=' '
+          placeholder='Search...'
           value={searchTerm}
           onChange={handleInputChange}
           onKeyPress={handleKeyPress}
           onFocus={handleOnFocus}
           disabled={loading}
         />
-        <div className={clsx(styles.selectedProductName, product ? styles.selected : '')}>
-          {product ? product.name : 'No product selected'}
+        <div className={clsx(styles.selectedClientName, client ? styles.selected : '')}>
+          {client ? client.name : 'No client selected'}
         </div>
         {showOptions && (
           <div ref={wrapperRef} className={styles.listContainer}>
             <div className={styles.listOptions}>
               <ul>
                 {loadingList ? (
-                  <li className={styles.emptyList} key={`no_product`}>
+                  <li className={styles.emptyList} key={`no_client`}>
                     loading...
                   </li>
-                ) : productList.length ? (
-                  productList.map((product, index) => (
-                    <li
-                      onClick={() => selectProduct(product)}
-                      key={`product.name_${index}`}>{`${product.unique_code} - ${product.name}`}</li>
+                ) : clientList.length ? (
+                  clientList.map((client, index) => (
+                    <li onClick={() => selectClient(client)} key={`client.name_${index}`}>
+                      {client.name}
+                    </li>
                   ))
                 ) : (
-                  <li className={styles.emptyList} key={`no_product`}>
-                    No products found
+                  <li className={styles.emptyList} key={`no_client`}>
+                    No clients found
                   </li>
                 )}
               </ul>
@@ -125,28 +125,29 @@ const ProductSearch = ({onConfirm, onEnterPress, searchProductsByName}) => {
           </div>
         )}
       </div>
-      <div className={styles.counterContainer}>
-        <Quantity quantity={quantity} setQuantity={setQuantity} disabled={!product || loading} />
-      </div>
-      <div>
-        <Button classes={buttonClass} onClick={() => handleConfirm({product, quantity})} disabled={!product || quantity < 1}>
-          Adicionar
+      <div className={styles.buttonContainer}>
+        <Button onClick={() => onConfirm(client)} classes={rightButton} disabled={!client}>
+          Alterar
+        </Button>
+        <Button color='cancel' classes={rightButton} onClick={onCancel}>
+          Cancelar
         </Button>
       </div>
     </div>
   )
 }
 
-ProductSearch.propTypes = {
+ClientSearch.propTypes = {
   onConfirm: PropTypes.func,
+  onCancel: PropTypes.func,
   onEnterPress: PropTypes.func,
-  searchProductsByName: PropTypes.func,
+  searchClientsByName: PropTypes.func,
 }
 
-ProductSearch.defaultProps = {
+ClientSearch.defaultProps = {
   onConfirm: () => {},
   onEnterPress: () => {},
-  searchProductsByName: () => {},
+  searchClientsByName: () => {},
 }
 
-export default ProductSearch
+export default ClientSearch

@@ -11,11 +11,6 @@ import styles from './index.module.scss'
 
 export const columns = [
   {
-    key: 'uniqueCode',
-    value: 'Código',
-    textAlign: 'left',
-  },
-  {
     key: 'name',
     value: 'Nome',
     textAlign: 'left',
@@ -52,7 +47,7 @@ const CompanyList = () => {
   useEffect(() => {
     const fetchCompanies = async () => {
       const result = await getCompanies()
-      if (result) setCompanies(result)
+      if (result) setCompanies(result.data)
     }
     fetchCompanies()
   }, [getCompanies, setCompanies])

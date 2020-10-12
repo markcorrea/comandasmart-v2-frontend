@@ -59,10 +59,10 @@ const products = [
   },
 ]
 
-const searchProductsByName = search =>
+const searchProductsByName = name =>
   new Promise(resolve => {
     setTimeout(() => {
-      resolve(products.filter(item => item.name.toLowerCase().includes(search.toLowerCase())))
+      resolve(products.filter(item => item.name.toLowerCase().includes(name.toLowerCase())))
     }, 1000)
   })
 

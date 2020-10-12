@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import QuantityButtons from 'components/QuantityButtons'
 
 export default {
@@ -7,9 +7,10 @@ export default {
 }
 
 export const Basic = () => {
+  const [counter, setCounter] = useState(0)
   return (
     <div style={{padding: '20px'}}>
-      <QuantityButtons />
+      <QuantityButtons counter={counter} setCounter={setCounter} />
     </div>
   )
 }

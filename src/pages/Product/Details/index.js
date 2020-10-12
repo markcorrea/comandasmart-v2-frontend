@@ -13,15 +13,15 @@ import styles from './index.module.scss'
 const unitTypes = [
   {
     name: 'KG',
-    value: 'kg',
+    value: 'KG',
   },
   {
-    name: 'LT',
-    value: 'lt',
+    name: 'L',
+    value: 'L',
   },
   {
-    name: 'UN',
-    value: 'un',
+    name: 'U',
+    value: 'U',
   },
 ]
 

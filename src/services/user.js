@@ -1,5 +1,8 @@
 import {useCallback} from 'react'
+import axios from 'axios'
+import server from 'services/server'
 import users from 'mocks/user'
+import {verifyToken} from 'utils/authentication'
 
 import {useStore} from 'store'
 import {useMessage} from 'components/Message'
@@ -8,17 +11,26 @@ const useUsers = () => {
   const {setLoading} = useStore()
   const {show} = useMessage()
 
-  const getUsers = useCallback(
-    () =>
-      new Promise(resolve => {
-        setLoading(true)
-        setTimeout(() => {
-          setLoading(false)
-          resolve(users)
-        }, 1000)
-      }),
-    [setLoading]
-  )
+  const getUsers = useCallback(() => {
+    setLoading(true)
+    const token = `Token ${verifyToken()}`
+    console.log('TOKEN', token)
+    return axios
+      .get(`${server}/users/`, {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then(response => {
+        console.log('SUCCESS')
+        return response
+      })
+      .catch(error => {
+        console.log('ERROR', error)
+        return false
+      })
+      .finally(() => setLoading(false))
+  }, [setLoading])
 
   const getUserById = useCallback(
     id =>
@@ -80,3 +92,17 @@ const useUsers = () => {
 }
 
 export default useUsers
+
+// MOCKS
+
+// const getUsers = useCallback(
+//   () =>
+//     new Promise(resolve => {
+//       setLoading(true)
+//       setTimeout(() => {
+//         setLoading(false)
+//         resolve(users)
+//       }, 1000)
+//     }),
+//   [setLoading]
+// )
