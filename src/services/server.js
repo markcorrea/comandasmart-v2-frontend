@@ -1,1 +1,1 @@
-export default 'http://806e7e36af2f.ngrok.io/api/v1'
+export default 'https://comandasmart.com.br/api/v1'
