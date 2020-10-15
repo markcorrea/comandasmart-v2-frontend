@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useCallback} from 'react'
 import PropTypes from 'prop-types'
-import {Paper, ProductSearch, QuantityButtons, ResponsiveTable} from 'components'
+import {Paper, ProductSearch, ResponsiveTable} from 'components'
 
 import {useParams, useHistory} from 'react-router-dom'
 import {useStore} from 'store'
@@ -91,18 +91,6 @@ const CashierSale = () => {
     [setProducts]
   )
 
-  const handleQuantities = useCallback(
-    (quantity, product) => {
-      setProducts(prevProducts => {
-        const index = prevProducts.findIndex(item => item.id === product.id)
-        const newProducts = [...prevProducts]
-        newProducts[index] = {...product, quantity}
-        return newProducts
-      })
-    },
-    [setProducts]
-  )
-
   const payProducts = useCallback(
     async products => {
       products = products.map(product => ({product: product.id.toString(), quantity: product.quantity}))
@@ -110,12 +98,6 @@ const CashierSale = () => {
       if (result) history.push(`/cashier/${cashierId}`)
     },
     [cashierId, quickSale, history]
-  )
-
-  const defineQuantityComponent = item => (
-    <QuantityButtons counter={item.quantity} setCounter={quantity => handleQuantities(quantity, item)} loading={false}>
-      {item.quantity}
-    </QuantityButtons>
   )
 
   const columns = [
@@ -132,8 +114,6 @@ const CashierSale = () => {
     {
       key: 'quantity',
       value: 'Quantity',
-      custom: defineQuantityComponent,
-
       textAlign: 'left',
     },
     {
