@@ -42,6 +42,4 @@ QuantityButtons.defaultProps = {
   counter: 0,
 }
 
-QuantityButtons.displayName = 'QuantityButtons'
-
 export default QuantityButtons

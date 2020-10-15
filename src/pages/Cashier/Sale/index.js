@@ -10,8 +10,11 @@ import useServices from 'services'
 import styles from './index.module.scss'
 
 const TotalPrice = ({products}) => {
-  const sum = products.length ? products.reduce((item, {price}) => item + price, 0) : 0
-  return <div className={styles.totalPrice}>{`Total: R$${sum}`}</div>
+  const sum = products.reduce((acc, {price, quantity}) => {
+    return acc + parseFloat(price * quantity)
+  }, 0)
+
+  return <div className={styles.totalPrice}>{`Total: R$${sum.toFixed(2)}`}</div>
 }
 
 TotalPrice.propTypes = {
@@ -135,7 +138,12 @@ const CashierSale = () => {
     },
     {
       key: 'price',
-      value: 'Preço',
+      value: 'Valor Unitário',
+    },
+    {
+      key: 'price',
+      value: 'Total',
+      custom: ({price, quantity}) => parseFloat(price * quantity).toFixed(2),
     },
   ]
 
