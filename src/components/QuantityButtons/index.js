@@ -19,16 +19,13 @@ const QuantityButtons = ({counter, setCounter}) => {
   return (
     <div className={styles.container}>
       <div className={styles.column}>
-        <Button
-          classes={buttonClass}
-          loading={false}
-          onClick={() => setCounter(prevCounter => (prevCounter < 1 ? 0 : prevCounter - 1))}>
+        <Button classes={buttonClass} onClick={() => setCounter(counter < 1 ? 0 : counter - 1)}>
           -
         </Button>
       </div>
       <div className={styles.counter}>{counter}</div>
       <div className={styles.column}>
-        <Button classes={buttonClass} loading={false} onClick={() => setCounter(counter + 1)}>
+        <Button classes={buttonClass} onClick={() => setCounter(counter + 1)}>
           +
         </Button>
       </div>
@@ -44,5 +41,7 @@ QuantityButtons.propTypes = {
 QuantityButtons.defaultProps = {
   counter: 0,
 }
+
+QuantityButtons.displayName = 'QuantityButtons'
 
 export default QuantityButtons

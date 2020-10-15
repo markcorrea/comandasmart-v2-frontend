@@ -154,7 +154,7 @@ const Table = ({
                         className={clsx(cell.textAlign ? styles[cell.textAlign] : styles.right)}
                         key={`cell_${rowIndex}_${cellIndex}`}
                         {...clickableRowFunction(row, rowIndex)}>
-                        {row[cell.key]}
+                        {cell.custom ? cell.custom(row) : row[cell.key]}
                       </td>
                     )
                   })}

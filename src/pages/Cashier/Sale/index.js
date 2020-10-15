@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useCallback} from 'react'
 import PropTypes from 'prop-types'
-import {Paper, ProductSearch, ResponsiveTable} from 'components'
+import {Paper, ProductSearch, QuantityButtons, ResponsiveTable} from 'components'
 
 import {useParams, useHistory} from 'react-router-dom'
 import {useStore} from 'store'
@@ -8,28 +8,6 @@ import {useStore} from 'store'
 import useServices from 'services'
 
 import styles from './index.module.scss'
-
-const columns = [
-  {
-    key: 'unique_code',
-    value: 'Código',
-    textAlign: 'left',
-  },
-  {
-    key: 'name',
-    value: 'Nome',
-    textAlign: 'left',
-  },
-  {
-    key: 'quantity',
-    value: 'Quantity',
-    textAlign: 'left',
-  },
-  {
-    key: 'price',
-    value: 'Preço',
-  },
-]
 
 const TotalPrice = ({products}) => {
   const sum = products.length ? products.reduce((item, {price}) => item + price, 0) : 0
@@ -67,9 +45,17 @@ const CashierSale = () => {
     async uniqueCode => {
       const result = await searchProductByCode(uniqueCode)
       if (result) {
+        let newProduct = result.data
         setProducts(prevProducts => {
-          const index = getMaxIndex(prevProducts)
-          const newProduct = {...result.data, quantity: 2, index: index + 1}
+          const index = prevProducts.findIndex(product => product.id === newProduct.id)
+          if (index >= 0) {
+            const updatedProducts = [...prevProducts]
+            updatedProducts[index].quantity++
+            return updatedProducts
+          }
+
+          const maxIndex = getMaxIndex(prevProducts)
+          newProduct = {...newProduct, quantity: 1, index: maxIndex + 1}
           return [...prevProducts, newProduct]
         })
       }
@@ -80,8 +66,15 @@ const CashierSale = () => {
   const addProductByClick = useCallback(
     async ({product, quantity}) => {
       setProducts(prevProducts => {
-        const index = getMaxIndex(prevProducts)
-        const newProduct = {...product, quantity, index: index + 1}
+        const index = prevProducts.findIndex(item => product.id === item.id)
+        if (index >= 0) {
+          const updatedProducts = [...prevProducts]
+          updatedProducts[index].quantity += quantity
+          return updatedProducts
+        }
+
+        const maxIndex = getMaxIndex(prevProducts)
+        const newProduct = {...product, quantity, index: maxIndex + 1}
         return [...prevProducts, newProduct]
       })
     },
@@ -95,6 +88,18 @@ const CashierSale = () => {
     [setProducts]
   )
 
+  const handleQuantities = useCallback(
+    (quantity, product) => {
+      setProducts(prevProducts => {
+        const index = prevProducts.findIndex(item => item.id === product.id)
+        const newProducts = [...prevProducts]
+        newProducts[index] = {...product, quantity}
+        return newProducts
+      })
+    },
+    [setProducts]
+  )
+
   const payProducts = useCallback(
     async products => {
       products = products.map(product => ({product: product.id.toString(), quantity: product.quantity}))
@@ -103,6 +108,36 @@ const CashierSale = () => {
     },
     [cashierId, quickSale, history]
   )
+
+  const defineQuantityComponent = item => (
+    <QuantityButtons counter={item.quantity} setCounter={quantity => handleQuantities(quantity, item)} loading={false}>
+      {item.quantity}
+    </QuantityButtons>
+  )
+
+  const columns = [
+    {
+      key: 'unique_code',
+      value: 'Código',
+      textAlign: 'left',
+    },
+    {
+      key: 'name',
+      value: 'Nome',
+      textAlign: 'left',
+    },
+    {
+      key: 'quantity',
+      value: 'Quantity',
+      custom: defineQuantityComponent,
+
+      textAlign: 'left',
+    },
+    {
+      key: 'price',
+      value: 'Preço',
+    },
+  ]
 
   const tableButtons = [
     {

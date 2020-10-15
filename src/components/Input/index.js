@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {forwardRef} from 'react'
 import PropTypes from 'prop-types'
 
 import {makeStyles} from '@material-ui/core/styles'
@@ -7,7 +7,7 @@ import UIInputAdornment from '@material-ui/core/InputAdornment'
 
 import {gray} from 'assets/styles/main.module.scss'
 
-const Input = ({label, startIcon, endIcon, isRequired, classes: {input}, InputProps, ...rest}) => {
+const Input = forwardRef(({label, startIcon, endIcon, isRequired, classes: {input}, InputProps, ...rest}, ref) => {
   const useStyles = makeStyles(() => ({
     root: {
       width: '100%',
@@ -72,6 +72,7 @@ const Input = ({label, startIcon, endIcon, isRequired, classes: {input}, InputPr
           startAdornment: startIcon ? setAdornment(startIcon, 'start') : null,
           endAdornment: endIcon ? setAdornment(endIcon, 'end') : null,
         }}
+        inputProps={{ref: ref}}
         InputLabelProps={{
           classes: {
             root: classes.labelRoot,
@@ -86,7 +87,7 @@ const Input = ({label, startIcon, endIcon, isRequired, classes: {input}, InputPr
       />
     </div>
   )
-}
+})
 
 const iconProps = PropTypes.oneOfType([PropTypes.element, PropTypes.string])
 
@@ -104,5 +105,7 @@ Input.defaultProps = {
   classes: {},
   isRequired: false,
 }
+
+Input.displayName = 'Input'
 
 export default Input

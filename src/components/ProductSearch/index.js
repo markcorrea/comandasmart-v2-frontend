@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react'
+import React, {useState, useRef, useEffect, useCallback} from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 
@@ -20,7 +20,9 @@ const ProductSearch = ({onConfirm, onEnterPress, searchProductsByName}) => {
   const [quantity, setQuantity] = useState(0)
   const [showOptions, setShowOptions] = useState(false)
   const [loadingList, setLoadingList] = useState(false)
+
   const wrapperRef = useRef(null)
+  const inputRef = useRef(null)
 
   const {loading} = useStore()
 
@@ -53,39 +55,46 @@ const ProductSearch = ({onConfirm, onEnterPress, searchProductsByName}) => {
         const result = await searchProductsByName(debouncedSearchTerm)
         setProductList(result.data)
         setLoadingList(false)
+        inputRef.current.focus()
       }
 
       fetch()
     }
-  }, [debouncedSearchTerm, searchProductsByName, setShowOptions, setLoadingList, setProductList])
+  }, [debouncedSearchTerm, searchProductsByName, setShowOptions, setLoadingList, setProductList, inputRef])
 
-  const selectProduct = product => {
-    setProduct(product)
-    setShowOptions(false)
-  }
+  const selectProduct = useCallback(
+    product => {
+      setProduct(product)
+      setShowOptions(false)
+    },
+    [setProduct, setShowOptions]
+  )
 
-  const handleInputChange = event => {
-    const value = event.target.value
-    setSearchTerm(value)
-  }
+  const handleInputChange = useCallback(event => setSearchTerm(event.target.value), [setSearchTerm])
 
-  const handleKeyPress = event => {
-    if (loading) return null
-    if (event.key === 'Enter' && !!searchTerm) {
-      onEnterPress(searchTerm)
-      setSearchTerm('')
-      return setShowOptions(false)
-    }
-  }
+  const handleKeyPress = useCallback(
+    event => {
+      if (loading) return null
+      if (event.key === 'Enter' && !!searchTerm) {
+        onEnterPress(searchTerm)
+        setSearchTerm('')
+        setShowOptions(false)
+      }
+    },
+    [loading, searchTerm, onEnterPress, setSearchTerm, setShowOptions]
+  )
 
-  const handleOnFocus = () => {
+  const handleOnFocus = useCallback(() => {
     searchTerm && searchTerm !== '' && setShowOptions(true)
-  }
+  }, [searchTerm, setShowOptions])
 
-  const handleConfirm = productData => {
-    setQuantity(0)
-    return onConfirm(productData)
-  }
+  const handleConfirm = useCallback(
+    productData => {
+      setQuantity(0)
+      return onConfirm(productData)
+    },
+    [setQuantity, onConfirm]
+  )
 
   return (
     <div className={styles.container}>
@@ -97,6 +106,7 @@ const ProductSearch = ({onConfirm, onEnterPress, searchProductsByName}) => {
           onKeyPress={handleKeyPress}
           onFocus={handleOnFocus}
           disabled={loading}
+          ref={inputRef}
         />
         <div className={clsx(styles.selectedProductName, product ? styles.selected : '')}>
           {product ? product.name : 'No product selected'}

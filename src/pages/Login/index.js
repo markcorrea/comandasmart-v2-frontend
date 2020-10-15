@@ -23,7 +23,6 @@ const Login = () => {
 
   const loginUser = useCallback(
     async userdata => {
-      console.log('USERDATA', userdata)
       const result = await login(userdata)
       if (result) history.push(`/tickets`)
     },
