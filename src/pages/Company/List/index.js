@@ -1,7 +1,7 @@
-import React, {useState, useEffect, useCallback, useMemo, memo} from 'react'
+import React, {useState, useEffect, useCallback} from 'react'
 import {useHistory} from 'react-router-dom'
 
-import {Paper, ResponsiveTable, SpeedDial} from 'components'
+import {Paper, PlusButton, ResponsiveTable} from 'components'
 
 import {useStore} from 'store'
 
@@ -29,16 +29,6 @@ const CompanyList = () => {
     page: 0,
     rowsPerPage: 0,
   })
-
-  const speedDialButtons = useMemo(
-    () => [
-      {
-        label: 'Nova Empresa',
-        onClick: () => history.push(`/company/`),
-      },
-    ],
-    [history]
-  )
 
   useEffect(() => {
     showMenu()
@@ -82,11 +72,11 @@ const CompanyList = () => {
           loading={loading}
         />
       </Paper>
-      <div className={styles.speedDialContainer}>
-        <SpeedDial buttons={speedDialButtons} />
+      <div className={styles.plusButtonContainer}>
+        <PlusButton onClick={() => history.push(`/company/`)} />
       </div>
     </>
   )
 }
 
-export default memo(CompanyList)
+export default CompanyList

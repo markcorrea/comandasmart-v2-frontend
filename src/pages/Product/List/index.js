@@ -1,7 +1,7 @@
-import React, {useState, useEffect, useCallback, useMemo, memo} from 'react'
+import React, {useState, useEffect, useCallback} from 'react'
 import {useHistory} from 'react-router-dom'
 
-import {Input, Paper, ResponsiveTable, SpeedDial} from 'components'
+import {Input, Paper, PlusButton, ResponsiveTable} from 'components'
 
 import {useStore} from 'store'
 
@@ -43,16 +43,6 @@ const ProductList = () => {
   })
 
   const [searchTerm, setSearchTerm] = useState('')
-
-  const speedDialButtons = useMemo(
-    () => [
-      {
-        label: 'Novo Produto',
-        onClick: () => history.push(`/product/`),
-      },
-    ],
-    [history]
-  )
 
   useEffect(() => {
     showMenu()
@@ -132,11 +122,11 @@ const ProductList = () => {
           pagination={{count: 0, page: 0, rowsPerPage: 10, onChangePage: () => {}}}
         />
       </Paper>
-      <div className={styles.speedDialContainer}>
-        <SpeedDial buttons={speedDialButtons} />
+      <div className={styles.plusButtonContainer}>
+        <PlusButton onClick={() => history.push(`/product/`)} />
       </div>
     </>
   )
 }
 
-export default memo(ProductList)
+export default ProductList

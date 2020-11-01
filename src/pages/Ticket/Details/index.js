@@ -2,7 +2,7 @@ import React, {useState, useEffect, useCallback, useMemo, memo, useRef} from 're
 import PropTypes from 'prop-types'
 import {useParams} from 'react-router-dom'
 
-import {ClientSearch, Modal, NumberInput, Paper, ProductCard, ProductSearch, SpeedDial} from 'components'
+import {Button, ClientSearch, Modal, NumberInput, Paper, ProductCard, ProductSearch} from 'components'
 
 import {useStore} from 'store'
 
@@ -118,34 +118,25 @@ const TicketDetails = () => {
     return ''
   }, [ticket])
 
-  const speedDialButtons = useMemo(
-    () => [
-      {
-        label: `${ticket?.client ? 'Remover' : 'Vincular'} Cliente`,
-        onClick: () => {
-          if (ticket?.client) {
-            return confirmationDialog({
-              header: 'Remover produto',
-              body: `Deseja realmente desvincular ${formatClientName} desta comanda?`,
-              onConfirm: () => unbindClient(),
-            })
-          }
-          return setClientModalOpen(true)
-        },
-      },
-      {
-        label: `Mudar Mesa`,
-        onClick: () => setCodeModalOpen(true),
-      },
-    ],
-    [confirmationDialog, formatClientName, unbindClient, setClientModalOpen, ticket]
-  )
-
   return (
     <>
       <header className={styles.header}>
         <h1>Comanda {ticket ? ticket.unique_code : '--'}</h1>
         <span className={styles.clientInfo}>&nbsp;{formatClientName}</span>
+        <Button
+          className={styles.headerButton}
+          onClick={() =>
+            confirmationDialog({
+              header: 'Remover produto',
+              body: `Deseja realmente desvincular ${formatClientName} desta comanda?`,
+              onConfirm: () => unbindClient(),
+            })
+          }>
+          Mudar Mesa
+        </Button>
+        <Button className={styles.headerButton} onClick={() => setCodeModalOpen(true)}>
+          {ticket?.client ? 'Remover' : 'Vincular'} Cliente
+        </Button>
       </header>
       <Paper className={styles.paper}>
         <ProductSearch
@@ -172,9 +163,6 @@ const TicketDetails = () => {
           <div className={styles.emptyTicket}>Não há itens na comanda atual.</div>
         )}
       </Paper>
-      <div className={styles.speedDialContainer}>
-        <SpeedDial buttons={speedDialButtons} />
-      </div>
       <Modal header='Alterar Cliente' onCancel={() => setClientModalOpen(false)} open={clientModalOpen} hideButtons>
         <ClientSearch
           searchClientsByName={searchClientsByName}

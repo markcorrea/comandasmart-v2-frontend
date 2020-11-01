@@ -1,8 +1,8 @@
-import React, {useState, useRef, useEffect, useCallback, useMemo, memo} from 'react'
+import React, {useState, useRef, useEffect, useCallback} from 'react'
 import PropTypes from 'prop-types'
 import {useHistory} from 'react-router-dom'
 
-import {Modal, NumberInput, Paper, TicketCard, SpeedDial} from 'components'
+import {Modal, NumberInput, Paper, PlusButton, TicketCard} from 'components'
 
 import {useStore} from 'store'
 
@@ -59,16 +59,6 @@ const TicketList = () => {
     [createTicketByCode, history]
   )
 
-  const speedDialButtons = useMemo(
-    () => [
-      {
-        label: 'Nova Comanda',
-        onClick: () => setModalOpen(true),
-      },
-    ],
-    [setModalOpen]
-  )
-
   const ticketClick = id => history.push(`ticket/${id}`)
 
   const modalConfirm = () => {
@@ -99,9 +89,10 @@ const TicketList = () => {
           <div className={styles.noTickets}>Não há comandas abertas.</div>
         )}
       </Paper>
-      <div className={styles.speedDialContainer}>
-        <SpeedDial buttons={speedDialButtons} />
+      <div className={styles.plusButtonContainer}>
+        <PlusButton onClick={() => setModalOpen(true)} />
       </div>
+
       <Modal header='Digite um código para a nova comanda.' onConfirm={modalConfirm} onCancel={modalCancel} open={modalOpen}>
         <ModalBody value={code} onChange={value => setCode(value)} />
       </Modal>
@@ -109,4 +100,4 @@ const TicketList = () => {
   )
 }
 
-export default memo(TicketList)
+export default TicketList

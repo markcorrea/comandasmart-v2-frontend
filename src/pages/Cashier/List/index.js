@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useCallback, useMemo, memo} from 'react'
 import {useHistory} from 'react-router-dom'
 
-import {Paper, ResponsiveTable, SpeedDial} from 'components'
+import {Paper, PlusButton, ResponsiveTable} from 'components'
 
 import useServices from 'services'
 
@@ -59,21 +59,6 @@ const CashierList = () => {
     if (result) history.push(`/cashier/${result.data.id}/`)
   }, [history, openCashier])
 
-  const speedDialButtons = useMemo(
-    () => [
-      {
-        label: 'Novo Caixa',
-        onClick: () =>
-          confirmationDialog({
-            header: 'Abrir caixa',
-            body: `Deseja abrir novo caixa com o usuário atual?`,
-            onConfirm: openNewCashier,
-          }),
-      },
-    ],
-    [openNewCashier, confirmationDialog]
-  )
-
   const formattedCashiers = useMemo(() => {
     return cashiers.map(cashier => {
       return {
@@ -102,8 +87,16 @@ const CashierList = () => {
           loading={loading}
         />
       </Paper>
-      <div className={styles.speedDialContainer}>
-        <SpeedDial buttons={speedDialButtons} />
+      <div className={styles.plusButtonContainer}>
+        <PlusButton
+          onClick={() =>
+            confirmationDialog({
+              header: 'Abrir caixa',
+              body: `Deseja abrir novo caixa com o usuário atual?`,
+              onConfirm: openNewCashier,
+            })
+          }
+        />
       </div>
     </>
   )

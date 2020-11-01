@@ -1,7 +1,7 @@
-import React, {useState, useEffect, useMemo, memo} from 'react'
+import React, {useState, useEffect} from 'react'
 import {useHistory, useParams} from 'react-router-dom'
 
-import {Paper, TicketCard, SpeedDial} from 'components'
+import {Button, Paper, TicketCard} from 'components'
 
 import {useStore} from 'store'
 
@@ -29,26 +29,18 @@ const CashierFront = () => {
     fetchTickets()
   }, [getTickets, setTickets])
 
-  const speedDialButtons = useMemo(
-    () => [
-      {
-        label: 'Registrar Venda',
-        onClick: () => history.push(`/cashier/${cashierId}/sale`),
-      },
-      {
-        label: 'Controle de Caixa',
-        onClick: () => history.push(`/cashier/${cashierId}/balance`),
-      },
-    ],
-    [history, cashierId]
-  )
-
   const ticketClick = ticket => history.push(`/cashier/${cashierId}/ticket/${ticket.id}`)
 
   return (
     <>
       <header className={styles.header}>
         <h1>Frente de Caixa</h1>
+        <Button className={styles.headerButton} onClick={() => history.push(`/cashier/${cashierId}/balance`)}>
+          Controle de Caixa
+        </Button>
+        <Button className={styles.headerButton} onClick={() => history.push(`/cashier/${cashierId}/sale`)}>
+          Registrar Venda
+        </Button>
       </header>
       <Paper className={styles.paper}>
         {tickets.length ? (
@@ -61,11 +53,8 @@ const CashierFront = () => {
           <div className={styles.noTickets}>Não há comandas abertas.</div>
         )}
       </Paper>
-      <div className={styles.speedDialContainer}>
-        <SpeedDial buttons={speedDialButtons} />
-      </div>
     </>
   )
 }
 
-export default memo(CashierFront)
+export default CashierFront
