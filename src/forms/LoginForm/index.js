@@ -22,7 +22,6 @@ const getErrorMessage = error => {
 const classes = {
   input: {
     fontSize: smallerFontSize,
-    textTransform: 'uppercase',
   },
   buttonRoot: {
     fontFamily: defaultFontFamily,

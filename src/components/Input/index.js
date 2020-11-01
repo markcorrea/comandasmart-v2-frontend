@@ -35,6 +35,7 @@ const Input = forwardRef(({label, startIcon, endIcon, isRequired, classes: {inpu
     labelRoot: {
       color: gray,
       marginLeft: '15px',
+      textTransform: 'uppercase',
       '&&+.MuiInput-formControl': {
         marginTop: '20px',
       },
