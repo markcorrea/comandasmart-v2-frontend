@@ -59,7 +59,8 @@ const CashierBalance = () => {
   }, [cashierId, getCashierById, setCashier])
 
   const closeCashier = useCallback(async () => {
-    const result = await closeCashierById(cashierId)
+    const close_date = new Date()
+    const result = await closeCashierById({id: cashierId, close_date})
     if (result) history.push(`/cashier/${cashierId}/`)
   }, [cashierId, closeCashierById, history])
 

@@ -199,17 +199,29 @@ const useCashiers = () => {
   )
 
   const closeCashierById = useCallback(
-    id => {
-      return new Promise(resolve => {
-        setLoading(true)
-        setTimeout(() => {
-          setLoading(false)
-          show('Caixa fechado com sucesso!')
-          return resolve(true)
-        }, 1000)
-      })
+    ({id, close_date}) => {
+      setLoading(true)
+      return axios
+        .patch(
+          `${server}/cashiers/${id}/`,
+          {close_date},
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        )
+        .then(response => {
+          console.log('SUCCESS')
+          return response.data
+        })
+        .catch(error => {
+          console.log('ERROR', error)
+          return false
+        })
+        .finally(() => setLoading(false))
     },
-    [setLoading, show]
+    [setLoading, token]
   )
 
   return {
@@ -227,31 +239,3 @@ const useCashiers = () => {
 }
 
 export default useCashiers
-
-// MOCKS
-
-// const getCashiers = useCallback(
-//   () =>
-//     new Promise(resolve => {
-//       setLoading(true)
-//       setTimeout(() => {
-//         setLoading(false)
-//         resolve(cashiers)
-//       }, 1000)
-//     }),
-//   [setLoading]
-// )
-
-// const openCashier = useCallback(
-//   id => {
-//     return new Promise(resolve => {
-//       setLoading(true)
-//       setTimeout(() => {
-//         setLoading(false)
-//         show('Caixa aberto com sucesso!')
-//         return resolve(true)
-//       }, 1000)
-//     })
-//   },
-//   [setLoading, show]
-// )

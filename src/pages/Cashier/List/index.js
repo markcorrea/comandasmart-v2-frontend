@@ -67,7 +67,7 @@ const CashierList = () => {
         id: cashier.id,
         name: cashier?.user?.first_name || '-',
         opened: cashier.created ? datetimeToString(cashier.created) : '-',
-        closed: cashier.close_date ? datetimeToString(cashier.closeDate) : '-',
+        closed: cashier.close_date ? datetimeToString(cashier.close_date) : '-',
         total_value: formatMoney(parseFloat(cashier.total_price)),
       }
     })
