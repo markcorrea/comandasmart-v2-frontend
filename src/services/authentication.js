@@ -1,12 +1,13 @@
 import {useCallback} from 'react'
 import axios from 'axios'
 import server from 'services/server'
-import {applyToken} from 'utils/authentication'
+import {applyToken, verifyToken} from 'utils/authentication'
 
 import {useStore} from 'store'
 
 const useAuthentication = () => {
   const {setLoading} = useStore()
+  const token = `Token ${verifyToken()}`
 
   const login = useCallback(
     body => {
@@ -15,6 +16,27 @@ const useAuthentication = () => {
         .post(`${server}/login/`, body, {})
         .then(response => {
           applyToken(response.data.token)
+          return response
+        })
+        .catch(error => {
+          console.log('ERROR', error)
+          return false
+        })
+        .finally(() => setLoading(false))
+    },
+    [setLoading]
+  )
+
+  const logout = useCallback(
+    body => {
+      setLoading(true)
+      return axios
+        .get(`${server}/logout/`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then(response => {
           return response
         })
         .catch(error => {
@@ -52,6 +74,7 @@ const useAuthentication = () => {
 
   return {
     login,
+    logout,
     sendRecoverEmail,
     changePassword,
   }

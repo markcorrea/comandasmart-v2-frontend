@@ -1,4 +1,5 @@
-import React from 'react'
+import React, {useCallback} from 'react'
+import {useHistory} from 'react-router-dom'
 import clsx from 'clsx'
 import PropTypes from 'prop-types'
 
@@ -9,6 +10,7 @@ import HeaderButton from './HeaderButton'
 import LoggedUserInfo from './LoggedUserInfo'
 
 import {useStore} from 'store'
+import useServices from 'services'
 
 import useMediaQuery from 'utils/mediaQuery'
 import {mediaQueryMD, mediaQueryLG} from 'assets/styles/_mediaQueries.scss'
@@ -17,6 +19,14 @@ import styles from './index.module.scss'
 
 const Header = ({className, toggleMenu}) => {
   const store = useStore()
+  const history = useHistory()
+
+  const {logout} = useServices()
+
+  const logoutUser = useCallback(() => {
+    logout()
+    history.push('/login')
+  }, [logout])
 
   const mediaMD = useMediaQuery('min', mediaQueryMD)
   const mediaLG = useMediaQuery('min', mediaQueryLG)
@@ -29,7 +39,7 @@ const Header = ({className, toggleMenu}) => {
       } = store.loggedUser
       return (
         <>
-          <HeaderButton icon='sign-out-alt' label='sair' onClick={() => console.log('clicked info')} />
+          <HeaderButton icon='sign-out-alt' label='sair' onClick={logoutUser} />
           {mediaMD && <LoggedUserInfo userName={firstName} userImage={userImage} company={companyName} />}
         </>
       )
