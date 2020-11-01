@@ -19,7 +19,7 @@ const useStyles = makeStyles({
   },
 })
 
-const Modal = ({children, header, onCancel, onConfirm, onUnderstood, open, hideButtons}) => {
+const Modal = ({children, maxWidth, header, onCancel, onConfirm, onUnderstood, open, hideButtons}) => {
   const modalContainer = document.getElementById('modalContainer')
   const classes = useStyles()
   const mediaQuerySmall = useMediaQuery('min', mediaQuerySM)
@@ -37,7 +37,7 @@ const Modal = ({children, header, onCancel, onConfirm, onUnderstood, open, hideB
     <Dialog
       classes={classes}
       open={open}
-      maxWidth='sm'
+      maxWidth={maxWidth}
       fullWidth
       onBackdropClick={onCancel || onUnderstood}
       onEscapeKeyDown={onCancel || onUnderstood}>
@@ -68,6 +68,7 @@ const Modal = ({children, header, onCancel, onConfirm, onUnderstood, open, hideB
 }
 
 Modal.propTypes = {
+  maxWidth: PropTypes.string,
   header: PropTypes.string,
   onCancel: PropTypes.func,
   onConfirm: PropTypes.func,
@@ -76,6 +77,7 @@ Modal.propTypes = {
 }
 
 Modal.defaultProps = {
+  maxWidth: 'sm',
   header: '',
   onCancel: null,
   onConfirm: null,

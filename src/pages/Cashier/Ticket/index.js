@@ -1,8 +1,11 @@
-import React, {useState, useEffect, useCallback, useMemo, memo} from 'react'
+import React, {useState, useEffect, useRef, useCallback, useMemo, memo} from 'react'
 import PropTypes from 'prop-types'
 import {useParams, useHistory} from 'react-router-dom'
 
-import {Paper, ProductSearch, ResponsiveTable} from 'components'
+import {Modal, NumberInput, Paper, ProductSearch, ResponsiveTable} from 'components'
+import PartialSaleModalBody from './PartialSaleModalBody'
+
+import formatMoney from 'utils/formatMoney'
 
 import {useStore} from 'store'
 
@@ -23,15 +26,44 @@ const columns = [
   },
   {
     key: 'price',
-    value: 'Preço',
+    value: 'Preço Unitário',
   },
   {
     key: 'quantity',
     value: 'Quantidade',
   },
+  {
+    key: 'total',
+    value: 'Total',
+  },
 ]
 
-const TotalPrice = ({ticket}) => <div className={styles.totalPrice}>{`Total: ${(ticket && ticket.price) || 0}`}</div>
+const ModalDelete = ({order, quantityToDelete, setQuantityToDelete}) => {
+  const ref = useRef('')
+  const focus = () => ref.current.focus()
+
+  useEffect(() => focus(), [])
+
+  const isValid =
+    quantityToDelete && quantityToDelete !== '' && quantityToDelete > 0 && order && quantityToDelete <= order.quantity
+
+  return (
+    <div className={styles.modalBody}>
+      <NumberInput ref={ref} label={''} value={quantityToDelete} onChange={setQuantityToDelete} />
+      {!isValid && <span className={styles.codeWarning}>Mínimo de 1 produto e máximo de {order ? order.quantity : 1}.</span>}
+    </div>
+  )
+}
+
+ModalDelete.propTypes = {
+  order: PropTypes.object,
+  quantityToDelete: PropTypes.number,
+  setQuantityToDelete: PropTypes.func,
+}
+
+const TotalPrice = ({ticket}) => (
+  <div className={styles.totalPrice}>{`Total: ${(ticket && formatMoney(ticket.total_price)) || 0}`}</div>
+)
 
 TotalPrice.propTypes = {
   ticket: PropTypes.object,
@@ -52,6 +84,10 @@ const CashierTicket = () => {
   const history = useHistory()
 
   const [ticket, setTicket] = useState(null)
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+  const [itemToDelete, setItemToDelete] = useState(false)
+  const [quantityToDelete, setQuantityToDelete] = useState(1)
+  const [openPartialSaleModal, setOpenPartialSaleModal] = useState(false)
 
   useEffect(() => {
     showMenu()
@@ -82,17 +118,9 @@ const CashierTicket = () => {
     [ticketId, addProductsToTicketById, setTicket]
   )
 
-  const removeOrder = useCallback(
-    async order => {
-      const result = await removeOrdersByTicketAndCashier({ticket: ticketId, order: order.id, quantity: order.quantity})
-      if (result) setTicket({...result.data})
-    },
-    [ticketId, removeOrdersByTicketAndCashier, setTicket]
-  )
-
   const payOrders = useCallback(
     async orders => {
-      orders = orders.map(order => ({order: order.id, quantity: order.quantity}))
+      orders = orders.map(order => ({order: order.id, quantity: order.quantity_selected || 0}))
       const result = await payOrdersByTicketAndCashier({ticket: ticketId, cashier: cashierId, orders})
       if (result) setTicket({...result.data})
     },
@@ -116,14 +144,37 @@ const CashierTicket = () => {
     },
     {
       label: 'Fechar Parcialmente',
-      onClick: orders =>
-        confirmationDialog({
-          header: 'Concluir Venda',
-          body: `Confirma venda dos valores selecionados?`,
-          onConfirm: () => payOrders(orders),
-        }),
+      onClick: () => setOpenPartialSaleModal(true),
     },
   ]
+
+  const removeOrder = useCallback(async () => {
+    if (!quantityToDelete || quantityToDelete == '' || quantityToDelete < 1 || quantityToDelete > itemToDelete.quantity) return
+    const result = await removeOrdersByTicketAndCashier({ticket: ticketId, order: itemToDelete.id, quantity: quantityToDelete})
+    if (result) {
+      setTicket({...result.data})
+      setDeleteModalOpen(false)
+      setItemToDelete(null)
+      setQuantityToDelete(1)
+    }
+  }, [
+    ticketId,
+    itemToDelete,
+    quantityToDelete,
+    setDeleteModalOpen,
+    setQuantityToDelete,
+    setItemToDelete,
+    removeOrdersByTicketAndCashier,
+    setTicket,
+  ])
+
+  const openDeleteModal = useCallback(
+    order => {
+      setDeleteModalOpen(true)
+      setItemToDelete(order)
+    },
+    [setDeleteModalOpen, setItemToDelete]
+  )
 
   const formattedOrders = useMemo(() => {
     if (!ticket?.orders) return []
@@ -131,8 +182,9 @@ const CashierTicket = () => {
       id: order.id,
       unique_code: order.product.unique_code,
       name: order.product.name,
-      quantity: 1,
-      price: order.product.price,
+      quantity: order.quantity,
+      price: formatMoney(order.product.price),
+      total: formatMoney(order.price),
     }))
   }, [ticket])
 
@@ -153,13 +205,31 @@ const CashierTicket = () => {
             rows={formattedOrders}
             titleColumn='name'
             hasButtons={tableButtons}
-            onDeleteClick={order => removeOrder(order)}
+            onDeleteClick={order => openDeleteModal(order)}
             additionalRow={<TotalPrice ticket={ticket} />}
             emptyTableMessage='Não há produtos registrados.'
             disabled={loading}
           />
         </div>
       </Paper>
+      <Modal
+        header='Selecione a quantidade a ser removida.'
+        onConfirm={removeOrder}
+        onCancel={() => setDeleteModalOpen(false)}
+        open={deleteModalOpen}>
+        <ModalDelete
+          order={itemToDelete}
+          quantityToDelete={quantityToDelete}
+          setQuantityToDelete={value => setQuantityToDelete(value)}
+        />
+      </Modal>
+      <Modal maxWidth='lg' header='Selecione os itens a serem vendidos' open={openPartialSaleModal}>
+        <PartialSaleModalBody
+          orders={(ticket && ticket.orders) || []}
+          onConfirm={ordersToSell => payOrders(ordersToSell)}
+          onCancel={() => setOpenPartialSaleModal(false)}
+        />
+      </Modal>
     </>
   )
 }

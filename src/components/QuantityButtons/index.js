@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import clsx from 'clsx'
 
 import Button from 'components/Button'
 
@@ -15,17 +16,25 @@ const buttonClass = {
   },
 }
 
-const QuantityButtons = ({counter, setCounter}) => {
+const QuantityButtons = ({className, counter, setCounter, total}) => {
   return (
-    <div className={styles.container}>
+    <div className={clsx(styles.container, className)}>
       <div className={styles.column}>
         <Button classes={buttonClass} onClick={() => setCounter(counter < 1 ? 0 : counter - 1)}>
           -
         </Button>
       </div>
-      <div className={styles.counter}>{counter}</div>
+      <div className={styles.counter}>
+        {counter}
+        {total ? `/${total}` : ''}
+      </div>
       <div className={styles.column}>
-        <Button classes={buttonClass} onClick={() => setCounter(counter + 1)}>
+        <Button
+          classes={buttonClass}
+          onClick={() => {
+            if (total && counter >= total) return
+            setCounter(counter + 1)
+          }}>
           +
         </Button>
       </div>
@@ -34,8 +43,10 @@ const QuantityButtons = ({counter, setCounter}) => {
 }
 
 QuantityButtons.propTypes = {
+  className: PropTypes.string,
   counter: PropTypes.number,
   setCounter: PropTypes.func,
+  total: PropTypes.number,
 }
 
 QuantityButtons.defaultProps = {
