@@ -9,6 +9,8 @@ import {useStore} from 'store'
 
 import {datetimeToString} from 'utils/datetimeToString'
 
+import formatMoney from 'utils/formatMoney'
+
 import styles from './index.module.scss'
 
 export const columns = [
@@ -66,7 +68,7 @@ const CashierList = () => {
         name: cashier?.user?.first_name || '-',
         opened: cashier.created ? datetimeToString(cashier.created) : '-',
         closed: cashier.close_date ? datetimeToString(cashier.closeDate) : '-',
-        total_value: cashier.total_price,
+        total_value: formatMoney(parseFloat(cashier.total_price)),
       }
     })
   }, [cashiers])

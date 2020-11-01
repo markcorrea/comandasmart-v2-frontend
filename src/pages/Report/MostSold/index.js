@@ -1,10 +1,12 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useMemo, memo} from 'react'
 
 import {Paper, ResponsiveTable} from 'components'
 
 import {useStore} from 'store'
 
 import useServices from 'services'
+
+import formatMoney from 'utils/formatMoney'
 
 import styles from './index.module.scss'
 
@@ -56,6 +58,16 @@ const ReportMostSold = () => {
     fetchProducts()
   }, [getMostSoldProducts, setProducts])
 
+  const formattedProducts = useMemo(() => {
+    if (products && products.data) {
+      return products.data.map(product => ({
+        ...product,
+        price: formatMoney(product.price),
+      }))
+    }
+    return []
+  }, [products])
+
   return (
     <>
       <header className={styles.header}>
@@ -64,7 +76,7 @@ const ReportMostSold = () => {
       <Paper className={styles.paper}>
         <ResponsiveTable
           columns={columns}
-          rows={products.data || []}
+          rows={formattedProducts}
           titleColumn='name'
           emptyTableMessage='Não há produtos vendidos até o momento.'
           loading={loading}
@@ -75,4 +87,4 @@ const ReportMostSold = () => {
   )
 }
 
-export default ReportMostSold
+export default memo(ReportMostSold)

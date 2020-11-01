@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react'
+import React, {useState, useEffect, useCallback, useMemo, memo} from 'react'
 import {useHistory} from 'react-router-dom'
 
 import {Input, Paper, PlusButton, ResponsiveTable} from 'components'
@@ -6,6 +6,7 @@ import {Input, Paper, PlusButton, ResponsiveTable} from 'components'
 import {useStore} from 'store'
 
 import useServices from 'services'
+import formatMoney from 'utils/formatMoney'
 
 import styles from './index.module.scss'
 
@@ -83,6 +84,16 @@ const ProductList = () => {
     [searchProducts]
   )
 
+  const formattedProducts = useMemo(() => {
+    if (products && products.data) {
+      return products.data.map(product => ({
+        ...product,
+        price: formatMoney(parseFloat(product.price)),
+      }))
+    }
+    return []
+  }, [products])
+
   return (
     <>
       <header className={styles.header}>
@@ -106,7 +117,7 @@ const ProductList = () => {
         </div>
         <ResponsiveTable
           columns={columns}
-          rows={products.data || []}
+          rows={formattedProducts}
           titleColumn='name'
           onEditClick={row => history.push(`/product/${row.id}`)}
           onDeleteClick={row =>
@@ -129,4 +140,4 @@ const ProductList = () => {
   )
 }
 
-export default ProductList
+export default memo(ProductList)

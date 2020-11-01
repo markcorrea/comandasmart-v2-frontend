@@ -62,7 +62,7 @@ ModalDelete.propTypes = {
 }
 
 const TotalPrice = ({ticket}) => (
-  <div className={styles.totalPrice}>{`Total: ${(ticket && formatMoney(ticket.total_price)) || 0}`}</div>
+  <div className={styles.totalPrice}>{`Total: ${(ticket && formatMoney(parseFloat(ticket.total_price))) || 0}`}</div>
 )
 
 TotalPrice.propTypes = {
@@ -183,8 +183,8 @@ const CashierTicket = () => {
       unique_code: order.product.unique_code,
       name: order.product.name,
       quantity: order.quantity,
-      price: formatMoney(order.product.price),
-      total: formatMoney(order.price),
+      price: formatMoney(parseFloat(order.product.price)),
+      total: formatMoney(parseFloat(order.price)),
     }))
   }, [ticket])
 

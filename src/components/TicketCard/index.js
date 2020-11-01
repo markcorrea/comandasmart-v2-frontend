@@ -5,6 +5,8 @@ import {Paper} from 'components'
 
 import {useStore} from 'store'
 
+import formatMoney from 'utils/formatMoney'
+
 import styles from './index.module.scss'
 
 const TicketCard = ({ticket, onClick, inset}) => {
@@ -21,7 +23,7 @@ const TicketCard = ({ticket, onClick, inset}) => {
       </div>
       <div className={styles.ticketNumber}>{unique_code}</div>
       <div className={styles.userName}>{(client && client.name) || '--'}</div>
-      <div className={styles.price}>{total_price}</div>
+      <div className={styles.price}>{formatMoney(parseFloat(total_price))}</div>
     </Paper>
   )
 }

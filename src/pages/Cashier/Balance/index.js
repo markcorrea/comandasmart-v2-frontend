@@ -7,6 +7,7 @@ import {useStore} from 'store'
 import useServices from 'services'
 
 import {datetimeToString} from 'utils/datetimeToString'
+import formatMoney from 'utils/formatMoney'
 
 import styles from './index.module.scss'
 
@@ -75,9 +76,9 @@ const CashierBalance = () => {
       return cashier.sales.map(sale => ({
         unique_code: sale.product.unique_code,
         name: sale.product.name,
-        price: sale.product.price,
+        price: formatMoney(parseFloat(sale.product.price)),
         quantity: sale.quantity,
-        total_price: sale.price,
+        total_price: formatMoney(parseFloat(sale.price)),
       }))
     }
     return []
@@ -100,7 +101,10 @@ const CashierBalance = () => {
             rows={formattedOrders}
             titleColumn='name'
             hasButtons={tableButtons}
-            additionalRow={<div className={styles.totalPrice}>{`Total: R$${cashier?.total_price || '-'}`}</div>}
+            additionalRow={
+              <div className={styles.totalPrice}>{`Total: ${(cashier && formatMoney(parseFloat(cashier.total_price))) ||
+                '-'}`}</div>
+            }
             emptyTableMessage='Não há produtos registrados.'
           />
         </div>

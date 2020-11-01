@@ -1,9 +1,10 @@
-import React, {useState, useEffect, useCallback} from 'react'
+import React, {useState, useEffect, useCallback, useMemo, memo} from 'react'
 import PropTypes from 'prop-types'
 import {Paper, ProductSearch, ResponsiveTable} from 'components'
 
 import {useParams, useHistory} from 'react-router-dom'
 import {useStore} from 'store'
+import formatMoney from 'utils/formatMoney'
 
 import useServices from 'services'
 
@@ -112,18 +113,17 @@ const CashierSale = () => {
       textAlign: 'left',
     },
     {
-      key: 'quantity',
-      value: 'Quantity',
-      textAlign: 'left',
+      key: 'unit_price',
+      value: 'Valor Unitário',
     },
     {
-      key: 'price',
-      value: 'Valor Unitário',
+      key: 'quantity',
+      value: 'Quantidade',
     },
     {
       key: 'price',
       value: 'Total',
-      custom: ({price, quantity}) => parseFloat(price * quantity).toFixed(2),
+      custom: ({price, quantity}) => formatMoney(parseFloat(price * quantity)),
     },
   ]
 
@@ -133,6 +133,16 @@ const CashierSale = () => {
       onClick: products => payProducts(products),
     },
   ]
+
+  const formattedProducts = useMemo(() => {
+    if (products) {
+      return products.map(product => ({
+        ...product,
+        unit_price: formatMoney(parseFloat(product.price)),
+      }))
+    }
+    return []
+  }, [products])
 
   return (
     <>
@@ -148,7 +158,7 @@ const CashierSale = () => {
         <div className={styles.responsiveTable}>
           <ResponsiveTable
             columns={columns}
-            rows={products}
+            rows={formattedProducts}
             titleColumn='name'
             onDeleteClick={row => removeProduct(row)}
             hasButtons={tableButtons}
@@ -161,4 +171,4 @@ const CashierSale = () => {
   )
 }
 
-export default CashierSale
+export default memo(CashierSale)

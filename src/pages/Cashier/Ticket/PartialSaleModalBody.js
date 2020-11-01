@@ -13,7 +13,7 @@ const TotalPrice = ({orders}) => {
     return acc + parseFloat(price * quantity)
   }, 0)
 
-  return <div className={styles.totalPrice}>{`Total: R$${sum.toFixed(2)}`}</div>
+  return <div className={styles.totalPrice}>{`Total Geral: ${formatMoney(sum)}`}</div>
 }
 
 TotalPrice.propTypes = {
@@ -98,8 +98,8 @@ const PartialSaleModalBody = ({orders, onConfirm, onCancel}) => {
       ...order,
       unique_code: order.product.unique_code,
       name: order.product.name,
-      price: formatMoney(order.product.price),
-      total: formatMoney(order.price),
+      price: formatMoney(parseFloat(order.product.price)),
+      total: formatMoney(parseFloat(order.price)),
     }))
   }, [orderList])
 

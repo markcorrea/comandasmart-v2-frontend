@@ -1,6 +1,6 @@
 export default money => {
   return `R$ ${money
-    .toString()
+    .toFixed(2)
     .trim()
     .replace('.', ',')}`
 }
