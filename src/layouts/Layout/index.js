@@ -55,7 +55,7 @@ const Layout = ({children}) => {
 
     const token = verifyToken()
     if (token) fetchUserByToken(token)
-  }, [getUserInfoByToken, setLoggedUser, destroyToken, history])
+  }, [getUserInfoByToken, setLoggedUser, history])
 
   const items = [
     {

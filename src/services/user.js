@@ -6,14 +6,17 @@ import {verifyToken} from 'utils/authentication'
 
 import {useStore} from 'store'
 import {useMessage} from 'components/Message'
+import {useHistory} from 'react-router-dom'
 
 const useUsers = () => {
   const {setLoading} = useStore()
   const {show} = useMessage()
+  const history = useHistory()
+
+  const token = `Token ${verifyToken()}`
 
   const getUsers = useCallback(() => {
     setLoading(true)
-    const token = `Token ${verifyToken()}`
     return axios
       .get(`${server}/users/`, {
         headers: {
@@ -25,11 +28,13 @@ const useUsers = () => {
         return response
       })
       .catch(error => {
-        console.log('ERROR', error)
-        return false
+        if (error.response.status === 401) {
+          history.push('/')
+          show('Usuário não possui permissão', 'error')
+        }
       })
       .finally(() => setLoading(false))
-  }, [setLoading])
+  }, [setLoading, token, show, history])
 
   const getUserById = useCallback(
     id =>
@@ -44,7 +49,7 @@ const useUsers = () => {
   )
 
   const getUserInfoByToken = useCallback(() => {
-    const token = `Token ${verifyToken()}`
+    setLoading(true)
     return axios
       .get(`${server}/user/`, {
         headers: {
@@ -56,10 +61,13 @@ const useUsers = () => {
         return response.data
       })
       .catch(error => {
-        console.log('ERROR', error)
-        return false
+        if (error.response.status === 401) {
+          history.push('/')
+          show('Usuário não possui permissão', 'error')
+        }
       })
-  }, [setLoading])
+      .finally(() => setLoading(false))
+  }, [setLoading, token, history, show])
 
   const saveUser = useCallback(
     body => {

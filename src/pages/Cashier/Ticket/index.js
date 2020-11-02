@@ -149,7 +149,7 @@ const CashierTicket = () => {
   ]
 
   const removeOrder = useCallback(async () => {
-    if (!quantityToDelete || quantityToDelete == '' || quantityToDelete < 1 || quantityToDelete > itemToDelete.quantity) return
+    if (!quantityToDelete || quantityToDelete === '' || quantityToDelete < 1 || quantityToDelete > itemToDelete.quantity) return
     const result = await removeOrdersByTicketAndCashier({ticket: ticketId, order: itemToDelete.id, quantity: quantityToDelete})
     if (result) {
       setTicket({...result.data})

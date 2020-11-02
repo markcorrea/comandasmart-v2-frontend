@@ -4,9 +4,14 @@ import server from 'services/server'
 import {verifyToken} from 'utils/authentication'
 
 import {useStore} from 'store'
+import {useMessage} from 'components/Message'
+import {useHistory} from 'react-router-dom'
 
 const useTerminalOrders = () => {
   const {setLoading} = useStore()
+  const {show} = useMessage()
+  const history = useHistory()
+
   const token = `Token ${verifyToken()}`
 
   const getOrdersByTerminalId = useCallback(
@@ -23,14 +28,15 @@ const useTerminalOrders = () => {
           return response.data
         })
         .catch(error => {
-          console.log('ERROR', error)
-          return false
+          if (error.response.status === 401) {
+            history.push('/')
+            show('Usuário não possui permissão', 'error')
+          }
         })
         .finally(() => setLoading(false))
     },
-    [setLoading, token]
+    [setLoading, token, history, show]
   )
-
 
   return {
     getOrdersByTerminalId,

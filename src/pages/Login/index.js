@@ -38,7 +38,7 @@ const Login = () => {
         history.push(`/tickets`)
       }
     },
-    [history, login]
+    [history, login, setLoggedUser, getUserInfoByToken]
   )
 
   const Forms = () => (

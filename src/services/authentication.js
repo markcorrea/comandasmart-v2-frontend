@@ -5,11 +5,13 @@ import {applyToken, verifyToken} from 'utils/authentication'
 
 import {useStore} from 'store'
 import {useMessage} from 'components/Message'
+import {useHistory} from 'react-router-dom'
 
 const useAuthentication = () => {
   const {setLoading} = useStore()
   const {show} = useMessage()
   const token = `Token ${verifyToken()}`
+  const history = useHistory()
 
   const login = useCallback(
     body => {
@@ -30,26 +32,26 @@ const useAuthentication = () => {
     [setLoading, show]
   )
 
-  const logout = useCallback(
-    body => {
-      setLoading(true)
-      return axios
-        .get(`${server}/logout/`, {
-          headers: {
-            Authorization: token,
-          },
-        })
-        .then(response => {
-          return response
-        })
-        .catch(error => {
-          console.log('ERROR', error)
-          return false
-        })
-        .finally(() => setLoading(false))
-    },
-    [setLoading]
-  )
+  const logout = useCallback(() => {
+    setLoading(true)
+    return axios
+      .get(`${server}/logout/`, {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then(response => {
+        return response
+      })
+      .catch(error => {
+        if (error.response.status === 401) {
+          history.push('/')
+          show('Houve um problema ao realizar operação', 'error')
+        }
+        return false
+      })
+      .finally(() => setLoading(false))
+  }, [setLoading, token, history, show])
 
   const sendRecoverEmail = useCallback(
     () =>
