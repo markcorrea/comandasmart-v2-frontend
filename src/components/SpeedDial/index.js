@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 
 import {makeStyles} from '@material-ui/core/styles'
 import UISpeedDial from '@material-ui/lab/SpeedDial'
-import SpeedDialIcon from '@material-ui/lab/SpeedDialIcon'
+import MenuIcon from '@material-ui/icons/Menu'
 
 import Button from 'components/Button'
 
@@ -76,7 +76,7 @@ const SpeedDial = ({buttons, positionFixed}) => {
       <UISpeedDial
         ariaLabel='SpeedDial tooltip example'
         classes={classes}
-        icon={<SpeedDialIcon classes={iconClasses} />}
+        icon={<MenuIcon classes={iconClasses} />}
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
         open={open}>

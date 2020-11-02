@@ -22,7 +22,7 @@ const useCashiers = () => {
         },
       })
       .then(response => {
-        console.log('SUCCESS')
+        show('Caixas encontrados com sucesso!')
         return response.data
       })
       .catch(error => {
@@ -30,7 +30,7 @@ const useCashiers = () => {
         return false
       })
       .finally(() => setLoading(false))
-  }, [setLoading, token])
+  }, [setLoading, token, show])
 
   const openCashier = useCallback(() => {
     setLoading(true)

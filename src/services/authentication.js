@@ -4,9 +4,11 @@ import server from 'services/server'
 import {applyToken, verifyToken} from 'utils/authentication'
 
 import {useStore} from 'store'
+import {useMessage} from 'components/Message'
 
 const useAuthentication = () => {
   const {setLoading} = useStore()
+  const {show} = useMessage()
   const token = `Token ${verifyToken()}`
 
   const login = useCallback(
@@ -16,15 +18,16 @@ const useAuthentication = () => {
         .post(`${server}/login/`, body, {})
         .then(response => {
           applyToken(response.data.token)
-          return response
+          show('Usuário logado com sucesso!')
+          return response.data
         })
         .catch(error => {
-          console.log('ERROR', error)
+          show('Usuário ou senha não encontrados.', 'error')
           return false
         })
         .finally(() => setLoading(false))
     },
-    [setLoading]
+    [setLoading, show]
   )
 
   const logout = useCallback(
@@ -81,17 +84,3 @@ const useAuthentication = () => {
 }
 
 export default useAuthentication
-
-// MOCKS
-
-// const login = useCallback(
-//   () =>
-//     new Promise(resolve => {
-//       setLoading(true)
-//       setTimeout(() => {
-//         setLoading(false)
-//         resolve(true)
-//       }, 1000)
-//     }),
-//   [setLoading]
-// )

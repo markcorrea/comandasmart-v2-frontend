@@ -14,7 +14,6 @@ const useUsers = () => {
   const getUsers = useCallback(() => {
     setLoading(true)
     const token = `Token ${verifyToken()}`
-    console.log('TOKEN', token)
     return axios
       .get(`${server}/users/`, {
         headers: {
@@ -43,6 +42,24 @@ const useUsers = () => {
       }),
     [setLoading]
   )
+
+  const getUserInfoByToken = useCallback(() => {
+    const token = `Token ${verifyToken()}`
+    return axios
+      .get(`${server}/user/`, {
+        headers: {
+          Authorization: token,
+        },
+      })
+      .then(response => {
+        console.log('SUCCESS')
+        return response.data
+      })
+      .catch(error => {
+        console.log('ERROR', error)
+        return false
+      })
+  }, [setLoading])
 
   const saveUser = useCallback(
     body => {
@@ -86,23 +103,10 @@ const useUsers = () => {
   return {
     getUsers,
     getUserById,
+    getUserInfoByToken,
     saveUser,
     deleteUserById,
   }
 }
 
 export default useUsers
-
-// MOCKS
-
-// const getUsers = useCallback(
-//   () =>
-//     new Promise(resolve => {
-//       setLoading(true)
-//       setTimeout(() => {
-//         setLoading(false)
-//         resolve(users)
-//       }, 1000)
-//     }),
-//   [setLoading]
-// )

@@ -2,11 +2,13 @@ import React, {useState, useEffect, useCallback, useMemo, memo, useRef} from 're
 import PropTypes from 'prop-types'
 import {useParams} from 'react-router-dom'
 
-import {Button, ClientSearch, Modal, NumberInput, Paper, ProductCard, ProductSearch} from 'components'
+import {Button, ClientSearch, Modal, NumberInput, Paper, ProductCard, ProductSearch, SpeedDial} from 'components'
 
 import {useStore} from 'store'
 
 import useServices from 'services'
+import useMediaQuery from 'utils/mediaQuery'
+import {mediaQueryMD} from 'assets/styles/_mediaQueries.scss'
 
 import styles from './index.module.scss'
 
@@ -48,6 +50,7 @@ const TicketDetails = () => {
   const [ticket, setTicket] = useState(null)
   const [clientModalOpen, setClientModalOpen] = useState(false)
   const [codeModalOpen, setCodeModalOpen] = useState(false)
+  const mediaMD = useMediaQuery('min', mediaQueryMD)
 
   useEffect(() => {
     showMenu()
@@ -118,25 +121,45 @@ const TicketDetails = () => {
     return ''
   }, [ticket])
 
+  const buttons = [
+    {
+      label: 'Mudar Mesa',
+      onClick: () =>
+        confirmationDialog({
+          header: 'Remover produto',
+          body: `Deseja realmente desvincular ${formatClientName} desta comanda?`,
+          onConfirm: () => unbindClient(),
+        }),
+    },
+    {
+      label: `${ticket?.client ? 'Remover' : 'Vincular'} Cliente`,
+      onClick: () => setCodeModalOpen(true),
+    },
+  ]
+
   return (
     <>
       <header className={styles.header}>
         <h1>Comanda {ticket ? ticket.unique_code : '--'}</h1>
         <span className={styles.clientInfo}>&nbsp;{formatClientName}</span>
-        <Button
-          className={styles.headerButton}
-          onClick={() =>
-            confirmationDialog({
-              header: 'Remover produto',
-              body: `Deseja realmente desvincular ${formatClientName} desta comanda?`,
-              onConfirm: () => unbindClient(),
-            })
-          }>
-          Mudar Mesa
-        </Button>
-        <Button className={styles.headerButton} onClick={() => setCodeModalOpen(true)}>
-          {ticket?.client ? 'Remover' : 'Vincular'} Cliente
-        </Button>
+        {mediaMD && (
+          <>
+            <Button
+              className={styles.headerButton}
+              onClick={() =>
+                confirmationDialog({
+                  header: 'Remover produto',
+                  body: `Deseja realmente desvincular ${formatClientName} desta comanda?`,
+                  onConfirm: () => unbindClient(),
+                })
+              }>
+              Mudar Mesa
+            </Button>
+            <Button className={styles.headerButton} onClick={() => setCodeModalOpen(true)}>
+              {ticket?.client ? 'Remover' : 'Vincular'} Cliente
+            </Button>
+          </>
+        )}
       </header>
       <Paper className={styles.paper}>
         <ProductSearch
@@ -163,6 +186,11 @@ const TicketDetails = () => {
           <div className={styles.emptyTicket}>Não há itens na comanda atual.</div>
         )}
       </Paper>
+      {!mediaMD && (
+        <div className={styles.speedDialContainer}>
+          <SpeedDial buttons={buttons} />
+        </div>
+      )}
       <Modal header='Alterar Cliente' onCancel={() => setClientModalOpen(false)} open={clientModalOpen} hideButtons>
         <ClientSearch
           searchClientsByName={searchClientsByName}

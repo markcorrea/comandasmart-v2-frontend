@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {useHistory} from 'react-router-dom'
 import PropTypes from 'prop-types'
 
@@ -7,6 +7,9 @@ import {Drawer, Footer, Header, SideMenu} from 'components'
 import useMediaQuery from 'utils/mediaQuery'
 
 import {useStore} from 'store'
+import useServices from 'services'
+
+import {verifyToken, destroyToken} from 'utils/authentication'
 
 import {mediaQueryLG} from 'assets/styles/_mediaQueries.scss'
 import styles from './index.module.scss'
@@ -30,9 +33,32 @@ ShowSideMenu.propTypes = {
 
 const Layout = ({children}) => {
   const history = useHistory()
-  const store = useStore()
+  const {sideMenu, setLoggedUser} = useStore()
+  const {getUserInfoByToken} = useServices()
 
   const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+    const fetchUserByToken = async token => {
+      const result = await getUserInfoByToken(token)
+      if (!result) {
+        destroyToken()
+        return history.push('/login')
+      }
+
+      const userData = {
+        ...result.data,
+        image: result.data.image || null,
+      }
+
+      console.log('USER DATA', userData)
+
+      setLoggedUser(userData)
+    }
+
+    const token = verifyToken()
+    if (token) fetchUserByToken(token)
+  }, [getUserInfoByToken, setLoggedUser, destroyToken, history])
 
   const items = [
     {
@@ -91,7 +117,7 @@ const Layout = ({children}) => {
     <div className={styles.container}>
       <Header className={styles.header} toggleMenu={() => setOpen(!open)} />
       <div className={styles.content}>
-        {store.sideMenu && <ShowSideMenu items={items} className={styles.sideMenu} open={open} setOpen={setOpen} />}
+        {sideMenu && <ShowSideMenu items={items} className={styles.sideMenu} open={open} setOpen={setOpen} />}
         <div className={styles.children}>{children}</div>
       </div>
       <Footer className={styles.footer} />

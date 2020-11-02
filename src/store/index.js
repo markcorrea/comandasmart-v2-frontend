@@ -6,14 +6,7 @@ import {useMessage} from 'components/Message'
 const StoreContext = React.createContext(null)
 
 const initialState = {
-  loggedUser: {
-    firstName: 'Savio',
-    lastName: 'Canova',
-    company: {
-      name: 'Kanova Revistaria',
-    },
-  },
-  // loggedUser: null,
+  loggedUser: null,
   sideMenu: false,
   loading: false,
   dialog: {
@@ -52,8 +45,20 @@ const Store = ({children}) => {
     updateState(prevState => ({...prevState, dialog: {open: false, header: '', body: '', onConfirm: null}}))
   }, [updateState])
 
+  const setLoggedUser = useCallback(
+    loggedUser => {
+      updateState(prevState => ({...prevState, loggedUser}))
+    },
+    [updateState]
+  )
+
+  const unsetLoggedUser = useCallback(() => {
+    updateState(prevState => ({...prevState, loggedUser: null}))
+  }, [updateState])
+
   return (
-    <StoreContext.Provider value={{...state, showMenu, setLoading, confirmationDialog, closeDialog}}>
+    <StoreContext.Provider
+      value={{...state, showMenu, setLoading, confirmationDialog, closeDialog, setLoggedUser, unsetLoggedUser}}>
       {children}
     </StoreContext.Provider>
   )

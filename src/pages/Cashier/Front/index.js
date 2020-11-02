@@ -1,11 +1,13 @@
 import React, {useState, useEffect} from 'react'
 import {useHistory, useParams} from 'react-router-dom'
 
-import {Button, Paper, TicketCard} from 'components'
+import {Button, Paper, SpeedDial, TicketCard} from 'components'
 
 import {useStore} from 'store'
 
 import useServices from 'services'
+import useMediaQuery from 'utils/mediaQuery'
+import {mediaQueryMD} from 'assets/styles/_mediaQueries.scss'
 
 import styles from './index.module.scss'
 
@@ -14,6 +16,7 @@ const CashierFront = () => {
   const history = useHistory()
   const {cashierId} = useParams()
   const [tickets, setTickets] = useState([])
+  const mediaMD = useMediaQuery('min', mediaQueryMD)
 
   const {getTickets} = useServices()
 
@@ -31,16 +34,31 @@ const CashierFront = () => {
 
   const ticketClick = ticket => history.push(`/cashier/${cashierId}/ticket/${ticket.id}`)
 
+  const buttons = [
+    {
+      label: 'Controle de Caixa',
+      onClick: () => history.push(`/cashier/${cashierId}/balance`),
+    },
+    {
+      label: 'Registrar Venda',
+      onClick: () => history.push(`/cashier/${cashierId}/sale`),
+    },
+  ]
+
   return (
     <>
       <header className={styles.header}>
         <h1>Frente de Caixa</h1>
-        <Button className={styles.headerButton} onClick={() => history.push(`/cashier/${cashierId}/balance`)}>
-          Controle de Caixa
-        </Button>
-        <Button className={styles.headerButton} onClick={() => history.push(`/cashier/${cashierId}/sale`)}>
-          Registrar Venda
-        </Button>
+        {mediaMD && (
+          <>
+            <Button className={styles.headerButton} onClick={() => history.push(`/cashier/${cashierId}/balance`)}>
+              Controle de Caixa
+            </Button>
+            <Button className={styles.headerButton} onClick={() => history.push(`/cashier/${cashierId}/sale`)}>
+              Registrar Venda
+            </Button>
+          </>
+        )}
       </header>
       <Paper className={styles.paper}>
         {tickets.length ? (
@@ -53,6 +71,11 @@ const CashierFront = () => {
           <div className={styles.noTickets}>Não há comandas abertas.</div>
         )}
       </Paper>
+      {!mediaMD && (
+        <div className={styles.speedDialContainer}>
+          <SpeedDial buttons={buttons} />
+        </div>
+      )}
     </>
   )
 }

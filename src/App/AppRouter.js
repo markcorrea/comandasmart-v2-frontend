@@ -1,9 +1,12 @@
-import React, {lazy} from 'react'
-import {HashRouter as Router, Switch, Redirect} from 'react-router-dom'
+import React, {lazy, Suspense} from 'react'
+import {HashRouter as Router, Route, Switch, Redirect} from 'react-router-dom'
+
+import ErrorBoundary from 'utils/routeHelpers/ErrorBoundary'
+import DelayedFallback from 'utils/routeHelpers/DelayedFallback'
 
 import Layout from 'layouts/Layout'
-
-import LoadableRoute from 'utils/LoadableRoute'
+import {ConfirmDialog} from 'components'
+import Store from 'store'
 
 const Login = lazy(() => import(/* webpackChunkName: "Login" */ '../pages/Login'))
 
@@ -35,41 +38,53 @@ const NotFound = lazy(() => import(/* webpackChunkName: "NotFound" */ './NotFoun
 const AppRouter = () => {
   return (
     <Router>
-      <Switch>
-        <Redirect path='/' exact to='/login' />
-
-        <LoadableRoute path='/login' component={Login} layout={Layout} />
-        <LoadableRoute path='/forgot_password' component={ForgotPassword} layout={Layout} />
-        <LoadableRoute path='/redefine_password' component={RedefinePassweord} layout={Layout} />
-        <LoadableRoute path='/cashiers' component={CashierList} layout={Layout} />
-        <LoadableRoute exact path='/cashier/:cashierId' component={CashierFront} layout={Layout} />
-        <LoadableRoute exact path='/cashier/:cashierId/ticket/:ticketId' component={CashierTicket} layout={Layout} />
-        <LoadableRoute exact path='/cashier/:cashierId/balance' component={CashierBalance} layout={Layout} />
-        <LoadableRoute exact path='/cashier/:cashierId/sale' component={CashierSale} layout={Layout} />
-        <LoadableRoute path='/clients' component={ClientList} layout={Layout} />
-        <LoadableRoute exact path='/client/:clientId' component={ClientDetails} layout={Layout} />
-        <LoadableRoute exact path='/client' component={ClientDetails} layout={Layout} />
-        <LoadableRoute path='/companies' component={CompanyList} layout={Layout} />
-        <LoadableRoute path='/company/:companyId' component={CompanyDetails} layout={Layout} />
-        <LoadableRoute path='/company' component={CompanyDetails} layout={Layout} />
-        <LoadableRoute path='/products' component={ProductList} layout={Layout} />
-        <LoadableRoute path='/product/:productId' component={ProductDetails} layout={Layout} />
-        <LoadableRoute path='/product' component={ProductDetails} layout={Layout} />
-        <LoadableRoute exact path='/reports' component={Reports} layout={Layout} />
-        <LoadableRoute exact path='/report_most_sold' component={ReportMostSold} layout={Layout} />
-        <LoadableRoute exact path='/report_sales' component={ReportSales} layout={Layout} />
-        <LoadableRoute path='/terminals' component={TerminalList} layout={Layout} />
-        <LoadableRoute exact path='/terminal/:terminalId/view' component={TerminalView} layout={Layout} />
-        <LoadableRoute exact path='/terminal/:terminalId' component={TerminalDetails} layout={Layout} />
-        <LoadableRoute exact path='/terminal' component={TerminalDetails} layout={Layout} />
-        <LoadableRoute path='/tickets' component={TicketList} layout={Layout} />
-        <LoadableRoute path='/ticket/:ticketId' component={TicketDetails} layout={Layout} />
-        <LoadableRoute path='/ticket' component={TicketDetails} layout={Layout} />
-        <LoadableRoute path='/users' component={UserList} layout={Layout} />
-        <LoadableRoute path='/user/:userId' component={UserDetails} layout={Layout} />
-        <LoadableRoute path='/user' component={UserDetails} layout={Layout} />
-        <LoadableRoute component={NotFound} layout={Layout} />
-      </Switch>
+      <Store>
+        <ErrorBoundary>
+          <Layout>
+            <>
+              <ConfirmDialog />
+              <ErrorBoundary>
+                <Suspense fallback={<DelayedFallback />}>
+                  <Switch>
+                    <Redirect path='/' exact to='/login' />
+                    <Route path='/login' component={Login} />
+                    <Route path='/forgot_password' component={ForgotPassword} />
+                    <Route path='/redefine_password' component={RedefinePassweord} />
+                    <Route path='/cashiers' component={CashierList} layout={Layout} />
+                    <Route exact path='/cashier/:cashierId' component={CashierFront} />
+                    <Route exact path='/cashier/:cashierId/ticket/:ticketId' component={CashierTicket} />
+                    <Route exact path='/cashier/:cashierId/balance' component={CashierBalance} />
+                    <Route exact path='/cashier/:cashierId/sale' component={CashierSale} />
+                    <Route path='/clients' component={ClientList} />
+                    <Route exact path='/client/:clientId' component={ClientDetails} />
+                    <Route exact path='/client' component={ClientDetails} />
+                    <Route path='/companies' component={CompanyList} layout={Layout} />
+                    <Route path='/company/:companyId' component={CompanyDetails} />
+                    <Route path='/company' component={CompanyDetails} layout={Layout} />
+                    <Route path='/products' component={ProductList} layout={Layout} />
+                    <Route path='/product/:productId' component={ProductDetails} />
+                    <Route path='/product' component={ProductDetails} />
+                    <Route exact path='/reports' component={Reports} />
+                    <Route exact path='/report_most_sold' component={ReportMostSold} />
+                    <Route exact path='/report_sales' component={ReportSales} />
+                    <Route path='/terminals' component={TerminalList} layout={Layout} />
+                    <Route exact path='/terminal/:terminalId/view' component={TerminalView} />
+                    <Route exact path='/terminal/:terminalId' component={TerminalDetails} />
+                    <Route exact path='/terminal' component={TerminalDetails} />
+                    <Route path='/tickets' component={TicketList} layout={Layout} />
+                    <Route path='/ticket/:ticketId' component={TicketDetails} />
+                    <Route path='/ticket' component={TicketDetails} />
+                    <Route path='/users' component={UserList} />
+                    <Route path='/user/:userId' component={UserDetails} />
+                    <Route path='/user' component={UserDetails} />
+                    <Route component={NotFound} />
+                  </Switch>
+                </Suspense>
+              </ErrorBoundary>
+            </>
+          </Layout>
+        </ErrorBoundary>
+      </Store>
     </Router>
   )
 }

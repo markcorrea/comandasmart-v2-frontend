@@ -4,7 +4,6 @@ import clsx from 'clsx'
 import PropTypes from 'prop-types'
 
 import logo from 'assets/images/comandasmart_white.svg'
-import userImage from 'assets/images/user.png'
 
 import HeaderButton from './HeaderButton'
 import LoggedUserInfo from './LoggedUserInfo'
@@ -17,41 +16,48 @@ import {mediaQueryMD, mediaQueryLG} from 'assets/styles/_mediaQueries.scss'
 
 import styles from './index.module.scss'
 
-const Header = ({className, toggleMenu}) => {
-  const store = useStore()
+const UserIsLoggedComponents = ({loggedUser, unsetLoggedUser}) => {
+  const mediaMD = useMediaQuery('min', mediaQueryMD)
+
   const history = useHistory()
 
   const {logout} = useServices()
 
   const logoutUser = useCallback(() => {
     logout()
+    unsetLoggedUser()
     history.push('/login')
-  }, [logout])
+  }, [history, logout, unsetLoggedUser])
 
-  const mediaMD = useMediaQuery('min', mediaQueryMD)
-  const mediaLG = useMediaQuery('min', mediaQueryLG)
-
-  const UserIsLoggedComponents = () => {
-    if (store.loggedUser) {
-      const {
-        firstName,
-        company: {name: companyName},
-      } = store.loggedUser
-      return (
-        <>
-          <HeaderButton icon='sign-out-alt' label='sair' onClick={logoutUser} />
-          {mediaMD && <LoggedUserInfo userName={firstName} userImage={userImage} company={companyName} />}
-        </>
-      )
-    }
+  if (loggedUser) {
+    const {name, company, image} = loggedUser
     return (
       <>
-        <HeaderButton icon='cog' label='suporte' onClick={() => console.log('clicked info')} />
-        <HeaderButton icon='envelope' label='contato' onClick={() => console.log('clicked info')} />
-        <HeaderButton icon='info' label='sobre' onClick={() => console.log('clicked info')} />
+        <HeaderButton icon='sign-out-alt' label='sair' onClick={logoutUser} />
+        {mediaMD && <LoggedUserInfo userName={name} userImage={image} company={company} />}
       </>
     )
   }
+  return (
+    <>
+      <HeaderButton icon='cog' label='suporte' onClick={() => console.log('clicked info')} />
+      <HeaderButton icon='envelope' label='contato' onClick={() => console.log('clicked info')} />
+      <HeaderButton icon='info' label='sobre' onClick={() => console.log('clicked info')} />
+    </>
+  )
+}
+
+UserIsLoggedComponents.propTypes = {
+  loggedUser: PropTypes.object,
+  unsetLoggedUser: PropTypes.func,
+}
+
+const Header = ({className, toggleMenu}) => {
+  const store = useStore()
+
+  const {loggedUser, sideMenu, unsetLoggedUser} = store
+
+  const mediaLG = useMediaQuery('min', mediaQueryLG)
 
   const Logo = () => <img alt='logo' src={logo} className={styles.logo} />
 
@@ -59,14 +65,14 @@ const Header = ({className, toggleMenu}) => {
     <div className={clsx(styles.container, className)}>
       {mediaLG ? (
         <Logo />
-      ) : store.sideMenu ? (
+      ) : sideMenu ? (
         <div className={styles.burgerMenu} onClick={toggleMenu}>
           <i className='fas fa-bars'></i>
         </div>
       ) : (
         <Logo />
       )}
-      <UserIsLoggedComponents />
+      <UserIsLoggedComponents loggedUser={loggedUser} unsetLoggedUser={unsetLoggedUser} />
     </div>
   )
 }
