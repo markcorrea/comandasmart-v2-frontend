@@ -9,6 +9,8 @@ import logo from 'assets/images/logo_login_mobile.svg'
 import {mediaQuerySM} from 'assets/styles/_mediaQueries.scss'
 import useMediaQuery from 'utils/mediaQuery'
 
+import {useStore} from 'store'
+
 import useServices from 'services'
 
 import menu from 'mocks/menu'
@@ -19,12 +21,22 @@ const Login = () => {
   const history = useHistory()
   const mediaSM = useMediaQuery('min', mediaQuerySM)
   const [open, setOpen] = useState(false)
-  const {login} = useServices()
+  const {login, getUserInfoByToken} = useServices()
+  const {setLoggedUser} = useStore()
 
   const loginUser = useCallback(
     async userdata => {
       const result = await login(userdata)
-      if (result) history.push(`/tickets`)
+      if (result) {
+        const userResult = await getUserInfoByToken(result.token)
+        const userData = {
+          ...userResult.data,
+          image: userResult.data.image || null,
+        }
+        setLoggedUser(userData)
+
+        history.push(`/tickets`)
+      }
     },
     [history, login]
   )

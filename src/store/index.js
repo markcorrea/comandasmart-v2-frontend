@@ -47,7 +47,7 @@ const Store = ({children}) => {
 
   const setLoggedUser = useCallback(
     loggedUser => {
-      updateState(prevState => ({...prevState, loggedUser}))
+      updateState(prevState => ({...prevState, loggedUser: {...loggedUser}}))
     },
     [updateState]
   )

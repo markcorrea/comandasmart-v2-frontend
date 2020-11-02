@@ -50,9 +50,6 @@ const Layout = ({children}) => {
         ...result.data,
         image: result.data.image || null,
       }
-
-      console.log('USER DATA', userData)
-
       setLoggedUser(userData)
     }
 
