@@ -49,11 +49,11 @@ const useUsers = () => {
   )
 
   const getUserInfoByToken = useCallback(() => {
-    setLoading(true)
+    const refreshedToken = `Token ${verifyToken()}`
     return axios
       .get(`${server}/user/`, {
         headers: {
-          Authorization: token,
+          Authorization: refreshedToken,
         },
       })
       .then(response => {
@@ -66,8 +66,7 @@ const useUsers = () => {
           show('Usuário não possui permissão', 'error')
         }
       })
-      .finally(() => setLoading(false))
-  }, [setLoading, token, history, show])
+  }, [history, show])
 
   const saveUser = useCallback(
     body => {

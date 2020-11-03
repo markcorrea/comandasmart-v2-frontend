@@ -8,6 +8,7 @@ const StoreContext = React.createContext(null)
 const initialState = {
   loggedUser: null,
   sideMenu: false,
+  menus: [],
   loading: false,
   dialog: {
     open: false,
@@ -23,7 +24,17 @@ const Store = ({children}) => {
 
   const [state, updateState] = useState(initialState)
 
+  const setMenus = useCallback(menus => !state.sideMenu && updateState(prevState => ({...prevState, menus})), [
+    updateState,
+    state.sideMenu,
+  ])
+
   const showMenu = useCallback(() => !state.sideMenu && updateState(prevState => ({...prevState, sideMenu: true})), [
+    updateState,
+    state.sideMenu,
+  ])
+
+  const hideMenu = useCallback(() => !state.sideMenu && updateState(prevState => ({...prevState, sideMenu: false})), [
     updateState,
     state.sideMenu,
   ])
@@ -56,9 +67,24 @@ const Store = ({children}) => {
     updateState(prevState => ({...prevState, loggedUser: null}))
   }, [updateState])
 
+  const resetStore = useCallback(() => {
+    updateState(() => ({...initialState}))
+  }, [updateState])
+
   return (
     <StoreContext.Provider
-      value={{...state, showMenu, setLoading, confirmationDialog, closeDialog, setLoggedUser, unsetLoggedUser}}>
+      value={{
+        ...state,
+        setMenus,
+        showMenu,
+        hideMenu,
+        setLoading,
+        confirmationDialog,
+        closeDialog,
+        setLoggedUser,
+        unsetLoggedUser,
+        resetStore,
+      }}>
       {children}
     </StoreContext.Provider>
   )

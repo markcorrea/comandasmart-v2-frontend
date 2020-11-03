@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useEffect, useState, useCallback} from 'react'
 import {useHistory} from 'react-router-dom'
 import PropTypes from 'prop-types'
 
@@ -33,88 +33,49 @@ ShowSideMenu.propTypes = {
 
 const Layout = ({children}) => {
   const history = useHistory()
-  const {sideMenu, setLoggedUser} = useStore()
-  const {getUserInfoByToken} = useServices()
+  const {sideMenu, setMenus, menus, setLoggedUser, loggedUser} = useStore()
+  const {getUserInfoByToken, getMenus} = useServices()
 
   const [open, setOpen] = useState(false)
 
-  useEffect(() => {
-    const fetchUserByToken = async token => {
-      const result = await getUserInfoByToken(token)
-      if (!result) {
-        destroyToken()
-        return history.push('/login')
-      }
-
-      const userData = {
-        ...result.data,
-        image: result.data.image || null,
-      }
-      setLoggedUser(userData)
-    }
-
+  /**
+   * Precisa permitir carregar essa página mesmo sem token,
+   * pois o <Layout /> é carregado na página de Login.
+   */
+  const checkLoggedUser = useCallback(async () => {
     const token = verifyToken()
-    if (token) fetchUserByToken(token)
-  }, [getUserInfoByToken, setLoggedUser, history])
 
-  const items = [
-    {
-      label: 'Página Inicial',
-      icon: 'fa fa-home',
-      onClick: () => console.log('Página Inicial'),
-    },
-    {
-      label: 'Comandas',
-      icon: 'fa fa-list-alt',
-      onClick: () => history.push('/tickets'),
-    },
-    {
-      label: 'Terminais',
-      icon: 'fa fa-tablet-alt',
-      onClick: () => history.push('/terminals'),
-    },
-    {
-      label: 'Caixas',
-      icon: 'fa fa-money-bill-alt',
-      onClick: () => history.push(`/cashiers`),
-    },
-    {
-      label: 'Produtos',
-      icon: 'fa fa-tag',
-      onClick: () => history.push('/products'),
-    },
-    {
-      label: 'Clientes',
-      icon: 'fa fa-smile',
-      onClick: () => history.push('/clients'),
-    },
-    {
-      label: 'Usuários',
-      icon: 'fa fa-users',
-      onClick: () => history.push('/users'),
-    },
-    {
-      label: 'Empresas',
-      icon: 'fa fa-building',
-      onClick: () => history.push('/companies'),
-    },
-    {
-      label: 'Relatórios',
-      icon: 'fa fa-scroll',
-      onClick: () => history.push('/reports'),
-    },
-    {
-      label: 'Ajuda',
-      icon: 'fa fa-question-circle',
-      onClick: () => console.log('Ajuda'),
-    },
-  ]
+    if (token && !loggedUser) {
+      const result = await getUserInfoByToken(token)
+      if (result) {
+        const userData = {
+          ...result.data,
+          image: result.data.image || null,
+        }
+        setLoggedUser(userData)
+        const menu = await getMenus()
+        if (menu?.data) {
+          const menus = menu.data.menus
+          setMenus(menus)
+          history.push(menus[0].href)
+          return
+        }
+      }
+
+      destroyToken()
+      return history.push('/login')
+    }
+  }, [getUserInfoByToken, getMenus, setMenus, setLoggedUser, history, loggedUser])
+
+  useEffect(() => {
+    checkLoggedUser()
+  }, [checkLoggedUser])
 
   return (
     <div className={styles.container}>
       <Header className={styles.header} toggleMenu={() => setOpen(!open)} />
       <div className={styles.content}>
-        {sideMenu && <ShowSideMenu items={items} className={styles.sideMenu} open={open} setOpen={setOpen} />}
+        {sideMenu && <ShowSideMenu menus={menus} className={styles.sideMenu} open={open} setOpen={setOpen} />}
         <div className={styles.children}>{children}</div>
       </div>
       <Footer className={styles.footer} />
