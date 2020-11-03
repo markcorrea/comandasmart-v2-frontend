@@ -8,9 +8,9 @@ import formatMoney from 'utils/formatMoney'
 import styles from './index.module.scss'
 
 const TotalPrice = ({orders}) => {
-  const sum = orders.reduce((acc, {price, quantity_selected}) => {
+  const sum = orders.reduce((acc, {product, quantity_selected}) => {
     const quantity = quantity_selected || 0
-    return acc + parseFloat(price * quantity)
+    return acc + parseFloat(product.price * quantity)
   }, 0)
 
   return <div className={styles.totalPrice}>{`Total Geral: ${formatMoney(sum)}`}</div>

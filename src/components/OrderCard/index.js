@@ -13,8 +13,8 @@ const OrderCard = ({order}) => {
   } = order
   return (
     <Paper inset className={styles.container}>
-      <div className={styles.productNumber}>{`Comanda ${ticket_id}`}</div>
-      <div className={styles.productName}>{`${name} - (${quantity}${unit_type ? unit_type : ''})`}</div>
+      <div className={styles.productNumber}>{`(${quantity}${unit_type ? unit_type : ''}) ${name}`}</div>
+      <div className={styles.productName}>{`Comanda ${ticket_id}`}</div>
     </Paper>
   )
 }
