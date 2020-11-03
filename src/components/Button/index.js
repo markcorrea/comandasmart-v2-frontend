@@ -53,7 +53,7 @@ const Button = ({className, children, classes: {root}, onClick, color: buttonCol
 
 Button.propTypes = {
   classes: PropTypes.object,
-  children: PropTypes.string,
+  children: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
   onClick: PropTypes.func,
   color: PropTypes.string,
   type: PropTypes.string,

@@ -60,14 +60,7 @@ const SpeedDial = ({buttons, positionFixed}) => {
     },
   })
 
-  const useIconStyles = makeStyles({
-    icon: {
-      fontSize: '1.4rem',
-    },
-  })
-
   const classes = useStyles()
-  const iconClasses = useIconStyles()
   const [open, setOpen] = React.useState(false)
 
   return (
@@ -76,7 +69,7 @@ const SpeedDial = ({buttons, positionFixed}) => {
       <UISpeedDial
         ariaLabel='SpeedDial tooltip example'
         classes={classes}
-        icon={<MenuIcon classes={iconClasses} />}
+        icon={<MenuIcon />}
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
         open={open}>

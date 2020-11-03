@@ -57,7 +57,6 @@ const Layout = ({children}) => {
         if (menu?.data) {
           const menus = menu.data.menus
           setMenus(menus)
-          history.push(menus[0].href)
           return
         }
       }
