@@ -1,4 +1,5 @@
 import React from 'react'
+import {useHistory} from 'react-router-dom'
 import clsx from 'clsx'
 import PropTypes from 'prop-types'
 
@@ -11,29 +12,30 @@ import {mediaQueryLG} from 'assets/styles/_mediaQueries.scss'
 
 import styles from './index.module.scss'
 
-const SideMenu = ({items, className}) => {
+const SideMenu = ({menus, className}) => {
   const mediaLG = useMediaQuery('min', mediaQueryLG)
-  const {loading} = useStore()
+  const {loggedUser, loading} = useStore()
+  const history = useHistory()
 
   return (
     <div className={clsx(styles.container, className)}>
-      {!mediaLG ? (
+      {loggedUser && !mediaLG ? (
         <div className={styles.userInfo}>
-          <div alt='user' className={styles.userImage} style={{backgroundImage: `url(${userImage})`}}>
+          <div alt='user' className={styles.userImage} style={{backgroundImage: `url(${loggedUser.image})`}}>
             {!userImage && <i className='fa fa-user' />}
           </div>
-          <span>Savio Canova</span> - Admin
+          <span>{loggedUser.name}</span>
           <br />
-          Kanova Revistaria
+          {loggedUser.company}
         </div>
       ) : (
         <div className={styles.title}>Menu</div>
       )}
       <ul>
-        {items.map((item, index) => {
+        {menus?.map((item, index) => {
           return (
             <li key={`menu_item_${index}`}>
-              <div onClick={!loading ? item.onClick : null}>
+              <div onClick={!loading ? () => history.push(item.href) : null}>
                 <i className={item.icon} />
                 <span>{item.label}</span>
               </div>
@@ -46,12 +48,13 @@ const SideMenu = ({items, className}) => {
 }
 
 SideMenu.propTypes = {
-  items: PropTypes.array.isRequired,
+  menus: PropTypes.array.isRequired,
   className: PropTypes.string,
 }
 
 SideMenu.defaultProps = {
   className: '',
+  menus: [],
 }
 
 export default SideMenu

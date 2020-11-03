@@ -5,10 +5,12 @@ import server from 'services/server'
 
 import {useStore} from 'store'
 import {useMessage} from 'components/Message'
+import {useHistory} from 'react-router-dom'
 
 const useCompanies = () => {
   const {setLoading} = useStore()
   const {show} = useMessage()
+  const history = useHistory()
 
   const getCompanies = useCallback(() => {
     setLoading(true)
@@ -18,11 +20,13 @@ const useCompanies = () => {
         return response
       })
       .catch(error => {
-        console.log('ERROR', error)
-        return false
+        if (error.response.status === 401) {
+          history.push('/')
+          show('Usuário não possui permissão', 'error')
+        }
       })
       .finally(() => setLoading(false))
-  }, [setLoading])
+  }, [setLoading, history, show])
 
   const getCompanyById = useCallback(
     id =>
@@ -84,17 +88,3 @@ const useCompanies = () => {
 }
 
 export default useCompanies
-
-// MOCKS
-
-// const getCompanies = useCallback(
-//   () =>
-//     new Promise(resolve => {
-//       setLoading(true)
-//       setTimeout(() => {
-//         setLoading(false)
-//         resolve(companies)
-//       }, 1000)
-//     }),
-//   [setLoading]
-// )

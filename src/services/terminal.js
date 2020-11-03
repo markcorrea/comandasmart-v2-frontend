@@ -4,9 +4,14 @@ import server from 'services/server'
 import {verifyToken} from 'utils/authentication'
 
 import {useStore} from 'store'
+import {useMessage} from 'components/Message'
+import {useHistory} from 'react-router-dom'
 
 const useTerminals = () => {
   const {setLoading} = useStore()
+  const {show} = useMessage()
+  const history = useHistory()
+
   const token = `Token ${verifyToken()}`
 
   const getTerminals = useCallback(() => {
@@ -22,11 +27,13 @@ const useTerminals = () => {
         return response.data
       })
       .catch(error => {
-        console.log('ERROR', error)
-        return false
+        if (error.response.status === 401) {
+          history.push('/')
+          show('Usuário não possui permissão', 'error')
+        }
       })
       .finally(() => setLoading(false))
-  }, [setLoading, token])
+  }, [setLoading, token, history, show])
 
   const getTerminalById = useCallback(
     id => {
@@ -66,8 +73,10 @@ const useTerminals = () => {
             return response.data
           })
           .catch(error => {
-            console.log('ERROR', error)
-            return false
+            if (error.response.status === 401) {
+              history.push('/')
+              show('Usuário não possui permissão', 'error')
+            }
           })
           .finally(() => setLoading(false))
       }
@@ -85,12 +94,14 @@ const useTerminals = () => {
           return response.data
         })
         .catch(error => {
-          console.log('ERROR', error)
-          return false
+          if (error.response.status === 401) {
+            history.push('/')
+            show('Usuário não possui permissão', 'error')
+          }
         })
         .finally(() => setLoading(false))
     },
-    [setLoading, token]
+    [setLoading, token, history, show]
   )
 
   const deleteTerminalById = useCallback(
@@ -107,12 +118,14 @@ const useTerminals = () => {
           return response.data
         })
         .catch(error => {
-          console.log('ERROR', error)
-          return false
+          if (error.response.status === 401) {
+            history.push('/')
+            show('Usuário não possui permissão', 'error')
+          }
         })
         .finally(() => setLoading(false))
     },
-    [setLoading, token]
+    [setLoading, token, history, show]
   )
 
   return {
@@ -124,54 +137,3 @@ const useTerminals = () => {
 }
 
 export default useTerminals
-
-// MOCKS
-
-// const getTerminals = useCallback(() => {
-//   return new Promise(resolve => {
-//     setLoading(true)
-//     setTimeout(() => {
-//       setLoading(false)
-//       resolve(terminals)
-//     }, 1000)
-//   })
-// }, [setLoading])
-
-// const saveTerminal = useCallback(
-//   body => {
-//     if (body.id) {
-//       // is updating
-//       return new Promise(resolve => {
-//         setLoading(true)
-//         setTimeout(() => {
-//           show('Terminal salvo com sucesso!')
-//           setLoading(false)
-//           resolve(body)
-//         }, 1000)
-//       })
-//     }
-//     // is creating
-//     return new Promise(resolve => {
-//       setLoading(true)
-//       setTimeout(() => {
-//         show('Terminal criado com sucesso!')
-//         setLoading(false)
-//         resolve(body)
-//       }, 1000)
-//     })
-//   },
-//   [setLoading, show]
-// )
-
-// const deleteTerminalById = useCallback(
-//   id =>
-//     new Promise(resolve => {
-//       setLoading(true)
-//       setTimeout(() => {
-//         setLoading(false)
-//         show('Terminal removido com sucesso!')
-//         resolve({...terminals, data: terminals.data.filter(terminal => terminal.id !== id)})
-//       }, 1000)
-//     }),
-//   [setLoading, show]
-// )

@@ -1,4 +1,4 @@
-import React, {useState, useCallback} from 'react'
+import React, {useState, useEffect, useCallback} from 'react'
 import {useHistory} from 'react-router-dom'
 
 import {Drawer, LoginMenu, Paper} from 'components'
@@ -8,6 +8,10 @@ import LoginForm from 'forms/LoginForm'
 import logo from 'assets/images/logo_login_mobile.svg'
 import {mediaQuerySM} from 'assets/styles/_mediaQueries.scss'
 import useMediaQuery from 'utils/mediaQuery'
+
+import {destroyToken} from 'utils/authentication'
+
+import {useStore} from 'store'
 
 import useServices from 'services'
 
@@ -19,14 +23,37 @@ const Login = () => {
   const history = useHistory()
   const mediaSM = useMediaQuery('min', mediaQuerySM)
   const [open, setOpen] = useState(false)
-  const {login} = useServices()
+  const {login, getUserInfoByToken, getMenus} = useServices()
+  const {hideMenu, setLoggedUser, resetStore, setMenus} = useStore()
+
+  useEffect(() => {
+    hideMenu()
+    resetStore()
+    destroyToken()
+  }, [hideMenu, resetStore])
 
   const loginUser = useCallback(
     async userdata => {
       const result = await login(userdata)
-      if (result) history.push(`/tickets`)
+      if (result) {
+        const userResult = await getUserInfoByToken(result.token)
+        const userData = {
+          ...userResult.data,
+          image: userResult.data.image || null,
+        }
+        setLoggedUser(userData)
+        const menu = await getMenus()
+        if (menu?.data) {
+          const menus = menu.data.menus
+          setMenus(menus)
+          history.push(menus[0].href)
+          return
+        }
+
+        history.push(`/help`)
+      }
     },
-    [history, login]
+    [history, login, setLoggedUser, getUserInfoByToken, getMenus, setMenus]
   )
 
   const Forms = () => (

@@ -89,7 +89,7 @@ const PartialSaleModalBody = ({orders, onConfirm, onCancel}) => {
         onClick: onCancel,
       },
     ],
-    [hasItemsToSell, onConfirm, orderList]
+    [hasItemsToSell, onConfirm, onCancel, orderList]
   )
 
   const formattedOrders = useMemo(() => {

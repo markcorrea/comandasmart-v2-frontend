@@ -1,7 +1,8 @@
+import useAuthentication from './authentication'
 import useCashiers from './cashier'
 import useClients from './client'
 import useCompanies from './company'
-import useAuthentication from './authentication'
+import useMenus from './menu'
 import useOrders from './order'
 import useProducts from './product'
 import useReports from './report'
@@ -12,10 +13,11 @@ import useUsers from './user'
 
 const useServices = () => {
   return {
+    ...useAuthentication(),
     ...useCashiers(),
     ...useClients(),
     ...useCompanies(),
-    ...useAuthentication(),
+    ...useMenus(),
     ...useOrders(),
     ...useProducts(),
     ...useReports(),

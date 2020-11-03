@@ -37,7 +37,6 @@ const TicketDetails = () => {
     getTicketById,
     addProductToTicketByCode,
     addProductsToTicketById,
-    removeProductFromTicket,
     searchClientsByName,
     bindClientToTicket,
     unbindClientFromTicket,
@@ -81,14 +80,6 @@ const TicketDetails = () => {
     [ticketId, addProductsToTicketById, setTicket]
   )
 
-  const removeProduct = useCallback(
-    async productId => {
-      const result = await removeProductFromTicket(ticketId, productId)
-      if (result) setTicket(result)
-    },
-    [ticketId, removeProductFromTicket, setTicket]
-  )
-
   const bindClient = useCallback(
     async client => {
       setClientModalOpen(false)
@@ -121,18 +112,28 @@ const TicketDetails = () => {
     return ''
   }, [ticket])
 
+  const clientBindingActions = useMemo(() => {
+    if (ticket?.client) {
+      return {
+        header: 'Remover Cliente',
+        body: `Deseja realmente remover ${formatClientName} desta comanda?`,
+        onConfirm: () => unbindClient(),
+      }
+    }
+    return {
+      header: 'Vincular Cliente',
+      body: `Deseja vincular ${formatClientName} a esta comanda?`,
+      onConfirm: () => bindClient(),
+    }
+  }, [ticket, formatClientName, bindClient, unbindClient])
+
   const buttons = [
     {
-      label: 'Mudar Mesa',
-      onClick: () =>
-        confirmationDialog({
-          header: 'Remover produto',
-          body: `Deseja realmente desvincular ${formatClientName} desta comanda?`,
-          onConfirm: () => unbindClient(),
-        }),
+      label: `${ticket?.client ? 'Remover' : 'Vincular'} Cliente`,
+      onClick: () => confirmationDialog(clientBindingActions),
     },
     {
-      label: `${ticket?.client ? 'Remover' : 'Vincular'} Cliente`,
+      label: 'Mudar Mesa',
       onClick: () => setCodeModalOpen(true),
     },
   ]
@@ -144,19 +145,11 @@ const TicketDetails = () => {
         <span className={styles.clientInfo}>&nbsp;{formatClientName}</span>
         {mediaMD && (
           <>
-            <Button
-              className={styles.headerButton}
-              onClick={() =>
-                confirmationDialog({
-                  header: 'Remover produto',
-                  body: `Deseja realmente desvincular ${formatClientName} desta comanda?`,
-                  onConfirm: () => unbindClient(),
-                })
-              }>
-              Mudar Mesa
+            <Button className={styles.headerButton} onClick={() => confirmationDialog(clientBindingActions)}>
+              <>{ticket?.client ? 'Remover' : 'Vincular'} Cliente</>
             </Button>
             <Button className={styles.headerButton} onClick={() => setCodeModalOpen(true)}>
-              {ticket?.client ? 'Remover' : 'Vincular'} Cliente
+              Mudar Mesa
             </Button>
           </>
         )}
@@ -170,16 +163,7 @@ const TicketDetails = () => {
         {ticket && ticket.orders.length ? (
           ticket.orders.map((order, index) => (
             <div key={`item_${index}`} className={styles.flexCell}>
-              <ProductCard
-                order={order}
-                onDeleteClick={() =>
-                  confirmationDialog({
-                    header: 'Remover produto',
-                    body: `Deseja realmente remover "${order.name}?"`,
-                    onConfirm: () => removeProduct(order.id),
-                  })
-                }
-              />
+              <ProductCard order={order} />
             </div>
           ))
         ) : (

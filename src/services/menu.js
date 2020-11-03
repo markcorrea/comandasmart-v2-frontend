@@ -3,24 +3,20 @@ import axios from 'axios'
 import server from 'services/server'
 import {verifyToken} from 'utils/authentication'
 
-import {useStore} from 'store'
 import {useMessage} from 'components/Message'
 import {useHistory} from 'react-router-dom'
 
-const useTerminalOrders = () => {
-  const {setLoading} = useStore()
+const useMenus = () => {
   const {show} = useMessage()
   const history = useHistory()
 
-  const token = `Token ${verifyToken()}`
-
-  const getOrdersByTerminalId = useCallback(
+  const getMenus = useCallback(
     id => {
-      setLoading(true)
+      const refreshedToken = `Token ${verifyToken()}`
       return axios
-        .get(`${server}/orders/terminal/${id}/`, {
+        .get(`${server}/menus/`, {
           headers: {
-            Authorization: token,
+            Authorization: refreshedToken,
           },
         })
         .then(response => {
@@ -33,14 +29,13 @@ const useTerminalOrders = () => {
             show('Usuário não possui permissão', 'error')
           }
         })
-        .finally(() => setLoading(false))
     },
-    [setLoading, token, history, show]
+    [history, show]
   )
 
   return {
-    getOrdersByTerminalId,
+    getMenus,
   }
 }
 
-export default useTerminalOrders
+export default useMenus
