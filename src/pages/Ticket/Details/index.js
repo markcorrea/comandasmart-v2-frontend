@@ -21,7 +21,7 @@ const ModalBody = ({value, onChange}) => {
   return (
     <div className={styles.modalBody}>
       <NumberInput ref={ref} label={''} value={value} onChange={onChange} />
-      {!value && <span className={styles.codeWarning}>Only numbers and cannot be empty.</span>}
+      {!value && <span className={styles.codeWarning}>Apenas números, campo obrigatório.</span>}
     </div>
   )
 }
@@ -89,13 +89,10 @@ const TicketDetails = () => {
     [ticketId, bindClientToTicket, setTicket, setClientModalOpen]
   )
 
-  const unbindClient = useCallback(
-    async client => {
-      const result = await unbindClientFromTicket({ticket: ticketId})
-      if (result) setTicket({...result.data})
-    },
-    [ticketId, unbindClientFromTicket, setTicket]
-  )
+  const unbindClient = useCallback(async () => {
+    const result = await unbindClientFromTicket({ticket: ticketId})
+    if (result) setTicket({...result.data})
+  }, [ticketId, unbindClientFromTicket, setTicket])
 
   const changeCode = useCallback(async () => {
     setCodeModalOpen(false)
@@ -112,25 +109,22 @@ const TicketDetails = () => {
     return ''
   }, [ticket])
 
-  const clientBindingActions = useMemo(() => {
+  const bindingActions = useCallback(() => {
     if (ticket?.client) {
-      return {
-        header: 'Remover Cliente',
-        body: `Deseja realmente remover ${formatClientName} desta comanda?`,
+      return confirmationDialog({
+        header: 'Excluir cliente',
+        body: `Deseja realmente desvincular "${ticket.client.name}"?`,
         onConfirm: () => unbindClient(),
-      }
+      })
     }
-    return {
-      header: 'Vincular Cliente',
-      body: `Deseja vincular ${formatClientName} a esta comanda?`,
-      onConfirm: () => bindClient(),
-    }
-  }, [ticket, formatClientName, bindClient, unbindClient])
+
+    return setClientModalOpen(true)
+  }, [ticket, setClientModalOpen, unbindClient, confirmationDialog])
 
   const buttons = [
     {
       label: `${ticket?.client ? 'Remover' : 'Vincular'} Cliente`,
-      onClick: () => confirmationDialog(clientBindingActions),
+      onClick: () => bindingActions(),
     },
     {
       label: 'Mudar Mesa',
@@ -145,8 +139,8 @@ const TicketDetails = () => {
         <span className={styles.clientInfo}>&nbsp;{formatClientName}</span>
         {mediaMD && (
           <>
-            <Button className={styles.headerButton} onClick={() => confirmationDialog(clientBindingActions)}>
-              <>{ticket?.client ? 'Remover' : 'Vincular'} Cliente</>
+            <Button className={styles.headerButton} onClick={() => bindingActions()}>
+              {ticket?.client ? 'Remover' : 'Vincular'} Cliente
             </Button>
             <Button className={styles.headerButton} onClick={() => setCodeModalOpen(true)}>
               Mudar Mesa

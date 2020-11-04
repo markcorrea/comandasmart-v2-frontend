@@ -4,12 +4,6 @@
 
 .container {
   width: 100%;
-  display: flex;
-  flex-direction: column;
-
-  @include media-breakpoint-up(xl) {
-    flex-direction: row;
-  }
 }
 
 .searchContainer {

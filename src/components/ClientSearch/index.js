@@ -5,9 +5,6 @@ import clsx from 'clsx'
 import Button from 'components/Button'
 import Input from 'components/Input'
 
-import {mediaQuerySM} from 'assets/styles/_mediaQueries.scss'
-import useMediaQuery from 'utils/mediaQuery'
-
 import {useStore} from 'store'
 
 import useDebounce from './debounce'
@@ -22,7 +19,6 @@ const ClientSearch = ({onConfirm, onCancel, onEnterPress, searchClientsByName}) 
   const [loadingList, setLoadingList] = useState(false)
   const wrapperRef = useRef(null)
 
-  const mediaQuerySmall = useMediaQuery('min', mediaQuerySM)
   const {loading} = useStore()
 
   const rightButton = {
@@ -30,7 +26,6 @@ const ClientSearch = ({onConfirm, onCancel, onEnterPress, searchClientsByName}) 
       minWidth: 'initial',
       maxWidth: '200px',
       margin: '5px 0 5px 15px',
-      float: mediaQuerySmall ? 'right' : 'none',
     },
   }
 
@@ -76,7 +71,7 @@ const ClientSearch = ({onConfirm, onCancel, onEnterPress, searchClientsByName}) 
   const handleKeyPress = event => {
     if (loading) return null
     if (event.key === 'Enter' && !!searchTerm) {
-      onEnterPress(searchTerm)
+      onEnterPress(searchTerm.toLowerCase())
       setSearchTerm('')
       return setShowOptions(false)
     }
@@ -99,7 +94,7 @@ const ClientSearch = ({onConfirm, onCancel, onEnterPress, searchClientsByName}) 
           disabled={loading}
         />
         <div className={clsx(styles.selectedClientName, client ? styles.selected : '')}>
-          {client ? client.name : 'No client selected'}
+          {client ? client.name : 'Nenhum cliente selecionado'}
         </div>
         {showOptions && (
           <div ref={wrapperRef} className={styles.listContainer}>
@@ -126,11 +121,11 @@ const ClientSearch = ({onConfirm, onCancel, onEnterPress, searchClientsByName}) 
         )}
       </div>
       <div className={styles.buttonContainer}>
-        <Button onClick={() => onConfirm(client)} classes={rightButton} disabled={!client}>
-          Alterar
-        </Button>
         <Button color='cancel' classes={rightButton} onClick={onCancel}>
           Cancelar
+        </Button>
+        <Button onClick={() => onConfirm(client)} classes={rightButton} disabled={!client}>
+          Alterar
         </Button>
       </div>
     </div>
