@@ -21,7 +21,7 @@ const ShowSideMenu = ({open, setOpen, ...props}) => {
     <SideMenu {...props} />
   ) : (
     <Drawer open={open} setOpen={setOpen}>
-      <SideMenu {...props} />
+      <SideMenu {...props} onClose={() => setOpen(false)} />
     </Drawer>
   )
 }

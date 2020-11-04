@@ -100,14 +100,7 @@ const TicketDetails = () => {
     if (result) setTicket({...result.data})
   }, [ticketId, code, changeTicketCode, setTicket, setCodeModalOpen])
 
-  const formatClientName = useMemo(() => {
-    const name = ticket?.client?.name
-    if (name) {
-      const nameArray = name.split(' ')
-      return `(${nameArray[0]} ${nameArray.length > 1 ? nameArray[nameArray.length - 1] : ''})`
-    }
-    return ''
-  }, [ticket])
+  const formatClientName = useMemo(() => (ticket?.client?.name ? `(${ticket.client.name})` : ''), [ticket])
 
   const bindingActions = useCallback(() => {
     if (ticket?.client) {

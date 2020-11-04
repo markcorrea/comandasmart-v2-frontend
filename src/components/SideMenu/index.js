@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useCallback} from 'react'
 import {useHistory} from 'react-router-dom'
 import clsx from 'clsx'
 import PropTypes from 'prop-types'
@@ -12,10 +12,23 @@ import {mediaQueryLG} from 'assets/styles/_mediaQueries.scss'
 
 import styles from './index.module.scss'
 
-const SideMenu = ({menus, className}) => {
+const SideMenu = ({menus, className, onClose}) => {
   const mediaLG = useMediaQuery('min', mediaQueryLG)
   const {loggedUser, loading} = useStore()
   const history = useHistory()
+
+  const menuItemAction = useCallback(
+    href => {
+      if (loading) return
+      if (onClose) {
+        onClose()
+        history.push(href)
+        return
+      }
+      history.push(href)
+    },
+    [onClose, history, loading]
+  )
 
   return (
     <div className={clsx(styles.container, className)}>
@@ -35,7 +48,7 @@ const SideMenu = ({menus, className}) => {
         {menus?.map((item, index) => {
           return (
             <li key={`menu_item_${index}`}>
-              <div onClick={!loading ? () => history.push(item.href) : null}>
+              <div onClick={() => menuItemAction(item.href)}>
                 <i className={item.icon} />
                 <span>{item.label}</span>
               </div>
@@ -50,6 +63,7 @@ const SideMenu = ({menus, className}) => {
 SideMenu.propTypes = {
   menus: PropTypes.array.isRequired,
   className: PropTypes.string,
+  onClose: PropTypes.func,
 }
 
 SideMenu.defaultProps = {
