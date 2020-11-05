@@ -12,17 +12,18 @@ import useMediaQuery from 'utils/mediaQuery'
 
 import styles from './index.module.scss'
 
-const useStyles = makeStyles({
-  paper: {
-    borderRadius: '5px',
-    overflowY: 'unset',
-  },
-})
-
 const Modal = ({children, maxWidth, header, onCancel, onConfirm, onUnderstood, open, hideButtons}) => {
   const modalContainer = document.getElementById('modalContainer')
-  const classes = useStyles()
   const mediaQuerySmall = useMediaQuery('min', mediaQuerySM)
+
+  const useStyles = makeStyles({
+    paper: {
+      borderRadius: '5px',
+      overflowY: mediaQuerySmall ? 'unset' : 'auto',
+    },
+  })
+
+  const classes = useStyles()
 
   const rightButton = {
     root: {

@@ -110,7 +110,9 @@ const CardList = ({
                     return (
                       <div key={`card_item_row_${rowIndex}_${columnIndex}`} className={styles.row}>
                         <div className={styles.name}>{value}</div>
-                        <div className={styles.value}>{row[key] || '-'}</div>
+                        <div className={styles.value}>
+                          {column.custom ? column.custom(row) : row[key] || '-'}
+                        </div>
                       </div>
                     )
                   }

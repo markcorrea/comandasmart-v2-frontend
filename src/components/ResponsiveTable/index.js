@@ -14,10 +14,10 @@ const ResponsiveTable = ({cardDisplayColumns, tableDisplayColumns, ...props}) =>
   return (
     <>
       {mediaQueryMedium ? (
-        <Table className={styles.table} displayColumns={cardDisplayColumns} {...props} />
+        <Table className={styles.table} displayColumns={tableDisplayColumns} {...props} />
       ) : (
         <div>
-          <CardList displayColumns={tableDisplayColumns} {...props} />
+          <CardList displayColumns={cardDisplayColumns} {...props} />
         </div>
       )}
     </>

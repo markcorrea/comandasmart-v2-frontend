@@ -50,6 +50,7 @@ const PartialSaleModalBody = ({orders, onConfirm, onCancel}) => {
       {
         key: 'price',
         value: 'Preço Unitário',
+        custom: order => formatMoney(parseFloat(order.price)),
       },
       {
         key: 'quantity',
@@ -65,7 +66,11 @@ const PartialSaleModalBody = ({orders, onConfirm, onCancel}) => {
       },
       {
         key: 'total',
-        value: 'Total',
+        value: 'Valor a pagar',
+        custom: order => {
+          const quantity = order.quantity_selected || 0
+          return formatMoney(parseFloat(quantity * order.price))
+        },
       },
     ],
     [updateQuantity]
@@ -98,7 +103,7 @@ const PartialSaleModalBody = ({orders, onConfirm, onCancel}) => {
       ...order,
       unique_code: order.product.unique_code,
       name: order.product.name,
-      price: formatMoney(parseFloat(order.product.price)),
+      price: order.product.price,
       total: formatMoney(parseFloat(order.price)),
     }))
   }, [orderList])

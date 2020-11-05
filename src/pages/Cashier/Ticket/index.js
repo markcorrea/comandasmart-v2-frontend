@@ -56,7 +56,7 @@ const ModalDelete = ({order, quantityToDelete, setQuantityToDelete}) => {
 }
 
 ModalDelete.propTypes = {
-  order: PropTypes.object,
+  order: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
   quantityToDelete: PropTypes.number,
   setQuantityToDelete: PropTypes.func,
 }
