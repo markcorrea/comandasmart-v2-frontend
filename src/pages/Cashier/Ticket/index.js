@@ -223,7 +223,12 @@ const CashierTicket = () => {
           setQuantityToDelete={value => setQuantityToDelete(value)}
         />
       </Modal>
-      <Modal maxWidth='lg' header='Selecione os itens a serem vendidos' open={openPartialSaleModal}>
+      <Modal
+        maxWidth='lg'
+        header='Selecione os itens a serem vendidos'
+        open={openPartialSaleModal}
+        onCancel={() => setOpenPartialSaleModal(false)}
+        hideButtons>
         <PartialSaleModalBody
           orders={(ticket && ticket.orders) || []}
           onConfirm={ordersToSell => payOrders(ordersToSell)}

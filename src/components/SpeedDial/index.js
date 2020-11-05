@@ -22,23 +22,27 @@ const buttonClasses = classes => ({
   },
 })
 
-const SpeedDialOptions = ({buttons, setOpen}) => {
+const SpeedDialOptions = ({buttons, setOpen, allDisabled}) => {
   return buttons.map((button, index) => {
-    const {label, onClick, classes} = button
+    const {label, onClick, classes, disabled} = button
 
     const clickAndClose = onClick => {
       onClick()
       setOpen(false)
     }
     return (
-      <Button key={`speed_dial_button_${index}`} classes={buttonClasses(classes)} onClick={() => clickAndClose(onClick)}>
+      <Button
+        key={`speed_dial_button_${index}`}
+        classes={buttonClasses(classes)}
+        onClick={() => clickAndClose(onClick)}
+        disabled={disabled || allDisabled}>
         {label}
       </Button>
     )
   })
 }
 
-const SpeedDial = ({buttons, positionFixed}) => {
+const SpeedDial = ({buttons, positionFixed, disabled}) => {
   const useStyles = makeStyles({
     root: {
       position: positionFixed ? 'fixed' : 'absolute',
@@ -65,7 +69,7 @@ const SpeedDial = ({buttons, positionFixed}) => {
 
   return (
     <>
-      {positionFixed && <div className={open ? styles.overlay : ''} />}
+      <div className={open ? styles.overlay : ''} onClick={() => setOpen(false)} />
       <UISpeedDial
         ariaLabel='SpeedDial tooltip example'
         classes={classes}
@@ -73,7 +77,7 @@ const SpeedDial = ({buttons, positionFixed}) => {
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
         open={open}>
-        <SpeedDialOptions buttons={buttons} setOpen={setOpen} />
+        <SpeedDialOptions buttons={buttons} setOpen={setOpen} allDisabled={disabled} />
       </UISpeedDial>
     </>
   )
@@ -82,6 +86,11 @@ const SpeedDial = ({buttons, positionFixed}) => {
 SpeedDial.propTypes = {
   buttons: PropTypes.array,
   positionFixed: PropTypes.bool,
+  disabled: PropTypes.bool,
+}
+
+SpeedDial.defaultProps = {
+  disabled: false,
 }
 
 export default SpeedDial

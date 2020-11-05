@@ -210,7 +210,7 @@ const Table = ({
           )}
           {hasButtons &&
             hasButtons.map((button, index) => {
-              const {label, onClick, classes} = button
+              const {label, onClick, classes, disabled} = button
               const checkedRows = rows.filter(row => row.checked)
               const returnRows = hasCheckbox ? checkedRows : rows
 
@@ -220,7 +220,7 @@ const Table = ({
                 <Button
                   key={`button_${index}`}
                   classes={buttonClasses(classes)}
-                  disabled={disableButton}
+                  disabled={disableButton || disabled}
                   onClick={() => onClick(returnRows)}>
                   {label}
                 </Button>

@@ -80,12 +80,22 @@ const CardList = ({
 
   const buttons = useMemo(() => {
     const returnRows = hasCheckbox ? rows.filter(row => row.checked) : rows
-    const newButtons = hasButtons
-      ? hasButtons.map(button => ({...button, onClick: !loading ? () => button.onClick(returnRows) : null}))
-      : []
+    let newButtons = []
+
+    if (hasButtons) {
+      newButtons = [
+        ...hasButtons.map(button => ({
+          ...button,
+          disabled: button.disabled || false,
+          onClick: !loading ? () => button.onClick(returnRows) : null,
+        })),
+      ]
+    }
 
     return [...(hasCheckbox ? [{label: 'Select All', onClick: !loading ? toggleAll : null}] : []), ...newButtons]
   }, [hasCheckbox, hasButtons, rows, toggleAll, loading])
+
+  const checkedRows = useMemo(() => rows.filter(row => row.checked), [rows])
 
   return (
     <div className={styles.container}>
@@ -110,9 +120,7 @@ const CardList = ({
                     return (
                       <div key={`card_item_row_${rowIndex}_${columnIndex}`} className={styles.row}>
                         <div className={styles.name}>{value}</div>
-                        <div className={styles.value}>
-                          {column.custom ? column.custom(row) : row[key] || '-'}
-                        </div>
+                        <div className={styles.value}>{column.custom ? column.custom(row) : row[key] || '-'}</div>
                       </div>
                     )
                   }
@@ -165,7 +173,9 @@ const CardList = ({
           </CardActionArea>
         </Card>
       )}
-      {(hasButtons || hasCheckbox) && <SpeedDial positionFixed buttons={buttons} />}
+      {(hasButtons || hasCheckbox) && (
+        <SpeedDial positionFixed buttons={buttons} disabled={loading || !rows.length || (hasCheckbox && !checkedRows.length)} />
+      )}
     </div>
   )
 }

@@ -13,7 +13,7 @@ const TotalPrice = ({orders}) => {
     return acc + parseFloat(product.price * quantity)
   }, 0)
 
-  return <div className={styles.totalPrice}>{`Total Geral: ${formatMoney(sum)}`}</div>
+  return <div className={styles.totalPrice}>{`Valor a pagar: ${formatMoney(sum)}`}</div>
 }
 
 TotalPrice.propTypes = {
@@ -66,7 +66,7 @@ const PartialSaleModalBody = ({orders, onConfirm, onCancel}) => {
       },
       {
         key: 'total',
-        value: 'Valor a pagar',
+        value: 'Preço Total',
         custom: order => {
           const quantity = order.quantity_selected || 0
           return formatMoney(parseFloat(quantity * order.price))
@@ -82,6 +82,7 @@ const PartialSaleModalBody = ({orders, onConfirm, onCancel}) => {
     () => [
       {
         label: 'Concluir',
+        disabled: !orderList.some(item => item.quantity_selected && item.quantity_selected > 0),
         onClick: () => {
           if (hasItemsToSell) {
             onConfirm(orderList)
