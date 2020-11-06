@@ -10,7 +10,7 @@ import useServices from 'services'
 
 import styles from './index.module.scss'
 
-const ModalBody = ({value, onChange}) => {
+const ModalBody = ({value, onChange, onKeyPress}) => {
   const ref = useRef('')
   const focus = () => ref.current.focus()
 
@@ -18,7 +18,7 @@ const ModalBody = ({value, onChange}) => {
 
   return (
     <div className={styles.modalBody}>
-      <NumberInput ref={ref} label={''} value={value} onChange={onChange} />
+      <NumberInput ref={ref} label={''} value={value} onChange={onChange} onKeyPress={onKeyPress} />
       {!value && <span className={styles.codeWarning}>Only numbers and cannot be empty.</span>}
     </div>
   )
@@ -27,6 +27,7 @@ const ModalBody = ({value, onChange}) => {
 ModalBody.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onChange: PropTypes.func,
+  onKeyPress: PropTypes.func,
 }
 
 const TicketList = () => {
@@ -61,12 +62,21 @@ const TicketList = () => {
 
   const ticketClick = id => history.push(`ticket/${id}`)
 
-  const modalConfirm = () => {
+  const modalConfirm = useCallback(() => {
     if (code && code !== '') {
       createNewTicket(code)
       return setModalOpen(false)
     }
-  }
+  }, [createNewTicket, setModalOpen, code])
+
+  const handleKeyPress = useCallback(
+    event => {
+      if (event.key === 'Enter') {
+        modalConfirm()
+      }
+    },
+    [modalConfirm]
+  )
 
   const modalCancel = () => {
     setCode('')
@@ -94,7 +104,7 @@ const TicketList = () => {
       </div>
 
       <Modal header='Digite um código para a nova comanda.' onConfirm={modalConfirm} onCancel={modalCancel} open={modalOpen}>
-        <ModalBody value={code} onChange={value => setCode(value)} />
+        <ModalBody value={code} onChange={value => setCode(value)} onKeyPress={handleKeyPress} />
       </Modal>
     </>
   )
