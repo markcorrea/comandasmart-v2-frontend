@@ -53,13 +53,14 @@ UserIsLoggedComponents.propTypes = {
 }
 
 const Header = ({className, toggleMenu}) => {
-  const store = useStore()
+  const {loggedUser, sideMenu, unsetLoggedUser} = useStore()
 
-  const {loggedUser, sideMenu, unsetLoggedUser} = store
-
+  const mediaMD = useMediaQuery('min', mediaQueryMD)
   const mediaLG = useMediaQuery('min', mediaQueryLG)
 
   const Logo = () => <img alt='logo' src={logo} className={styles.logo} />
+
+  if (!mediaMD && !loggedUser) return null
 
   return (
     <div className={clsx(styles.container, className)}>
