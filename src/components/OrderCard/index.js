@@ -8,7 +8,7 @@ import styles from './index.module.scss'
 const OrderCard = ({order}) => {
   const {
     product: {name, unit_type},
-    unique_code,
+    ticket: {unique_code},
     quantity,
   } = order
   return (
