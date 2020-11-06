@@ -9,6 +9,8 @@ import Quantity from './Quantity'
 
 import {useStore} from 'store'
 
+import removeAccentsAndLowerCase from 'utils/removeAccentsAndLowerCase'
+
 import useDebounce from './debounce'
 
 import styles from './index.module.scss'
@@ -52,7 +54,7 @@ const ProductSearch = ({onConfirm, onEnterPress, searchProductsByName}) => {
       const fetch = async () => {
         setShowOptions(true)
         setLoadingList(true)
-        const result = await searchProductsByName(debouncedSearchTerm)
+        const result = await searchProductsByName(removeAccentsAndLowerCase(debouncedSearchTerm))
         setProductList(result.data)
         setLoadingList(false)
         inputRef.current.focus()
@@ -76,7 +78,7 @@ const ProductSearch = ({onConfirm, onEnterPress, searchProductsByName}) => {
     event => {
       if (loading) return null
       if (event.key === 'Enter' && !!searchTerm) {
-        onEnterPress(searchTerm)
+        onEnterPress(removeAccentsAndLowerCase(searchTerm))
         setSearchTerm('')
         setShowOptions(false)
       }

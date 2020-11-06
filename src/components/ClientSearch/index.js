@@ -7,6 +7,8 @@ import Input from 'components/Input'
 
 import {useStore} from 'store'
 
+import removeAccentsAndLowerCase from 'utils/removeAccentsAndLowerCase'
+
 import useDebounce from './debounce'
 
 import styles from './index.module.scss'
@@ -49,7 +51,7 @@ const ClientSearch = ({onConfirm, onCancel, onEnterPress, searchClientsByName}) 
       const fetch = async () => {
         setShowOptions(true)
         setLoadingList(true)
-        const result = await searchClientsByName(debouncedSearchTerm)
+        const result = await searchClientsByName(removeAccentsAndLowerCase(debouncedSearchTerm))
         setClientList(result.data)
         setLoadingList(false)
       }
@@ -71,7 +73,7 @@ const ClientSearch = ({onConfirm, onCancel, onEnterPress, searchClientsByName}) 
   const handleKeyPress = event => {
     if (loading) return null
     if (event.key === 'Enter' && !!searchTerm) {
-      onEnterPress(searchTerm.toLowerCase())
+      onEnterPress(removeAccentsAndLowerCase(searchTerm))
       setSearchTerm('')
       return setShowOptions(false)
     }
