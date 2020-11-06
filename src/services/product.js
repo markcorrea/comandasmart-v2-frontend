@@ -64,6 +64,9 @@ const useProducts = () => {
             history.push('/')
             show('Usuário não possui permissão', 'error')
           }
+          if (error.response.status === 500) {
+            show('Houve um erro ao buscar o produto', 'error')
+          }
         })
         .finally(() => setLoading(false))
     },

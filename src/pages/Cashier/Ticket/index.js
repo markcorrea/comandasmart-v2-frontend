@@ -103,17 +103,19 @@ const CashierTicket = () => {
   }, [ticketId, getTicketById])
 
   const addProductByCode = useCallback(
-    async code => {
+    async (code, inputToFocus) => {
       const result = await addProductToTicketByCode({ticket: ticketId, code})
       if (result) setTicket({...result.data})
+      if (inputToFocus) inputToFocus.current.focus()
     },
     [ticketId, addProductToTicketByCode, setTicket]
   )
 
   const addProductByClick = useCallback(
-    async ({product, quantity}) => {
+    async ({product, quantity}, inputToFocus) => {
       const result = await addProductsToTicketById({ticket: ticketId, product: product.id, quantity})
       if (result) setTicket({...result.data})
+      if (inputToFocus) inputToFocus.current.focus()
     },
     [ticketId, addProductsToTicketById, setTicket]
   )
@@ -196,8 +198,8 @@ const CashierTicket = () => {
       <Paper className={styles.paper}>
         <ProductSearch
           searchProductsByName={searchProductsByName}
-          onEnterPress={uniqueCode => addProductByCode(uniqueCode)}
-          onConfirm={productData => addProductByClick(productData)}
+          onEnterPress={(uniqueCode, inputToFocus) => addProductByCode(uniqueCode, inputToFocus)}
+          onConfirm={(productData, inputToFocus) => addProductByClick(productData, inputToFocus)}
         />
         <div className={styles.responsiveTable}>
           <ResponsiveTable

@@ -59,7 +59,6 @@ const ProductSearch = ({onConfirm, onEnterPress, searchProductsByName}) => {
         setLoadingList(false)
         inputRef.current.focus()
       }
-
       fetch()
     }
   }, [debouncedSearchTerm, searchProductsByName, setShowOptions, setLoadingList, setProductList, inputRef])
@@ -78,12 +77,12 @@ const ProductSearch = ({onConfirm, onEnterPress, searchProductsByName}) => {
     event => {
       if (loading) return null
       if (event.key === 'Enter' && !!searchTerm) {
-        onEnterPress(removeAccentsAndLowerCase(searchTerm))
+        onEnterPress(removeAccentsAndLowerCase(searchTerm), inputRef)
         setSearchTerm('')
         setShowOptions(false)
       }
     },
-    [loading, searchTerm, onEnterPress, setSearchTerm, setShowOptions]
+    [loading, searchTerm, onEnterPress, setSearchTerm, setShowOptions, inputRef]
   )
 
   const handleOnFocus = useCallback(() => {
@@ -93,9 +92,10 @@ const ProductSearch = ({onConfirm, onEnterPress, searchProductsByName}) => {
   const handleConfirm = useCallback(
     productData => {
       setQuantity(0)
+      setSearchTerm('')
       return onConfirm(productData)
     },
-    [setQuantity, onConfirm]
+    [setQuantity, setSearchTerm, onConfirm]
   )
 
   return (
