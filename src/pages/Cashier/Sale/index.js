@@ -1,6 +1,6 @@
-import React, {useState, useEffect, useCallback, useMemo, memo} from 'react'
+import React, {useState, useEffect, useCallback, useRef, useMemo, memo} from 'react'
 import PropTypes from 'prop-types'
-import {Paper, ProductSearch, ResponsiveTable} from 'components'
+import {Modal, NumberInput, Paper, ProductSearch, ResponsiveTable} from 'components'
 
 import {useParams, useHistory} from 'react-router-dom'
 import {useStore} from 'store'
@@ -22,6 +22,29 @@ TotalPrice.propTypes = {
   products: PropTypes.array,
 }
 
+const ModalDelete = ({product, quantityToDelete, setQuantityToDelete}) => {
+  const ref = useRef('')
+  const focus = () => ref.current.focus()
+
+  useEffect(() => focus(), [])
+
+  const isValid =
+    quantityToDelete && quantityToDelete !== '' && quantityToDelete > 0 && product && quantityToDelete <= product.quantity
+
+  return (
+    <div className={styles.modalBody}>
+      <NumberInput ref={ref} label={''} value={quantityToDelete} onChange={setQuantityToDelete} />
+      {!isValid && <span className={styles.codeWarning}>Mínimo de 1 produto e máximo de {product ? product.quantity : 1}.</span>}
+    </div>
+  )
+}
+
+ModalDelete.propTypes = {
+  product: PropTypes.oneOfType([PropTypes.object, PropTypes.bool]),
+  quantityToDelete: PropTypes.number,
+  setQuantityToDelete: PropTypes.func,
+}
+
 const getMaxIndex = array => {
   if (array.length) {
     return Math.max.apply(
@@ -33,6 +56,10 @@ const getMaxIndex = array => {
 }
 
 const CashierSale = () => {
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false)
+  const [itemToDelete, setItemToDelete] = useState(null)
+  const [quantityToDelete, setQuantityToDelete] = useState(null)
+
   const {searchProductsByName, searchProductByCode, quickSale} = useServices()
 
   const {showMenu} = useStore()
@@ -60,7 +87,7 @@ const CashierSale = () => {
           }
 
           const maxIndex = getMaxIndex(prevProducts)
-          newProduct = {...newProduct, quantity: 1, index: maxIndex + 1}
+          newProduct = {...newProduct, quantity, index: maxIndex + 1}
           if (inputToFocus) inputToFocus.current.focus()
           return [...prevProducts, newProduct]
         })
@@ -87,11 +114,35 @@ const CashierSale = () => {
     [setProducts]
   )
 
-  const removeProduct = useCallback(
+  const removeProduct = useCallback(async () => {
+    if (!quantityToDelete || quantityToDelete === '' || quantityToDelete < 1 || quantityToDelete > itemToDelete.quantity) return
+
+    setProducts(prevProducts => {
+      const index = prevProducts.findIndex(item => itemToDelete.id === item.id)
+      if (index >= 0) {
+        const updatedProducts = [...prevProducts]
+
+        if (updatedProducts[index].quantity === quantityToDelete) {
+          updatedProducts.filter(item => item.id !== updatedProducts[index].id)
+        } else {
+          updatedProducts[index].quantity -= quantityToDelete
+        }
+
+        return updatedProducts
+      }
+    })
+
+    setDeleteModalOpen(false)
+    setItemToDelete(null)
+    setQuantityToDelete(1)
+  }, [itemToDelete, quantityToDelete, setDeleteModalOpen, setItemToDelete])
+
+  const openDeleteModal = useCallback(
     product => {
-      setProducts(prevProducts => prevProducts.filter(item => item.index !== product.index))
+      setDeleteModalOpen(true)
+      setItemToDelete(product)
     },
-    [setProducts]
+    [setDeleteModalOpen, setItemToDelete]
   )
 
   const payProducts = useCallback(
@@ -162,13 +213,24 @@ const CashierSale = () => {
             columns={columns}
             rows={formattedProducts}
             titleColumn='name'
-            onDeleteClick={row => removeProduct(row)}
+            onDeleteClick={product => openDeleteModal(product)}
             hasButtons={tableButtons}
             additionalRow={<TotalPrice products={products} />}
             emptyTableMessage='Não há produtos registrados.'
           />
         </div>
       </Paper>
+      <Modal
+        header='Selecione a quantidade a ser removida.'
+        onConfirm={removeProduct}
+        onCancel={() => setDeleteModalOpen(false)}
+        open={deleteModalOpen}>
+        <ModalDelete
+          product={itemToDelete}
+          quantityToDelete={quantityToDelete}
+          setQuantityToDelete={value => setQuantityToDelete(value)}
+        />
+      </Modal>
     </>
   )
 }
