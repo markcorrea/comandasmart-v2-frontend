@@ -57,7 +57,7 @@ const ProductSearch = ({onConfirm, onEnterPress, searchProductsByName}) => {
   const debouncedSearchTerm = useDebounce(searchTerm, 1000)
 
   useEffect(() => {
-    if (debouncedSearchTerm) {
+    if (debouncedSearchTerm && debouncedSearchTerm.length > 2) {
       const fetch = async () => {
         setShowOptions(true)
         setLoadingList(true)
@@ -112,7 +112,7 @@ const ProductSearch = ({onConfirm, onEnterPress, searchProductsByName}) => {
     <div className={styles.container}>
       <div className={styles.searchContainer}>
         <Input
-          label='Search'
+          label='Busca'
           value={searchTerm}
           onChange={handleInputChange}
           onKeyPress={handleKeyPress}
@@ -126,7 +126,7 @@ const ProductSearch = ({onConfirm, onEnterPress, searchProductsByName}) => {
               <ul>
                 {loadingList ? (
                   <li className={styles.emptyList} key={`no_product`}>
-                    loading...
+                    carregando...
                   </li>
                 ) : productList.length ? (
                   productList.map((product, index) => (
@@ -136,7 +136,7 @@ const ProductSearch = ({onConfirm, onEnterPress, searchProductsByName}) => {
                   ))
                 ) : (
                   <li className={styles.emptyList} key={`no_product`}>
-                    No products found
+                    Nenhum produto encontrado
                   </li>
                 )}
               </ul>

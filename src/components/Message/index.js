@@ -21,7 +21,7 @@ const MessageComponent = ({children}) => {
     loading = enqueueSnackbar(
       <>
         <Spinner />
-        &nbsp;&nbsp;Loading&nbsp;...
+        &nbsp;&nbsp;Carregando&nbsp;...
       </>,
       {variant: 'default', persist: true, anchorOrigin: {horizontal: 'center', vertical: 'top'}}
     )
