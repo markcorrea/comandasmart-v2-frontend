@@ -122,10 +122,10 @@ const CashierSale = () => {
       if (index >= 0) {
         const updatedProducts = [...prevProducts]
 
-        if (updatedProducts[index].quantity === quantityToDelete) {
-          updatedProducts.filter(item => item.id !== updatedProducts[index].id)
-        } else {
-          updatedProducts[index].quantity -= quantityToDelete
+        updatedProducts[index].quantity -= quantityToDelete
+
+        if (updatedProducts[index].quantity < 1) {
+          return updatedProducts.filter(item => item.id !== updatedProducts[index].id)
         }
 
         return updatedProducts
