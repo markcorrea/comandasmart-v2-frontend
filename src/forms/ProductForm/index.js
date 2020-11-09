@@ -87,15 +87,6 @@ const ProductForm = ({product, terminals, unitTypes, onSubmit, onCancel, loading
         />
         <Controller
           as={NumberInput}
-          name='volume_per_unit'
-          decimalScale={3}
-          thousandSeparator
-          control={control}
-          label='Quantidade por Unidade'
-          disabled={loading}
-        />
-        <Controller
-          as={NumberInput}
           name='stock'
           control={control}
           label='Estoque'
@@ -118,17 +109,6 @@ const ProductForm = ({product, terminals, unitTypes, onSubmit, onCancel, loading
           prefix='$ '
           disabled={loading}
           isRequired
-        />
-        <Controller
-          as={NumberInput}
-          name='price_per_unit'
-          control={control}
-          label='Preço Por Unidade'
-          decimalScale={2}
-          thousandSeparator
-          error={Boolean(errors.price_per_unit)}
-          helperText={getErrorMessage(errors.price_per_unit)}
-          disabled={loading}
         />
         <Controller
           as={Select}

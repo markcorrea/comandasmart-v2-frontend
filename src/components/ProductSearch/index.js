@@ -1,13 +1,17 @@
 import React, {useState, useRef, useEffect, useCallback} from 'react'
 import PropTypes from 'prop-types'
-import clsx from 'clsx'
 
 import Button from 'components/Button'
 import Input from 'components/Input'
 
+import {Modal} from 'components'
+
 import Quantity from './Quantity'
 
 import {useStore} from 'store'
+
+import {mediaQueryMD} from 'assets/styles/_mediaQueries.scss'
+import useMediaQuery from 'utils/mediaQuery'
 
 import useDebounce from './debounce'
 
@@ -18,8 +22,11 @@ const ProductSearch = ({onConfirm, onEnterPress, searchProductsByName}) => {
   const [productList, setProductList] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
   const [quantity, setQuantity] = useState(0)
+  const [quantityModal, setQuantityModal] = useState(false)
   const [showOptions, setShowOptions] = useState(false)
   const [loadingList, setLoadingList] = useState(false)
+
+  const mediaQuerySmall = useMediaQuery('min', mediaQueryMD)
 
   const wrapperRef = useRef(null)
   const inputRef = useRef(null)
@@ -29,6 +36,8 @@ const ProductSearch = ({onConfirm, onEnterPress, searchProductsByName}) => {
   const buttonClass = {
     root: {
       marginTop: '25px',
+
+      ...(mediaQuerySmall ? {float: 'right', marginLeft: '20px'} : {}),
     },
   }
 
@@ -64,7 +73,9 @@ const ProductSearch = ({onConfirm, onEnterPress, searchProductsByName}) => {
   const selectProduct = useCallback(
     product => {
       setProduct(product)
+      setSearchTerm('')
       setShowOptions(false)
+      setQuantityModal(true)
     },
     [setProduct, setShowOptions]
   )
@@ -91,6 +102,7 @@ const ProductSearch = ({onConfirm, onEnterPress, searchProductsByName}) => {
     productData => {
       setQuantity(0)
       setSearchTerm('')
+      setQuantityModal(false)
       return onConfirm(productData)
     },
     [setQuantity, setSearchTerm, onConfirm]
@@ -108,9 +120,6 @@ const ProductSearch = ({onConfirm, onEnterPress, searchProductsByName}) => {
           disabled={loading}
           ref={inputRef}
         />
-        <div className={clsx(styles.selectedProductName, product ? styles.selected : '')}>
-          {product ? product.name : 'No product selected'}
-        </div>
         {showOptions && (
           <div ref={wrapperRef} className={styles.listContainer}>
             <div className={styles.listOptions}>
@@ -135,14 +144,19 @@ const ProductSearch = ({onConfirm, onEnterPress, searchProductsByName}) => {
           </div>
         )}
       </div>
-      <div className={styles.counterContainer}>
-        <Quantity quantity={quantity} setQuantity={setQuantity} disabled={!product || loading} />
-      </div>
-      <div>
-        <Button classes={buttonClass} onClick={() => handleConfirm({product, quantity})} disabled={!product || quantity < 1}>
-          Adicionar
-        </Button>
-      </div>
+      <Modal header={`Selecione a quantidade: ${product ? product.name : '-'}`} open={quantityModal} hideButtons>
+        <div className={styles.counterContainer}>
+          <Quantity quantity={quantity} setQuantity={setQuantity} disabled={!product || loading} />
+        </div>
+        <div className={styles.modalButtonsContainer}>
+          <Button classes={buttonClass} onClick={() => handleConfirm({product, quantity})} disabled={!product || quantity < 1}>
+            Adicionar
+          </Button>
+          <Button classes={buttonClass} color='cancel' onClick={() => setQuantityModal(false)}>
+            Cancelar
+          </Button>
+        </div>
+      </Modal>
     </div>
   )
 }

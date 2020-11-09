@@ -70,10 +70,20 @@
 }
 
 .counterContainer {
-  max-width: 200px;
   width: 100%;
+  @include media-breakpoint-up(md) {
+    max-width: 200px;
+    padding: 0 10px;
+  }
   @include media-breakpoint-up(xl) {
     padding: 0 10px;
+  }
+}
+
+.modalButtonsContainer {
+  text-align: center;
+  @include media-breakpoint-up(md) {
+    text-align: initial;
   }
 }
 
