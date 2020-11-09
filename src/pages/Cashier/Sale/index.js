@@ -49,12 +49,13 @@ const CashierSale = () => {
     async (uniqueCode, inputToFocus = null) => {
       const result = await searchProductByCode(uniqueCode)
       if (result) {
-        let newProduct = result.data
+        let newProduct = result.data.product
+        const quantity = result.data.quantity
         setProducts(prevProducts => {
           const index = prevProducts.findIndex(product => product.id === newProduct.id)
           if (index >= 0) {
             const updatedProducts = [...prevProducts]
-            updatedProducts[index].quantity++
+            updatedProducts[index].quantity += quantity
             return updatedProducts
           }
 

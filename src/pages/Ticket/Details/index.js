@@ -135,7 +135,7 @@ const TicketDetails = () => {
         {mediaMD && (
           <>
             <Button className={styles.headerButton} onClick={() => bindingActions()}>
-              {ticket?.client ? 'Remover' : 'Vincular'} Cliente
+              <>{ticket?.client ? 'Remover' : 'Vincular'} Cliente</>
             </Button>
             <Button className={styles.headerButton} onClick={() => setCodeModalOpen(true)}>
               Mudar Mesa
