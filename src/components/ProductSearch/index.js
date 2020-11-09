@@ -107,6 +107,9 @@ const ProductSearch = ({onConfirm, onEnterPress, searchProductsByName}) => {
     },
     [setQuantity, setSearchTerm, onConfirm]
   )
+  useEffect(() => {
+    inputRef.current.focus()
+  })
 
   return (
     <div className={styles.container}>

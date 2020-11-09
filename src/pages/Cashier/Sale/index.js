@@ -46,7 +46,7 @@ const CashierSale = () => {
   const [products, setProducts] = useState([])
 
   const addProductByCode = useCallback(
-    async (uniqueCode, inputToFocus) => {
+    async (uniqueCode, inputToFocus = null) => {
       const result = await searchProductByCode(uniqueCode)
       if (result) {
         let newProduct = result.data
@@ -153,7 +153,7 @@ const CashierSale = () => {
       <Paper className={styles.paper}>
         <ProductSearch
           searchProductsByName={searchProductsByName}
-          onEnterPress={(uniqueCode, inputToFocus) => addProductByCode(uniqueCode, inputToFocus)}
+          onEnterPress={uniqueCode => addProductByCode(uniqueCode)}
           onConfirm={productData => addProductByClick(productData)}
         />
         <div className={styles.responsiveTable}>
