@@ -67,15 +67,7 @@ const ProductForm = ({product, terminals, unitTypes, onSubmit, onCancel, loading
         />
         <Controller as={NumberInput} name='unique_code' control={control} label='Código Único' disabled={loading} />
         <Controller as={Input} name='brand' control={control} label={'Marca'} disabled={loading} />
-        <Controller
-          as={NumberInput}
-          name='bar_code'
-          control={control}
-          label='Código de Barras'
-          error={Boolean(errors.bar_code)}
-          helperText={getErrorMessage(errors.bar_code)}
-          disabled={loading}
-        />
+        <Controller as={NumberInput} name='bar_code' control={control} label='Código de Barras' disabled={loading} />
         <Controller
           as={Select}
           name='unit_type'
@@ -92,23 +84,17 @@ const ProductForm = ({product, terminals, unitTypes, onSubmit, onCancel, loading
           label='Estoque'
           decimalScale={2}
           thousandSeparator
-          error={Boolean(errors.stock)}
-          helperText={getErrorMessage(errors.stock)}
           disabled={loading}
-          isRequired
         />
         <Controller
           as={NumberInput}
           name='price'
           control={control}
           label='Preço'
-          error={Boolean(errors.price)}
-          helperText={getErrorMessage(errors.price)}
           thousandSeparator
           decimalScale={2}
           prefix='$ '
           disabled={loading}
-          isRequired
         />
         <Controller
           as={Select}
@@ -116,8 +102,6 @@ const ProductForm = ({product, terminals, unitTypes, onSubmit, onCancel, loading
           items={terminals}
           control={control}
           label='Terminal'
-          error={Boolean(errors.terminal)}
-          helperText={getErrorMessage(errors.terminal)}
           showEmptyOption
           disabled={loading}
         />
