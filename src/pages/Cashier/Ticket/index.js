@@ -135,7 +135,7 @@ const CashierTicket = () => {
       onClick: () =>
         confirmationDialog({
           header: 'Fechar Comanda',
-          body: `Deseja realmente encerrar comanda ${ticketId}?`,
+          body: `Deseja realmente encerrar comanda ${ticket.unique_code}?`,
           onConfirm: () => closeTicket(),
         }),
     },
