@@ -13,8 +13,6 @@ import styles from './index.module.scss'
 
 const validationRules = yup.object().shape({
   name: yup.string().required('Nome é um campo obrigatório'),
-  stock: yup.string().required('Estoque é um campo obrigatório'),
-  price: yup.string().required('Preço é um campo obrigatório'),
 })
 
 const getErrorMessage = error => {
