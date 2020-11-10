@@ -28,7 +28,6 @@ const useClients = () => {
           }
         )
         .then(response => {
-          console.log('SUCCESS')
           return response.data
         })
         .catch(error => {
@@ -52,7 +51,6 @@ const useClients = () => {
         },
       })
       .then(response => {
-        console.log('SUCCESS')
         return response
       })
       .catch(error => {
@@ -74,7 +72,6 @@ const useClients = () => {
           },
         })
         .then(response => {
-          console.log('SUCCESS')
           return response.data
         })
         .catch(error => {
@@ -100,7 +97,6 @@ const useClients = () => {
             },
           })
           .then(response => {
-            console.log('SUCCESS')
             return response.data
           })
           .catch(error => {
@@ -121,7 +117,6 @@ const useClients = () => {
           },
         })
         .then(response => {
-          console.log('SUCCESS')
           return response.data
         })
         .catch(error => {
@@ -145,7 +140,6 @@ const useClients = () => {
           },
         })
         .then(response => {
-          console.log('SUCCESS')
           return response.data
         })
         .catch(error => {

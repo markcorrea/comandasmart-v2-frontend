@@ -50,7 +50,6 @@ const useCashiers = () => {
         }
       )
       .then(response => {
-        console.log('SUCCESS')
         return response.data
       })
       .catch(error => {
@@ -73,7 +72,6 @@ const useCashiers = () => {
           },
         })
         .then(response => {
-          console.log('SUCCESS')
           return response.data
         })
         .catch(error => {
@@ -98,7 +96,6 @@ const useCashiers = () => {
           },
         })
         .then(response => {
-          console.log('SUCCESS')
           return response.data
         })
         .catch(error => {
@@ -123,7 +120,6 @@ const useCashiers = () => {
           },
         })
         .then(response => {
-          console.log('SUCCESS')
           return response.data
         })
         .catch(error => {
@@ -148,7 +144,6 @@ const useCashiers = () => {
           },
         })
         .then(response => {
-          console.log('SUCCESS')
           return response.data
         })
         .catch(error => {
@@ -173,7 +168,6 @@ const useCashiers = () => {
           },
         })
         .then(response => {
-          console.log('SUCCESS')
           return response.data
         })
         .catch(error => {
@@ -202,7 +196,6 @@ const useCashiers = () => {
           }
         )
         .then(response => {
-          console.log('SUCCESS')
           return response.data
         })
         .catch(error => {

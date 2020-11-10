@@ -1,0 +1,17 @@
+@import '~assets/styles/_colors.scss';
+
+.counterButton {
+  cursor: pointer;
+
+  &:hover {
+    color: $ronchi;
+  }
+
+  &.disabled {
+    color: $lightGray;
+    cursor: default;
+    &:hover {
+      color: $lightGray;
+    }
+  }
+}

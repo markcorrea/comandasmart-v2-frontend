@@ -23,7 +23,6 @@ const useTerminals = () => {
         },
       })
       .then(response => {
-        console.log('SUCCESS')
         return response.data
       })
       .catch(error => {
@@ -45,7 +44,6 @@ const useTerminals = () => {
           },
         })
         .then(response => {
-          console.log('SUCCESS')
           return response.data
         })
         .catch(error => {
@@ -69,7 +67,6 @@ const useTerminals = () => {
             },
           })
           .then(response => {
-            console.log('SUCCESS')
             return response.data
           })
           .catch(error => {
@@ -90,7 +87,6 @@ const useTerminals = () => {
           },
         })
         .then(response => {
-          console.log('SUCCESS')
           return response.data
         })
         .catch(error => {
@@ -114,7 +110,6 @@ const useTerminals = () => {
           },
         })
         .then(response => {
-          console.log('SUCCESS')
           return response.data
         })
         .catch(error => {

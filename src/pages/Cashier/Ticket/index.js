@@ -1,8 +1,8 @@
-import React, {useState, useEffect, useRef, useCallback, useMemo, memo} from 'react'
+import React, {useState, useEffect, useCallback, useMemo, memo} from 'react'
 import PropTypes from 'prop-types'
 import {useParams, useHistory} from 'react-router-dom'
 
-import {Modal, NumberInput, Paper, ProductSearch, ResponsiveTable} from 'components'
+import {Modal, QuantityInput, Paper, ProductSearch, ResponsiveTable} from 'components'
 import PartialSaleModalBody from './PartialSaleModalBody'
 
 import formatMoney from 'utils/formatMoney'
@@ -39,17 +39,12 @@ const columns = [
 ]
 
 const ModalDelete = ({order, quantityToDelete, setQuantityToDelete}) => {
-  const ref = useRef('')
-  const focus = () => ref.current.focus()
-
-  useEffect(() => focus(), [])
-
   const isValid =
     quantityToDelete && quantityToDelete !== '' && quantityToDelete > 0 && order && quantityToDelete <= order.quantity
 
   return (
     <div className={styles.modalBody}>
-      <NumberInput ref={ref} label={''} value={quantityToDelete} onChange={setQuantityToDelete} />
+      <QuantityInput label={''} quantity={quantityToDelete} setQuantity={setQuantityToDelete} />
       {!isValid && <span className={styles.codeWarning}>Mínimo de 1 produto e máximo de {order ? order.quantity : 1}.</span>}
     </div>
   )

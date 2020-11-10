@@ -28,7 +28,6 @@ const useOrders = () => {
           }
         )
         .then(response => {
-          console.log('SUCCESS')
           return response.data
         })
         .catch(error => {
@@ -56,7 +55,6 @@ const useOrders = () => {
           }
         )
         .then(response => {
-          console.log('SUCCESS')
           return response.data
         })
         .catch(error => {

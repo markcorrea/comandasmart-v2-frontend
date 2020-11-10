@@ -4,9 +4,7 @@ import PropTypes from 'prop-types'
 import Button from 'components/Button'
 import Input from 'components/Input'
 
-import {Modal} from 'components'
-
-import Quantity from './Quantity'
+import {Modal, QuantityInput} from 'components'
 
 import {useStore} from 'store'
 
@@ -149,7 +147,7 @@ const ProductSearch = ({onConfirm, onEnterPress, searchProductsByName}) => {
       </div>
       <Modal header={`Selecione a quantidade: ${product ? product.name : '-'}`} open={quantityModal} hideButtons>
         <div className={styles.counterContainer}>
-          <Quantity quantity={quantity} setQuantity={setQuantity} disabled={!product || loading} />
+          <QuantityInput quantity={quantity} setQuantity={setQuantity} disabled={!product || loading} />
         </div>
         <div className={styles.modalButtonsContainer}>
           <Button classes={buttonClass} onClick={() => handleConfirm({product, quantity})} disabled={!product || quantity < 1}>

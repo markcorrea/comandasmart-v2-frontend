@@ -1,3 +1,5 @@
+@import '~assets/styles/_mediaQueries.scss';
+
 .header {
   height: 68px;
 }
@@ -19,4 +21,10 @@
 .totalPrice {
   width: 100%;
   text-align: right;
+}
+
+.modalBody {
+  @include media-breakpoint-up(sm) {
+    max-width: 200px;
+  }
 }

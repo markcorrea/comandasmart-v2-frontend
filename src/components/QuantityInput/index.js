@@ -6,7 +6,7 @@ import NumberInput from 'components/NumberInput'
 
 import styles from './index.module.scss'
 
-const Quantity = ({quantity, setQuantity, disabled}) => {
+const QuantityInput = ({quantity, setQuantity, disabled}) => {
   const handleSetQuantity = useCallback(input => setQuantity(parseInt(input)), [setQuantity])
   const quantityInString = useMemo(() => quantity.toString(), [quantity])
 
@@ -15,13 +15,13 @@ const Quantity = ({quantity, setQuantity, disabled}) => {
 
   const Minus = () => (
     <i
-      className={`fa fa-minus ${clsx(styles.icon, styles.counterButton, disabled && styles.disabled)}`}
+      className={`fa fa-minus ${clsx(styles.counterButton, disabled && styles.disabled)}`}
       onClick={!disabled ? decrement : null}
     />
   )
   const Plus = () => (
     <i
-      className={`fa fa-plus ${clsx(styles.icon, styles.counterButton, disabled && styles.disabled)}`}
+      className={`fa fa-plus ${clsx(styles.counterButton, disabled && styles.disabled)}`}
       onClick={!disabled ? increment : null}
     />
   )
@@ -39,14 +39,14 @@ const Quantity = ({quantity, setQuantity, disabled}) => {
   )
 }
 
-Quantity.propTypes = {
+QuantityInput.propTypes = {
   quantity: PropTypes.number.isRequired,
   setQuantity: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
 }
 
-Quantity.defaultProps = {
+QuantityInput.defaultProps = {
   disabled: false,
 }
 
-export default memo(Quantity)
+export default memo(QuantityInput)

@@ -1,6 +1,6 @@
-import React, {useState, useEffect, useCallback, useRef, useMemo, memo} from 'react'
+import React, {useState, useEffect, useCallback, useMemo, memo} from 'react'
 import PropTypes from 'prop-types'
-import {Modal, NumberInput, Paper, ProductSearch, ResponsiveTable} from 'components'
+import {Modal, Paper, ProductSearch, QuantityInput, ResponsiveTable} from 'components'
 
 import {useParams, useHistory} from 'react-router-dom'
 import {useStore} from 'store'
@@ -23,17 +23,12 @@ TotalPrice.propTypes = {
 }
 
 const ModalDelete = ({product, quantityToDelete, setQuantityToDelete}) => {
-  const ref = useRef('')
-  const focus = () => ref.current.focus()
-
-  useEffect(() => focus(), [])
-
   const isValid =
     quantityToDelete && quantityToDelete !== '' && quantityToDelete > 0 && product && quantityToDelete <= product.quantity
 
   return (
     <div className={styles.modalBody}>
-      <NumberInput ref={ref} label={''} value={quantityToDelete} onChange={setQuantityToDelete} />
+      <QuantityInput label={''} quantity={quantityToDelete} setQuantity={setQuantityToDelete} />
       {!isValid && <span className={styles.codeWarning}>Mínimo de 1 produto e máximo de {product ? product.quantity : 1}.</span>}
     </div>
   )
@@ -58,7 +53,7 @@ const getMaxIndex = array => {
 const CashierSale = () => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false)
   const [itemToDelete, setItemToDelete] = useState(null)
-  const [quantityToDelete, setQuantityToDelete] = useState(null)
+  const [quantityToDelete, setQuantityToDelete] = useState(1)
 
   const {searchProductsByName, searchProductByCode, quickSale} = useServices()
 
