@@ -13,6 +13,8 @@ import styles from './index.module.scss'
 
 const validationRules = yup.object().shape({
   name: yup.string().required('Nome é um campo obrigatório'),
+  stock: yup.string().required('Estoque é obrigatório, mesmo que seja 0'),
+  price: yup.string().required('Preço é obrigatório, mesmo que seja 0'),
 })
 
 const getErrorMessage = error => {
@@ -26,8 +28,8 @@ const defaultValues = {
   bar_code: '',
   unit_type: '',
   volume_per_unit: '',
-  stock: '',
-  price: '',
+  stock: 0,
+  price: 0,
   price_per_unit: '',
   terminal: '',
 }
@@ -82,6 +84,8 @@ const ProductForm = ({product, terminals, unitTypes, onSubmit, onCancel, loading
           label='Estoque'
           decimalScale={2}
           thousandSeparator
+          error={Boolean(errors.stock)}
+          helperText={getErrorMessage(errors.stock)}
           disabled={loading}
         />
         <Controller
@@ -92,6 +96,8 @@ const ProductForm = ({product, terminals, unitTypes, onSubmit, onCancel, loading
           thousandSeparator
           decimalScale={2}
           prefix='$ '
+          error={Boolean(errors.price)}
+          helperText={getErrorMessage(errors.price)}
           disabled={loading}
         />
         <Controller
