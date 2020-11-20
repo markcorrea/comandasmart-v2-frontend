@@ -1,2 +1,2 @@
-// export default 'http://c4e34306e00c.ngrok.io/api/v1'
-export default 'https://comandasmart.com.br/api/v1'
+export default 'http://f0768a293d0f.ngrok.io/api/v1'
+// export default 'https://comandasmart.com.br/api/v1'
