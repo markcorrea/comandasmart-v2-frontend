@@ -34,60 +34,92 @@ export const columns = [
 const ProductList = () => {
   const {showMenu, loading, confirmationDialog} = useStore()
   const history = useHistory()
-  const {searchProductsByName, getProducts, deleteProductById} = useServices()
+  const {searchProductsByName, deleteProductById} = useServices()
 
   const [products, setProducts] = useState({
-    data: [],
+    results: [],
     count: 0,
-    page: 0,
     rowsPerPage: 0,
   })
 
-  const [searchTerm, setSearchTerm] = useState('')
+  const [page, setPage] = useState(1)
+  const [search, setSearch] = useState({value: '', currentSearch: ''})
+
+  const searchProducts = useCallback(
+    async (searchTerm, page) => {
+      const result = await searchProductsByName(searchTerm, page)
+      if (result) setProducts(prevProducts => ({...prevProducts, ...result.data}))
+    },
+    [searchProductsByName, setProducts]
+  )
+
+  const loadMoreProducts = useCallback(
+    async page => {
+      const result = await searchProductsByName(search.currentSearch, page)
+      if (result) {
+        setProducts(prevProducts => {
+          return {
+            ...prevProducts,
+            ...result.data,
+            results: [...prevProducts.results, ...result.data.results],
+          }
+        })
+      }
+    },
+    [searchProductsByName, setProducts, search.currentSearch]
+  )
+
+  const deleteProduct = useCallback(
+    async id => {
+      const result = await deleteProductById(id)
+      if (result) searchProducts(search.currentSearch, 1)
+    },
+    [deleteProductById, searchProducts, search.currentSearch]
+  )
+
+  const onChangePage = useCallback(
+    page => {
+      setPage(page)
+      searchProducts(search.currentSearch, page)
+    },
+    [setPage, searchProducts, search.currentSearch]
+  )
+
+  const onLoadMore = useCallback(
+    page => {
+      setPage(page)
+      loadMoreProducts(page)
+    },
+    [setPage, loadMoreProducts]
+  )
+
+  const onInputChange = useCallback(value => setSearch(prevSearch => ({...prevSearch, value})), [setSearch])
+
+  const callSearch = useCallback(() => {
+    setSearch(prevSearch => ({...prevSearch, currentSearch: prevSearch.value}))
+    searchProducts(search.value, 1)
+  }, [setSearch, searchProducts, search])
+
+  const handleKeyPress = useCallback(
+    event => {
+      if (event.key === 'Enter') return callSearch()
+    },
+    [callSearch]
+  )
 
   useEffect(() => {
     showMenu()
   }, [showMenu])
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      const result = await getProducts()
-      if (result) setProducts(result.data)
-    }
-    fetchProducts()
-  }, [getProducts, setProducts])
-
-  const deleteProduct = useCallback(
-    async id => {
-      const result = await deleteProductById(id)
-      if (result) {
-        const newProducts = await getProducts()
-        if (newProducts) {
-          setProducts(newProducts.data)
-        }
-      }
-    },
-    [deleteProductById, setProducts, getProducts]
-  )
-
-  const searchProducts = useCallback(async () => {
-    if (searchTerm) {
-      const result = await searchProductsByName(searchTerm)
-      if (result) setProducts({data: result})
-    }
-  }, [searchProductsByName, setProducts, searchTerm])
-
-  const handleKeyPress = useCallback(
-    event => {
-      if (event.key === 'Enter') searchProducts()
-    },
-    [searchProducts]
-  )
+    searchProducts()
+  }, [searchProducts])
 
   const formattedProducts = useMemo(() => {
-    if (products && products.data) {
-      return products.data.map(product => ({
+    if (products && products.results) {
+      return products.results.map(product => ({
         ...product,
+        brand: product.brand || '-',
         price: formatMoney(parseFloat(product.price)),
       }))
     }
@@ -103,17 +135,20 @@ const ProductList = () => {
         <div className={styles.search}>
           <Input
             onKeyPress={handleKeyPress}
-            value={searchTerm}
-            onChange={event => setSearchTerm(event.target.value)}
+            value={search.value}
+            onChange={event => onInputChange(event.target.value)}
             placeholder='Buscar por produto...'
             disabled={loading}
             label=''
             endIcon={
-              <div className={styles.searchButton} onClick={!loading ? searchProducts : () => {}}>
+              <div className={styles.searchButton} onClick={!loading ? callSearch : () => {}}>
                 <i className='fa fa-search' />
               </div>
             }
           />
+          <div className={styles.searchText}>
+            Busca atual: <span className={styles.searchTerm}>{search.currentSearch || 'Todos os produtos'}</span>
+          </div>
         </div>
         <ResponsiveTable
           columns={columns}
@@ -130,7 +165,8 @@ const ProductList = () => {
           rowClickable={row => history.push(`/product/${row.id}`)}
           emptyTableMessage='Não há produtos registrados.'
           loading={loading}
-          pagination={{count: 0, page: 0, rowsPerPage: 10, onChangePage: () => {}}}
+          pagination={{count: products.count, page, onChangePage}}
+          loadMore={{count: products.count, page, onLoadMore}}
         />
       </Paper>
       <div className={styles.plusButtonContainer}>

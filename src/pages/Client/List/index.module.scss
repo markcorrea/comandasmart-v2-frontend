@@ -1,5 +1,6 @@
 @import '~assets/styles/_mediaQueries.scss';
 @import '~assets/styles/_colors.scss';
+@import '~assets/styles/_typography.scss';
 
 .header {
   height: 68px;
@@ -16,7 +17,26 @@
   margin-top: 50px;
 }
 
+.search {
+  margin-bottom: 20px;
+}
+
+.searchButton {
+  cursor: pointer;
+}
+
 .plusButtonContainer {
   position: sticky;
   bottom: 0;
+}
+
+.searchText {
+  font-family: $defaultFontFamily;
+  font-size: $smallerFontSize;
+  font-weight: 300;
+  margin: 5px 0;
+  .searchTerm {
+    font-style: italic;
+    color: $gray;
+  }
 }

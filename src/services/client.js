@@ -15,11 +15,11 @@ const useClients = () => {
   const token = `Token ${verifyToken()}`
 
   const searchClientsByName = useCallback(
-    name => {
+    (name = '', page = null) => {
       setLoading(true)
       return axios
         .post(
-          `${server}/clients/search/`,
+          `${server}/clients/search/${page ? '?page=' + page : ''}`,
           {name},
           {
             headers: {
@@ -41,26 +41,29 @@ const useClients = () => {
     [setLoading, token, history, show]
   )
 
-  const getClients = useCallback(() => {
-    setLoading(true)
+  const getClients = useCallback(
+    (page = null) => {
+      setLoading(true)
 
-    return axios
-      .get(`${server}/clients/`, {
-        headers: {
-          Authorization: token,
-        },
-      })
-      .then(response => {
-        return response
-      })
-      .catch(error => {
-        if (error.response.status === 401) {
-          history.push('/')
-          show('Usuário não possui permissão', 'error')
-        }
-      })
-      .finally(() => setLoading(false))
-  }, [setLoading, token, history, show])
+      return axios
+        .get(`${server}/clients/${page ? '?page=' + page : ''}`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then(response => {
+          return response.data
+        })
+        .catch(error => {
+          if (error.response.status === 401) {
+            history.push('/')
+            show('Usuário não possui permissão', 'error')
+          }
+        })
+        .finally(() => setLoading(false))
+    },
+    [setLoading, token, history, show]
+  )
 
   const getClientById = useCallback(
     id => {

@@ -196,7 +196,6 @@ const Table = ({
             loading={loading}
             count={pagination.count}
             page={pagination.page}
-            rowsPerPage={pagination.rowsPerPage}
             onChangePage={pagination.onChangePage}
           />
         </div>

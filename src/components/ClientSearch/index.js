@@ -50,7 +50,7 @@ const ClientSearch = ({onConfirm, onCancel, onEnterPress, searchClientsByName}) 
         setShowOptions(true)
         setLoadingList(true)
         const result = await searchClientsByName(debouncedSearchTerm)
-        setClientList(result.data)
+        setClientList(result.data.results)
         setLoadingList(false)
       }
 

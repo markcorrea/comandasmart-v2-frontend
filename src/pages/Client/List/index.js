@@ -1,7 +1,7 @@
 import React, {useState, useEffect, useCallback} from 'react'
 import {useHistory} from 'react-router-dom'
 
-import {Paper, PlusButton, ResponsiveTable} from 'components'
+import {Input, Paper, PlusButton, ResponsiveTable} from 'components'
 
 import {useStore} from 'store'
 
@@ -31,26 +31,40 @@ const ClientList = () => {
   const {showMenu, loading, confirmationDialog} = useStore()
   const history = useHistory()
 
-  const {getClients, deleteClientById} = useServices()
+  const {searchClientsByName, getClients, deleteClientById} = useServices()
 
   const [clients, setClients] = useState({
-    data: [],
+    results: [],
     count: 0,
-    page: 0,
     rowsPerPage: 0,
   })
 
-  useEffect(() => {
-    showMenu()
-  }, [showMenu])
+  const [page, setPage] = useState(1)
+  const [search, setSearch] = useState({value: '', currentSearch: ''})
 
-  useEffect(() => {
-    const fetchClients = async () => {
-      const result = await getClients()
-      if (result) setClients(result.data)
-    }
-    fetchClients()
-  }, [getClients, setClients])
+  const searchClients = useCallback(
+    async (searchTerm, page) => {
+      const result = await searchClientsByName(searchTerm, page)
+      if (result) setClients(prevClients => ({...prevClients, ...result.data}))
+    },
+    [searchClientsByName, setClients]
+  )
+
+  const loadMoreClients = useCallback(
+    async page => {
+      const result = await searchClientsByName(search.currentSearch, page)
+      if (result) {
+        setClients(prevClients => {
+          return {
+            ...prevClients,
+            ...result.data,
+            results: [...prevClients.results, ...result.data.results],
+          }
+        })
+      }
+    },
+    [getClients, setClients, search.currentSearch]
+  )
 
   const deleteClient = useCallback(
     async id => {
@@ -64,15 +78,71 @@ const ClientList = () => {
     [deleteClientById, setClients, getClients]
   )
 
+  const onChangePage = useCallback(
+    page => {
+      setPage(page)
+      searchClients(search.currentSearch, page)
+    },
+    [setPage, searchClients, search.currentSearch]
+  )
+
+  const onLoadMore = useCallback(
+    page => {
+      setPage(page)
+      loadMoreClients(page)
+    },
+    [setPage, loadMoreClients]
+  )
+
+  const onInputChange = useCallback(value => setSearch(prevSearch => ({...prevSearch, value})), [setSearch])
+
+  const callSearch = useCallback(() => {
+    setSearch(prevSearch => ({...prevSearch, currentSearch: prevSearch.value}))
+    searchClients(search.value, 1)
+  }, [setSearch, searchClients, search])
+
+  const handleKeyPress = useCallback(
+    event => {
+      if (event.key === 'Enter') return callSearch()
+    },
+    [callSearch]
+  )
+
+  useEffect(() => {
+    showMenu()
+  }, [showMenu])
+
+  useEffect(() => {
+    searchClients()
+  }, [searchClients])
+
   return (
     <>
       <header className={styles.header}>
         <h1>Clientes</h1>
       </header>
       <Paper className={styles.paper}>
+        <div className={styles.search}>
+          <Input
+            onKeyPress={handleKeyPress}
+            value={search.value}
+            onChange={event => onInputChange(event.target.value)}
+            placeholder='Buscar por cliente...'
+            disabled={loading}
+            label=''
+            endIcon={
+              <div className={styles.searchButton} onClick={!loading ? callSearch : () => {}}>
+                <i className='fa fa-search' />
+              </div>
+            }
+          />
+          <div className={styles.searchText}>
+            Busca atual: <span className={styles.searchTerm}>{search.currentSearch || 'Todos os clientes'}</span>
+          </div>
+        </div>
         <ResponsiveTable
           columns={columns}
-          rows={clients.data || []}
+          rows={clients.results || []}
           titleColumn='name'
           onEditClick={row => history.push(`/client/${row.id}`)}
           onDeleteClick={row =>
@@ -85,6 +155,8 @@ const ClientList = () => {
           rowClickable={row => history.push(`/client/${row.id}`)}
           emptyTableMessage='Não há clientes registrados.'
           loading={loading}
+          pagination={{count: clients.count, page, onChangePage}}
+          loadMore={{count: clients.count, page, onLoadMore}}
         />
       </Paper>
       <div className={styles.plusButtonContainer}>

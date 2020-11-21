@@ -2,7 +2,7 @@ import React, {useState, useEffect, useCallback, useMemo, memo} from 'react'
 import PropTypes from 'prop-types'
 import clsx from 'clsx'
 
-import {SpeedDial} from 'components'
+import {SpeedDial, Spinner} from 'components'
 
 import {makeStyles} from '@material-ui/core/styles'
 
@@ -41,6 +41,7 @@ const CardList = ({
   emptyTableMessage,
   loading,
   additionalRow,
+  loadMore,
 }) => {
   const classes = useStyles()
   const [rows, setRows] = useState([])
@@ -71,6 +72,11 @@ const CardList = ({
     [setRows]
   )
 
+  const scrollBackToTop = () => {
+    document.body.scrollTop = 0
+    document.documentElement.scrollTop = 0
+  }
+
   const columnsToDisplay = useMemo(() => {
     if (displayColumns.length) {
       return columns.filter(column => displayColumns.some(displayColumn => displayColumn === column.key))
@@ -97,68 +103,86 @@ const CardList = ({
 
   const checkedRows = useMemo(() => rows.filter(row => row.checked), [rows])
 
+  const maxRowsReached = loadMore && rows.length >= loadMore.count
+
   return (
     <div className={styles.container}>
       {rows.length ? (
-        rows.map((row, rowIndex) => (
-          <Card key={`card_item_${rowIndex}`} className={clsx(classes.root, className)}>
-            <CardActionArea>
-              <CardContent>
-                {hasCheckbox && (
-                  <Checkbox
-                    className={styles.checkbox}
+        <>
+          {rows.map((row, rowIndex) => (
+            <Card key={`card_item_${rowIndex}`} className={clsx(classes.root, className)}>
+              <CardActionArea>
+                <CardContent>
+                  {hasCheckbox && (
+                    <Checkbox
+                      className={styles.checkbox}
+                      color='primary'
+                      checked={row.checked}
+                      onChange={() => checkRow(row, rowIndex)}
+                      inputProps={{'aria-label': 'primary checkbox'}}
+                    />
+                  )}
+                  {titleColumn ? <div className={styles.title}>{row[titleColumn]}</div> : <div className={styles.emptyRow} />}
+                  {columnsToDisplay.map((column, columnIndex) => {
+                    const {key, value} = column
+                    if (key !== titleColumn) {
+                      return (
+                        <div key={`card_item_row_${rowIndex}_${columnIndex}`} className={styles.row}>
+                          <div className={styles.name}>{value}</div>
+                          <div className={styles.value}>{column.custom ? column.custom(row) : row[key] || '-'}</div>
+                        </div>
+                      )
+                    }
+                    return null
+                  })}
+                </CardContent>
+              </CardActionArea>
+              <CardActions className={styles.buttons}>
+                {onViewClick && (
+                  <Button
+                    className={clsx(styles.button, styles.view)}
+                    size='small'
                     color='primary'
-                    checked={row.checked}
-                    onChange={() => checkRow(row, rowIndex)}
-                    inputProps={{'aria-label': 'primary checkbox'}}
-                  />
+                    onClick={!loading ? () => onViewClick(row) : null}>
+                    <i className='far fa-eye' />
+                  </Button>
                 )}
-                {titleColumn ? <div className={styles.title}>{row[titleColumn]}</div> : <div className={styles.emptyRow} />}
-                {columnsToDisplay.map((column, columnIndex) => {
-                  const {key, value} = column
-                  if (key !== titleColumn) {
-                    return (
-                      <div key={`card_item_row_${rowIndex}_${columnIndex}`} className={styles.row}>
-                        <div className={styles.name}>{value}</div>
-                        <div className={styles.value}>{column.custom ? column.custom(row) : row[key] || '-'}</div>
-                      </div>
-                    )
-                  }
-                  return null
-                })}
-              </CardContent>
-            </CardActionArea>
-            <CardActions className={styles.buttons}>
-              {onViewClick && (
-                <Button
-                  className={clsx(styles.button, styles.view)}
-                  size='small'
-                  color='primary'
-                  onClick={!loading ? () => onViewClick(row) : null}>
-                  <i className='far fa-eye' />
-                </Button>
+                {onEditClick && (
+                  <Button
+                    className={clsx(styles.button, styles.edit)}
+                    size='small'
+                    color='primary'
+                    onClick={!loading ? () => onEditClick(row) : null}>
+                    <i className='far fa-edit' />
+                  </Button>
+                )}
+                {onDeleteClick && (
+                  <Button
+                    className={clsx(styles.button, styles.delete)}
+                    size='small'
+                    color='primary'
+                    onClick={!loading ? () => onDeleteClick(row) : null}>
+                    <i className='fas fa-trash-alt' />
+                  </Button>
+                )}
+              </CardActions>
+            </Card>
+          ))}
+          {loadMore && (
+            <div className={styles.buttonsContainer}>
+              {!loading && !maxRowsReached && (
+                <div onClick={() => loadMore.onLoadMore(loadMore.page + 1)} className={styles.loadMore}>
+                  Carregar mais
+                </div>
               )}
-              {onEditClick && (
-                <Button
-                  className={clsx(styles.button, styles.edit)}
-                  size='small'
-                  color='primary'
-                  onClick={!loading ? () => onEditClick(row) : null}>
-                  <i className='far fa-edit' />
-                </Button>
-              )}
-              {onDeleteClick && (
-                <Button
-                  className={clsx(styles.button, styles.delete)}
-                  size='small'
-                  color='primary'
-                  onClick={!loading ? () => onDeleteClick(row) : null}>
-                  <i className='fas fa-trash-alt' />
-                </Button>
-              )}
-            </CardActions>
-          </Card>
-        ))
+              {loading && <Spinner className={styles.spinner} />}
+              {maxRowsReached && <div className={styles.allRegistersDisplayed}>Todos os registros foram carregados</div>}
+              <div onClick={() => scrollBackToTop()} className={styles.backToTop}>
+                Voltar ao topo
+              </div>
+            </div>
+          )}
+        </>
       ) : (
         <div className={styles.emptyTableMessage}>{emptyTableMessage}</div>
       )}
@@ -194,6 +218,7 @@ CardList.propTypes = {
   emptyTableMessage: PropTypes.string,
   loading: PropTypes.bool,
   additionalRow: PropTypes.any,
+  loadMore: PropTypes.object,
 }
 
 CardList.defaultProps = {

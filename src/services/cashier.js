@@ -14,28 +14,31 @@ const useCashiers = () => {
 
   const token = `Token ${verifyToken()}`
 
-  const getCashiers = useCallback(() => {
-    setLoading(true)
+  const getCashiers = useCallback(
+    (page = null) => {
+      setLoading(true)
 
-    return axios
-      .get(`${server}/cashiers/`, {
-        headers: {
-          Authorization: token,
-        },
-      })
-      .then(response => {
-        show('Caixas encontrados com sucesso!')
-        return response.data
-      })
-      .catch(error => {
-        if (error.response.status === 401) {
-          history.push('/')
-          show('Usuário não possui permissão', 'error')
-        }
-        return false
-      })
-      .finally(() => setLoading(false))
-  }, [setLoading, token, history, show])
+      return axios
+        .get(`${server}/cashiers/${page ? '?page=' + page : ''}`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then(response => {
+          show('Caixas encontrados com sucesso!')
+          return response.data
+        })
+        .catch(error => {
+          if (error.response.status === 401) {
+            history.push('/')
+            show('Usuário não possui permissão', 'error')
+          }
+          return false
+        })
+        .finally(() => setLoading(false))
+    },
+    [setLoading, token, history, show]
+  )
 
   const openCashier = useCallback(() => {
     setLoading(true)

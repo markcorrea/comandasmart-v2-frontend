@@ -79,3 +79,43 @@
   position: sticky;
   bottom: 0;
 }
+
+.buttonsContainer {
+  width: 100%;
+
+  .loadMore {
+    width: 150px;
+    text-align: center;
+    background-color: white;
+    border: solid thin $lightGray;
+    border-radius: 3px;
+    margin: 10px auto 0;
+    padding: 5px 0;
+    cursor: pointer;
+  }
+
+  .spinner {
+    margin: auto;
+    color: $gray;
+  }
+
+  .allRegistersDisplayed {
+    font-size: $smallerFontSize;
+    color: $gray;
+    text-align: center;
+    font-style: italic;
+    width: 100%;
+  }
+
+  .backToTop {
+    width: 120px;
+    text-align: center;
+    background-color: white;
+    border: solid thin $lightGray;
+    border-radius: 3px;
+    margin: 30px auto 0;
+    padding: 5px 0;
+    font-size: $smallerFontSize;
+    cursor: pointer;
+  }
+}

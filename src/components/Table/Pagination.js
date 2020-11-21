@@ -46,7 +46,11 @@ const useBackIconStyles = makeStyles({
   },
 })
 
-const Pagination = ({count, page, onChangePage, rowsPerPage, onChangeRowsPerPage, loading}) => {
+const formatOneBasedPage = page => page - 1
+
+const formatZeroBasedPage = page => page + 1
+
+const Pagination = ({count, page, onChangePage, loading}) => {
   const classes = useStyles()
   const nextIconClasses = useNextIconStyles()
   const backIconClasses = useBackIconStyles()
@@ -56,9 +60,10 @@ const Pagination = ({count, page, onChangePage, rowsPerPage, onChangeRowsPerPage
       component='div'
       classes={classes}
       count={count}
-      page={page}
-      onChangePage={!loading ? (_, page) => onChangePage(page) : () => {}}
-      rowsPerPage={rowsPerPage}
+      page={formatOneBasedPage(page)}
+      onChangePage={!loading ? (_, page) => onChangePage(formatZeroBasedPage(page)) : () => {}}
+      rowsPerPage={50}
+      rowsPerPageOptions={[50]}
       nextIconButtonProps={{classes: nextIconClasses}}
       backIconButtonProps={{classes: backIconClasses}}
     />

@@ -60,7 +60,7 @@ const ProductSearch = ({onConfirm, onEnterPress, searchProductsByName}) => {
         setShowOptions(true)
         setLoadingList(true)
         const result = await searchProductsByName(debouncedSearchTerm)
-        setProductList(result.data)
+        setProductList(result.data.results)
         setLoadingList(false)
         inputRef.current.focus()
       }

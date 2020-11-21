@@ -15,11 +15,11 @@ const useProducts = () => {
   const token = `Token ${verifyToken()}`
 
   const searchProductsByName = useCallback(
-    name => {
+    (name = '', page = null) => {
       setLoading(true)
       return axios
         .post(
-          `${server}/products/search/`,
+          `${server}/products/search/${page ? '?page=' + page : ''}`,
           {name},
           {
             headers: {
@@ -71,25 +71,28 @@ const useProducts = () => {
     [setLoading, token, history, show]
   )
 
-  const getProducts = useCallback(() => {
-    setLoading(true)
-    return axios
-      .get(`${server}/products/`, {
-        headers: {
-          Authorization: token,
-        },
-      })
-      .then(response => {
-        return response
-      })
-      .catch(error => {
-        if (error.response.status === 401) {
-          history.push('/')
-          show('Usuário não possui permissão', 'error')
-        }
-      })
-      .finally(() => setLoading(false))
-  }, [setLoading, token, history, show])
+  const getProducts = useCallback(
+    (page = null) => {
+      setLoading(true)
+      return axios
+        .get(`${server}/products/${page ? '?page=' + page : ''}`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then(response => {
+          return response
+        })
+        .catch(error => {
+          if (error.response.status === 401) {
+            history.push('/')
+            show('Usuário não possui permissão', 'error')
+          }
+        })
+        .finally(() => setLoading(false))
+    },
+    [setLoading, token, history, show]
+  )
 
   const getProductById = useCallback(
     id => {
