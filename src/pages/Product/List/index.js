@@ -8,6 +8,8 @@ import {useStore} from 'store'
 import useServices from 'services'
 import formatMoney from 'utils/formatMoney'
 
+import useDebounce from 'utils/debounce'
+
 import styles from './index.module.scss'
 
 export const columns = [
@@ -45,6 +47,10 @@ const ProductList = () => {
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState({value: '', currentSearch: ''})
 
+  const debouncedSearchTerm = useDebounce(search.value, 1000)
+
+  const onInputChange = useCallback(value => setSearch(prevSearch => ({...prevSearch, value})), [setSearch])
+
   const searchProducts = useCallback(
     async (searchTerm, page) => {
       const result = await searchProductsByName(searchTerm, page)
@@ -72,9 +78,12 @@ const ProductList = () => {
   const deleteProduct = useCallback(
     async id => {
       const result = await deleteProductById(id)
-      if (result) searchProducts(search.currentSearch, 1)
+      if (result) {
+        searchProducts(search.currentSearch, 1)
+        setPage(1)
+      }
     },
-    [deleteProductById, searchProducts, search.currentSearch]
+    [deleteProductById, searchProducts, setPage, search.currentSearch]
   )
 
   const onChangePage = useCallback(
@@ -93,18 +102,13 @@ const ProductList = () => {
     [setPage, loadMoreProducts]
   )
 
-  const onInputChange = useCallback(value => setSearch(prevSearch => ({...prevSearch, value})), [setSearch])
-
-  const callSearch = useCallback(() => {
-    setSearch(prevSearch => ({...prevSearch, currentSearch: prevSearch.value}))
-    searchProducts(search.value, 1)
-  }, [setSearch, searchProducts, search])
-
-  const handleKeyPress = useCallback(
-    event => {
-      if (event.key === 'Enter') return callSearch()
+  const callSearch = useCallback(
+    searchTerm => {
+      setSearch(prevSearch => ({...prevSearch, currentSearch: searchTerm}))
+      searchProducts(searchTerm, 1)
+      setPage(1)
     },
-    [callSearch]
+    [setSearch, setPage, searchProducts]
   )
 
   useEffect(() => {
@@ -112,8 +116,8 @@ const ProductList = () => {
   }, [showMenu])
 
   useEffect(() => {
-    searchProducts()
-  }, [searchProducts])
+    callSearch(debouncedSearchTerm)
+  }, [debouncedSearchTerm, callSearch])
 
   const formattedProducts = useMemo(() => {
     if (products && products.results) {
@@ -134,14 +138,13 @@ const ProductList = () => {
       <Paper className={styles.paper}>
         <div className={styles.search}>
           <Input
-            onKeyPress={handleKeyPress}
             value={search.value}
             onChange={event => onInputChange(event.target.value)}
             placeholder='Buscar por produto...'
             disabled={loading}
             label=''
             endIcon={
-              <div className={styles.searchButton} onClick={!loading ? callSearch : () => {}}>
+              <div className={styles.searchButton} onClick={!loading ? () => callSearch(search.value) : () => {}}>
                 <i className='fa fa-search' />
               </div>
             }

@@ -11,7 +11,7 @@ import {useStore} from 'store'
 import {mediaQueryMD} from 'assets/styles/_mediaQueries.scss'
 import useMediaQuery from 'utils/mediaQuery'
 
-import useDebounce from './debounce'
+import useDebounce from 'utils/debounce'
 
 import styles from './index.module.scss'
 
@@ -105,6 +105,7 @@ const ProductSearch = ({onConfirm, onEnterPress, searchProductsByName}) => {
     },
     [setQuantity, setSearchTerm, onConfirm]
   )
+
   useEffect(() => {
     inputRef.current.focus()
   })

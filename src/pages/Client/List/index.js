@@ -3,6 +3,8 @@ import {useHistory} from 'react-router-dom'
 
 import {Input, Paper, PlusButton, ResponsiveTable} from 'components'
 
+import useDebounce from 'utils/debounce'
+
 import {useStore} from 'store'
 
 import useServices from 'services'
@@ -31,7 +33,7 @@ const ClientList = () => {
   const {showMenu, loading, confirmationDialog} = useStore()
   const history = useHistory()
 
-  const {searchClientsByName, getClients, deleteClientById} = useServices()
+  const {searchClientsByName, deleteClientById} = useServices()
 
   const [clients, setClients] = useState({
     results: [],
@@ -41,6 +43,10 @@ const ClientList = () => {
 
   const [page, setPage] = useState(1)
   const [search, setSearch] = useState({value: '', currentSearch: ''})
+
+  const debouncedSearchTerm = useDebounce(search.value, 1000)
+
+  const onInputChange = useCallback(value => setSearch(prevSearch => ({...prevSearch, value})), [setSearch])
 
   const searchClients = useCallback(
     async (searchTerm, page) => {
@@ -63,19 +69,18 @@ const ClientList = () => {
         })
       }
     },
-    [getClients, setClients, search.currentSearch]
+    [setClients, searchClientsByName, search.currentSearch]
   )
 
   const deleteClient = useCallback(
     async id => {
       const result = await deleteClientById(id)
       if (result) {
-        setClients(result)
-        const newClients = await getClients()
-        if (newClients) setClients(newClients.data)
+        searchClients(search.currentSearch, 1)
+        setPage(1)
       }
     },
-    [deleteClientById, setClients, getClients]
+    [deleteClientById, searchClients, setPage, search.currentSearch]
   )
 
   const onChangePage = useCallback(
@@ -94,18 +99,13 @@ const ClientList = () => {
     [setPage, loadMoreClients]
   )
 
-  const onInputChange = useCallback(value => setSearch(prevSearch => ({...prevSearch, value})), [setSearch])
-
-  const callSearch = useCallback(() => {
-    setSearch(prevSearch => ({...prevSearch, currentSearch: prevSearch.value}))
-    searchClients(search.value, 1)
-  }, [setSearch, searchClients, search])
-
-  const handleKeyPress = useCallback(
-    event => {
-      if (event.key === 'Enter') return callSearch()
+  const callSearch = useCallback(
+    searchTerm => {
+      setSearch(prevSearch => ({...prevSearch, currentSearch: searchTerm}))
+      searchClients(searchTerm, 1)
+      setPage(1)
     },
-    [callSearch]
+    [setSearch, setPage, searchClients]
   )
 
   useEffect(() => {
@@ -113,8 +113,8 @@ const ClientList = () => {
   }, [showMenu])
 
   useEffect(() => {
-    searchClients()
-  }, [searchClients])
+    callSearch(debouncedSearchTerm)
+  }, [debouncedSearchTerm, callSearch])
 
   return (
     <>
@@ -124,7 +124,6 @@ const ClientList = () => {
       <Paper className={styles.paper}>
         <div className={styles.search}>
           <Input
-            onKeyPress={handleKeyPress}
             value={search.value}
             onChange={event => onInputChange(event.target.value)}
             placeholder='Buscar por cliente...'

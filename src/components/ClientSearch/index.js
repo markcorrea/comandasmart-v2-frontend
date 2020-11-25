@@ -7,7 +7,7 @@ import Input from 'components/Input'
 
 import {useStore} from 'store'
 
-import useDebounce from './debounce'
+import useDebounce from 'utils/debounce'
 
 import styles from './index.module.scss'
 
