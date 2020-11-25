@@ -96,7 +96,7 @@ const ClientForm = ({client, onSubmit, onCancel, loading}) => {
           as={MaskInput}
           name='phone'
           control={control}
-          label='Telefone (apenas números)'
+          label='Telefone'
           error={Boolean(errors.phone)}
           helperText={getErrorMessage(errors.phone)}
           mask={['+', /\d/, /\d/, '(', /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}

@@ -10,6 +10,8 @@ import useServices from 'services'
 import useMediaQuery from 'utils/mediaQuery'
 import {mediaQueryMD} from 'assets/styles/_mediaQueries.scss'
 
+import NewClientModalBody from './NewClientModalBody'
+
 import styles from './index.module.scss'
 
 const ModalBody = ({value, onChange}) => {
@@ -31,6 +33,24 @@ ModalBody.propTypes = {
   onChange: PropTypes.func,
 }
 
+const ClientModalBody = ({searchClientsByName, bindClient, setClientModalOpen, onNewClientClick}) => {
+  return (
+    <ClientSearch
+      searchClientsByName={searchClientsByName}
+      onNewClientClick={onNewClientClick}
+      onConfirm={client => bindClient(client)}
+      onCancel={() => setClientModalOpen(false)}
+    />
+  )
+}
+
+ClientModalBody.propTypes = {
+  searchClientsByName: PropTypes.func,
+  bindClient: PropTypes.func,
+  setClientModalOpen: PropTypes.func,
+  onNewClientClick: PropTypes.func,
+}
+
 const TicketDetails = () => {
   const {
     searchProductsByName,
@@ -48,6 +68,7 @@ const TicketDetails = () => {
   const [code, setCode] = useState('')
   const [ticket, setTicket] = useState(null)
   const [clientModalOpen, setClientModalOpen] = useState(false)
+  const [newClientModalOpen, setNewClientModalOpen] = useState(false)
   const [codeModalOpen, setCodeModalOpen] = useState(false)
   const mediaMD = useMediaQuery('min', mediaQueryMD)
 
@@ -116,6 +137,11 @@ const TicketDetails = () => {
     return setClientModalOpen(true)
   }, [ticket, setClientModalOpen, unbindClient, confirmationDialog])
 
+  const onNewClientClick = useCallback(() => {
+    setClientModalOpen(false)
+    setNewClientModalOpen(true)
+  }, [setClientModalOpen, setNewClientModalOpen])
+
   const buttons = [
     {
       label: `${ticket?.client ? 'Remover' : 'Vincular'} Cliente`,
@@ -164,11 +190,20 @@ const TicketDetails = () => {
           <SpeedDial buttons={buttons} />
         </div>
       )}
+      <Modal
+        maxWidth='md'
+        header='Novo Cliente'
+        onCancel={() => setNewClientModalOpen(false)}
+        open={newClientModalOpen}
+        hideButtons>
+        <NewClientModalBody onConfirm={bindClient} closeModal={() => setNewClientModalOpen(false)} />
+      </Modal>
       <Modal header='Alterar Cliente' onCancel={() => setClientModalOpen(false)} open={clientModalOpen} hideButtons>
-        <ClientSearch
+        <ClientModalBody
           searchClientsByName={searchClientsByName}
-          onConfirm={client => bindClient(client)}
-          onCancel={() => setClientModalOpen(false)}
+          bindClient={bindClient}
+          setClientModalOpen={setClientModalOpen}
+          onNewClientClick={onNewClientClick}
         />
       </Modal>
       <Modal header='Digite o novo código.' onConfirm={changeCode} onCancel={() => setCodeModalOpen(false)} open={codeModalOpen}>

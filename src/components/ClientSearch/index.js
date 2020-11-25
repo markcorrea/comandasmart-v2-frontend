@@ -7,11 +7,14 @@ import Input from 'components/Input'
 
 import {useStore} from 'store'
 
+import {mediaQuerySM} from 'assets/styles/_mediaQueries.scss'
+import useMediaQuery from 'utils/mediaQuery'
+
 import useDebounce from 'utils/debounce'
 
 import styles from './index.module.scss'
 
-const ClientSearch = ({onConfirm, onCancel, onEnterPress, searchClientsByName}) => {
+const ClientSearch = ({onNewClientClick, onConfirm, onCancel, onEnterPress, searchClientsByName}) => {
   const [client, setClient] = useState(null)
   const [clientList, setClientList] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
@@ -19,13 +22,27 @@ const ClientSearch = ({onConfirm, onCancel, onEnterPress, searchClientsByName}) 
   const [loadingList, setLoadingList] = useState(false)
   const wrapperRef = useRef(null)
 
+  const mediaQuerySmall = useMediaQuery('min', mediaQuerySM)
+
   const {loading} = useStore()
 
-  const rightButton = {
+  const buttonRight = {
     root: {
       minWidth: 'initial',
       maxWidth: '200px',
-      margin: '5px 0 5px 15px',
+      margin: mediaQuerySmall ? '5px 0 5px 15px' : '0 auto 20px',
+      float: mediaQuerySmall ? 'right' : 'none',
+      display: mediaQuerySmall ? 'initial' : 'block',
+    },
+  }
+
+  const buttonLeft = {
+    root: {
+      minWidth: 'initial',
+      maxWidth: '200px',
+      margin: mediaQuerySmall ? '5px 0 5px 15px' : '0 auto 20px',
+      float: mediaQuerySmall ? 'left' : 'none',
+      display: mediaQuerySmall ? 'initial' : 'block',
     },
   }
 
@@ -121,18 +138,24 @@ const ClientSearch = ({onConfirm, onCancel, onEnterPress, searchClientsByName}) 
         )}
       </div>
       <div className={styles.buttonContainer}>
-        <Button color='cancel' classes={rightButton} onClick={onCancel}>
+        <Button onClick={() => onConfirm(client)} classes={buttonRight} disabled={!client}>
+          Confirmar
+        </Button>
+        <Button color='cancel' classes={buttonRight} onClick={onCancel}>
           Cancelar
         </Button>
-        <Button onClick={() => onConfirm(client)} classes={rightButton} disabled={!client}>
-          Alterar
-        </Button>
+        {onNewClientClick && (
+          <Button classes={buttonLeft} onClick={onNewClientClick}>
+            Novo Cliente
+          </Button>
+        )}
       </div>
     </div>
   )
 }
 
 ClientSearch.propTypes = {
+  onNewClientClick: PropTypes.func,
   onConfirm: PropTypes.func,
   onCancel: PropTypes.func,
   onEnterPress: PropTypes.func,
