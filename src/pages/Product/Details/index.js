@@ -59,7 +59,7 @@ const ProductDetails = () => {
     async body => {
       const payload = {
         ...body,
-        unique_code: (body.unique_code && body.unique_code !== '') || null,
+        unique_code: ((body.unique_code && body.unique_code !== '') && body.unique_code) || null,
         bar_code: (body.bar_code && body.bar_code !== '') || null,
         ...(productId ? {id: productId} : {}),
       }
