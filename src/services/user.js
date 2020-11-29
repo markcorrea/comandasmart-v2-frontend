@@ -1,7 +1,6 @@
 import {useCallback} from 'react'
 import axios from 'axios'
 import server from 'services/server'
-import users from 'mocks/user'
 import {verifyToken} from 'utils/authentication'
 
 import {useStore} from 'store'
@@ -36,15 +35,26 @@ const useUsers = () => {
   }, [setLoading, token, show, history])
 
   const getUserById = useCallback(
-    id =>
-      new Promise(resolve => {
-        setLoading(true)
-        setTimeout(() => {
-          setLoading(false)
-          resolve({data: users.data.find(user => user.id === id)})
-        }, 1000)
-      }),
-    [setLoading]
+    id => {
+      setLoading(true)
+      return axios
+        .get(`${server}/users/details/${id}/`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then(response => {
+          return response.data
+        })
+        .catch(error => {
+          if (error.response.status === 401) {
+            history.push('/')
+            show('Usuário não possui permissão', 'error')
+          }
+        })
+        .finally(() => setLoading(false))
+    },
+    [setLoading, token, history, show]
   )
 
   const getUserInfoByToken = useCallback(() => {
@@ -68,41 +78,70 @@ const useUsers = () => {
 
   const saveUser = useCallback(
     body => {
+      // is updating
       if (body.id) {
-        // is updating
-        return new Promise(resolve => {
-          setLoading(true)
-          setTimeout(() => {
-            show('Usuário salvo com sucesso!')
-            setLoading(false)
-            resolve(body)
-          }, 1000)
-        })
-      }
-      // is creating
-      return new Promise(resolve => {
         setLoading(true)
-        setTimeout(() => {
-          show('Usuário criado com sucesso!')
-          setLoading(false)
-          resolve(body)
-        }, 1000)
-      })
+        return axios
+          .patch(`${server}/users/edit/${body.id}/`, body, {
+            headers: {
+              Authorization: token,
+            },
+          })
+          .then(response => {
+            return response.data
+          })
+          .catch(error => {
+            if (error.response.status === 401) {
+              history.push('/')
+              show('Usuário não possui permissão', 'error')
+            }
+          })
+          .finally(() => setLoading(false))
+      }
+
+      // is creating
+      setLoading(true)
+      return axios
+        .post(`${server}/users/create/`, body, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then(response => {
+          return response.data
+        })
+        .catch(error => {
+          if (error.response.status === 401) {
+            history.push('/')
+            show('Usuário não possui permissão', 'error')
+          }
+        })
+        .finally(() => setLoading(false))
     },
-    [setLoading, show]
+    [setLoading, token, history, show]
   )
 
   const deleteUserById = useCallback(
-    id =>
-      new Promise(resolve => {
-        setLoading(true)
-        setTimeout(() => {
-          setLoading(false)
-          show('Usuário removido com sucesso!')
-          resolve({...users, data: users.data.filter(user => user.id !== id)})
-        }, 1000)
-      }),
-    [setLoading, show]
+    id => {
+      setLoading(true)
+      return axios
+        .delete(`${server}/users/delete/${id}/`, {
+          headers: {
+            Authorization: token,
+          },
+        })
+        .then(response => {
+          return response.data
+        })
+        .catch(error => {
+          if (error.response.status === 401) {
+            history.push('/')
+            show('Usuário não possui permissão', 'error')
+          }
+        })
+        .finally(() => setLoading(false))
+    },
+    [setLoading, token, history, show]
   )
 
   return {

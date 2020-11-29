@@ -4,7 +4,7 @@ import {useForm, Controller} from 'react-hook-form'
 import {yupResolver} from '@hookform/resolvers'
 import * as yup from 'yup'
 
-import {Button, Input} from 'components'
+import {Button, Input, MaskInput, Select} from 'components'
 
 import {mediaQuerySM} from 'assets/styles/_mediaQueries.scss'
 
@@ -13,8 +13,13 @@ import useMediaQuery from 'utils/mediaQuery'
 import styles from './index.module.scss'
 
 const validationRules = yup.object().shape({
-  name: yup.string().required('Nome é um campo obrigatório'),
-  email: yup.string().email('Digite um e-mail válido, ex: john@gmail.com'),
+  first_name: yup.string().required('Nome é um campo obrigatório'),
+  last_name: yup.string().required('Sobrenome é um campo obrigatório'),
+  email: yup
+    .string()
+    .email('Digite um e-mail válido, ex: john@gmail.com')
+    .required('E-mail é um campo obrigatório'),
+  group: yup.string().required('Nível de Acesso é um campo obrigatório'),
 })
 
 const getErrorMessage = error => {
@@ -25,11 +30,17 @@ const defaultValues = {
   name: '',
   uniqueCode: '',
   email: '',
-  role: '',
   password: '',
+  group: '',
+  cpf: '',
+  phone: '',
+  address: '',
+  city: '',
+  state: '',
+  country: '',
 }
 
-const UserForm = ({user, onSubmit, onCancel, loading}) => {
+const UserForm = ({user, groups, onSubmit, onCancel, loading}) => {
   const mediaQuerySmall = useMediaQuery('min', mediaQuerySM)
   const headerButtonClass = {
     root: {
@@ -54,40 +65,33 @@ const UserForm = ({user, onSubmit, onCancel, loading}) => {
       <div className={styles.fields}>
         <Controller
           as={Input}
-          name='name'
+          name='first_name'
           control={control}
           label='Nome'
-          error={Boolean(errors.name)}
-          helperText={getErrorMessage(errors.name)}
-          disabled={loading}
+          error={Boolean(errors.first_name)}
+          helperText={getErrorMessage(errors.first_name)}
+          disabled={user?.first_name || loading}
           isRequired
         />
         <Controller
           as={Input}
-          name='uniqueCode'
+          name='last_name'
           control={control}
-          label={'Código Único'}
-          error={Boolean(errors.uniqueCode)}
-          helperText={getErrorMessage(errors.uniqueCode)}
-          disabled={loading}
+          label='Sobrenome'
+          error={Boolean(errors.last_name)}
+          helperText={getErrorMessage(errors.last_name)}
+          disabled={user?.last_name || loading}
+          isRequired
         />
         <Controller
           as={Input}
           name='email'
           control={control}
-          label={'E-mail'}
+          label='E-mail'
           error={Boolean(errors.email)}
           helperText={getErrorMessage(errors.email)}
-          disabled={loading}
-        />
-        <Controller
-          as={Input}
-          name='role'
-          control={control}
-          label='Nível de Acesso'
-          error={Boolean(errors.birthDate)}
-          helperText={getErrorMessage(errors.birthDate)}
-          disabled={loading}
+          disabled={user?.last_name || loading}
+          isRequired
         />
         <Controller
           as={Input}
@@ -96,6 +100,72 @@ const UserForm = ({user, onSubmit, onCancel, loading}) => {
           label='Senha'
           error={Boolean(errors.password)}
           helperText={getErrorMessage(errors.password)}
+          disabled={loading}
+          isRequired={!user?.id}
+        />
+        <Controller
+          as={Select}
+          name='group'
+          items={groups}
+          control={control}
+          label='Nível de Acesso'
+          showEmptyOption
+          disabled={loading}
+          isRequired
+        />
+        <Controller
+          as={Input}
+          name='cpf'
+          control={control}
+          label='CPF'
+          error={Boolean(errors.cpf)}
+          helperText={getErrorMessage(errors.cpf)}
+          disabled={user?.cpf || loading}
+        />
+        <Controller
+          as={MaskInput}
+          name='phone'
+          control={control}
+          label='Telefone'
+          error={Boolean(errors.phone)}
+          helperText={getErrorMessage(errors.phone)}
+          mask={['+', /\d/, /\d/, '(', /\d/, /\d/, ')', ' ', /\d/, /\d/, /\d/, /\d/, /\d/, '-', /\d/, /\d/, /\d/, /\d/]}
+          disabled={loading}
+        />
+        <Controller
+          as={Input}
+          name='address'
+          control={control}
+          label='Endereço'
+          error={Boolean(errors.address)}
+          helperText={getErrorMessage(errors.address)}
+          disabled={loading}
+        />
+        <Controller
+          as={Input}
+          name='city'
+          control={control}
+          label='Cidade'
+          error={Boolean(errors.city)}
+          helperText={getErrorMessage(errors.city)}
+          disabled={loading}
+        />
+        <Controller
+          as={Input}
+          name='state'
+          control={control}
+          label='Estado'
+          error={Boolean(errors.state)}
+          helperText={getErrorMessage(errors.state)}
+          disabled={loading}
+        />
+        <Controller
+          as={Input}
+          name='country'
+          control={control}
+          label='País'
+          error={Boolean(errors.country)}
+          helperText={getErrorMessage(errors.country)}
           disabled={loading}
         />
       </div>
@@ -113,6 +183,7 @@ const UserForm = ({user, onSubmit, onCancel, loading}) => {
 
 UserForm.propTypes = {
   user: PropTypes.object,
+  groups: PropTypes.array,
   onSubmit: PropTypes.func,
   onCancel: PropTypes.func,
   loading: PropTypes.bool,

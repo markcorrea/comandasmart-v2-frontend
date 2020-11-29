@@ -78,7 +78,7 @@ const ClientForm = ({client, onSubmit, onCancel, loading}) => {
           as={Input}
           name='cpf'
           control={control}
-          label={'CPF'}
+          label='CPF'
           error={Boolean(errors.cpf)}
           helperText={getErrorMessage(errors.cpf)}
           disabled={loading}

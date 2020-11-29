@@ -19,6 +19,7 @@ export const columns = [
     key: 'name',
     value: 'Nome',
     textAlign: 'left',
+    custom: row => `${row.first_name} ${row.last_name}`,
   },
 ]
 
@@ -35,25 +36,28 @@ const UserList = () => {
     rowsPerPage: 0,
   })
 
-  useEffect(() => {
-    showMenu()
-  }, [showMenu])
-
-  useEffect(() => {
-    const fetchUsers = async () => {
-      const result = await getUsers()
-      if (result) setUsers(result)
-    }
-    fetchUsers()
+  const fetchUsers = useCallback(async () => {
+    const result = await getUsers()
+    if (result) setUsers(result.data)
   }, [getUsers, setUsers])
 
   const deleteUser = useCallback(
     async id => {
       const result = await deleteUserById(id)
-      if (result) setUsers(result)
+      if (result) {
+        fetchUsers()
+      }
     },
-    [deleteUserById, setUsers]
+    [deleteUserById, fetchUsers]
   )
+
+  useEffect(() => {
+    showMenu()
+  }, [showMenu])
+
+  useEffect(() => {
+    fetchUsers()
+  }, [fetchUsers])
 
   return (
     <>

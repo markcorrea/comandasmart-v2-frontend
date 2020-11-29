@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback} from 'react'
+import React, {useState, useEffect, useCallback, useMemo, memo} from 'react'
 import {useParams, useHistory} from 'react-router-dom'
 
 import {Paper} from 'components'
@@ -15,34 +15,77 @@ const UserDetails = () => {
   const {showMenu, loading} = useStore()
   const {userId} = useParams()
   const history = useHistory()
-  const {getUserById, saveUser} = useServices()
+  const {getUserById, saveUser, getGroups} = useServices()
 
-  const [user, setUser] = useState({})
+  const [user, setUser] = useState(null)
+  const [groups, setGroups] = useState([])
+
+  const fetchGroups = useCallback(async () => {
+    const result = await getGroups()
+    if (result) {
+      const adjustedGroups = result.data.map(item => ({...item, value: item.id}))
+      setGroups(adjustedGroups)
+    }
+  }, [getGroups, setGroups])
+
+  const fetchUser = useCallback(async () => {
+    const result = await getUserById(userId)
+    if (result) setUser(result.data)
+  }, [getUserById, userId, setUser])
 
   useEffect(() => {
-    const fetchUser = async () => {
-      const result = await getUserById(userId)
-      if (result) setUser(result.data)
+    if (userId) {
+      fetchUser()
     }
+  }, [fetchUser, userId])
 
-    if (userId) fetchUser()
-  }, [userId, getUserById, setUser])
+  useEffect(() => {
+    fetchGroups()
+  }, [fetchGroups])
 
   useEffect(() => {
     showMenu()
   }, [showMenu])
 
   const postUser = useCallback(
-    async body => {
+    async data => {
       const payload = {
-        ...body,
         ...(userId ? {id: userId} : {}),
+        user: {
+          ...(data.password.length ? {password: data.password} : ''),
+          ...(userId ? {username: data.email} : {}),
+          ...(userId ? {email: data.email} : {}),
+          ...(userId ? {first_name: data.first_name} : {}),
+          ...(userId ? {last_name: data.last_name} : {}),
+        },
+        user_profile: {
+          ...(data.cpf ? {cpf: data.cpf} : {}),
+          ...(data.phone ? {phone: data.phone} : {}),
+          ...(data.address ? {address: data.address} : {}),
+          ...(data.city ? {city: data.city} : {}),
+          ...(data.state ? {state: data.state} : {}),
+          ...(data.country ? {country: data.country} : {}),
+        },
+        group: data.group,
       }
+
       const result = await saveUser(payload)
       if (result) history.push(`/users`)
     },
     [userId, saveUser, history]
   )
+
+  const formattedUser = useMemo(() => {
+    if (user) {
+      const {id, ...userProfile} = user.user_profile // eslint-disable-line
+      return {
+        ...user.user,
+        ...userProfile,
+        group: user.group,
+      }
+    }
+    return null
+  }, [user])
 
   return (
     <>
@@ -50,10 +93,16 @@ const UserDetails = () => {
         <h1>{userId ? 'Editar' : 'Criar'} Usuário</h1>
       </header>
       <Paper className={styles.paper}>
-        <UserForm user={user} onSubmit={data => postUser(data)} onCancel={() => history.push('/users')} loading={loading} />
+        <UserForm
+          user={formattedUser}
+          groups={groups}
+          onSubmit={data => postUser(data)}
+          onCancel={() => history.push('/users')}
+          loading={loading}
+        />
       </Paper>
     </>
   )
 }
 
-export default UserDetails
+export default memo(UserDetails)

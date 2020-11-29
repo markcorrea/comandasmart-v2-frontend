@@ -21,11 +21,13 @@ export const columns = [
     key: 'email',
     value: 'E-mail',
     textAlign: 'left',
+    custom: client => client.email || '-',
   },
   {
     key: 'cpf',
     value: 'CPF',
     textAlign: 'left',
+    custom: client => client.cpf || '-',
   },
 ]
 

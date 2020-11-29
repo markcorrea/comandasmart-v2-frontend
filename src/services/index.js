@@ -6,6 +6,7 @@ import useMenus from './menu'
 import useOrders from './order'
 import useProducts from './product'
 import useReports from './report'
+import useGroups from './group'
 import useTerminalOrders from './terminalOrder'
 import useTerminals from './terminal'
 import useTickets from './ticket'
@@ -21,6 +22,7 @@ const useServices = () => {
     ...useOrders(),
     ...useProducts(),
     ...useReports(),
+    ...useGroups(),
     ...useTerminalOrders(),
     ...useTerminals(),
     ...useTickets(),

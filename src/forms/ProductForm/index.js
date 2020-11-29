@@ -13,6 +13,7 @@ import styles from './index.module.scss'
 
 const validationRules = yup.object().shape({
   name: yup.string().required('Nome é um campo obrigatório'),
+  unique_code: yup.string().test('len', 'Máximo de 4 caracteres', val => val.length < 5),
   stock: yup.string().required('Estoque é obrigatório, mesmo que seja 0'),
   price: yup.string().required('Preço é obrigatório, mesmo que seja 0'),
 })
@@ -65,7 +66,15 @@ const ProductForm = ({product, terminals, unitTypes, onSubmit, onCancel, loading
           disabled={loading}
           isRequired
         />
-        <Controller as={NumberInput} name='unique_code' control={control} label='Código Único' disabled={loading} />
+        <Controller
+          as={NumberInput}
+          name='unique_code'
+          control={control}
+          label='Código Único'
+          disabled={loading}
+          error={Boolean(errors.unique_code)}
+          helperText={getErrorMessage(errors.unique_code)}
+        />
         <Controller as={Input} name='brand' control={control} label={'Marca'} disabled={loading} />
         <Controller as={NumberInput} name='bar_code' control={control} label='Código de Barras' disabled={loading} />
         <Controller

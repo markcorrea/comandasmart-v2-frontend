@@ -45,7 +45,7 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-const Select = ({label, startIcon, endIcon, items, showEmptyOption, ...rest}) => {
+const Select = ({label, startIcon, endIcon, items, showEmptyOption, isRequired, ...rest}) => {
   const classes = useStyles()
 
   const setAdornment = (icon, position) => {
@@ -61,7 +61,7 @@ const Select = ({label, startIcon, endIcon, items, showEmptyOption, ...rest}) =>
       <TextField
         select
         classes={{root: classes.root}}
-        label={label}
+        label={`${label} ${isRequired ? '*' : ''}`}
         InputProps={{
           classes: {root: classes.selectRoot, underline: classes.selectUnderline},
           startAdornment: startIcon ? setAdornment(startIcon, 'start') : null,
@@ -93,6 +93,7 @@ Select.propTypes = {
   endIcon: iconProps,
   items: PropTypes.array,
   showEmptyOption: PropTypes.bool,
+  isRequired: PropTypes.bool,
 }
 
 Select.defaultProps = {
