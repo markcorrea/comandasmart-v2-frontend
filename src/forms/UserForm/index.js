@@ -22,8 +22,6 @@ const validationRules = yup.object().shape({
   group: yup.string().required('Nível de Acesso é um campo obrigatório'),
   state: yup.string().test('len', 'Máximo de 2 caracteres', val => val.length < 3),
   country: yup.string().test('len', 'Máximo de 2 caracteres', val => val.length < 3),
-
-  
 })
 
 const getErrorMessage = error => {
