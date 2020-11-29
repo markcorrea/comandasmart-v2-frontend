@@ -20,6 +20,10 @@ const validationRules = yup.object().shape({
     .email('Digite um e-mail válido, ex: john@gmail.com')
     .required('E-mail é um campo obrigatório'),
   group: yup.string().required('Nível de Acesso é um campo obrigatório'),
+  state: yup.string().test('len', 'Máximo de 2 caracteres', val => val.length < 3),
+  country: yup.string().test('len', 'Máximo de 2 caracteres', val => val.length < 3),
+
+  
 })
 
 const getErrorMessage = error => {
