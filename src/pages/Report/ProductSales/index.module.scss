@@ -1,0 +1,59 @@
+@import '~assets/styles/_mediaQueries.scss';
+@import '~assets/styles/_colors.scss';
+@import '~assets/styles/_typography.scss';
+
+.header {
+  height: 68px;
+}
+.paper {
+  min-height: calc(100% - 68px);
+  padding: 20px 20px 120px;
+  align-content: flex-start;
+  position: relative;
+}
+
+.table {
+  width: 100%;
+  margin-top: 50px;
+}
+
+.search {
+  margin-bottom: 20px;
+  .datepickers {
+    @include media-breakpoint-up(md) {
+      display: flex;
+      flex-direction: row;
+      .datepicker {
+        margin-right: 20px;
+      }
+    }
+  }
+}
+
+.searchText {
+  font-family: $defaultFontFamily;
+  font-size: $smallerFontSize;
+  font-weight: 300;
+  margin: 5px 0;
+  .searchTerm {
+    font-style: italic;
+    color: $gray;
+  }
+}
+
+.searchButton {
+  float: right;
+  margin-top: 7px;
+  @include media-breakpoint-up(md) {
+    float: initial;
+    margin-top: 25px;
+  }
+}
+
+.validationMessage {
+  font-family: $defaultFontFamily;
+  font-size: $smallerFontSize;
+  font-weight: 300;
+  margin: 5px 0;
+  color: red;
+}

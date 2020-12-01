@@ -41,8 +41,36 @@ const useReports = () => {
     [setLoading, token, history, show]
   )
 
+  const getProductSalesReport = useCallback(
+    ({start_date, end_date}, page = null) => {
+      setLoading(true)
+      return axios
+        .post(
+          `${server}/reports/product-sales/${page ? '?page=' + page : ''}`,
+          {start_date, end_date},
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        )
+        .then(response => {
+          return response.data
+        })
+        .catch(error => {
+          if (error.response.status === 401) {
+            history.push('/')
+            show('Usuário não possui permissão', 'error')
+          }
+        })
+        .finally(() => setLoading(false))
+    },
+    [setLoading, token, history, show]
+  )
+
   return {
     getSalesReport,
+    getProductSalesReport,
   }
 }
 

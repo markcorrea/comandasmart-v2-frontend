@@ -1,8 +1,8 @@
 export default [
-  // {
-  //   name: 'Produtos Mais Vendidos',
-  //   url: 'report_most_sold',
-  // },
+  {
+    name: 'Produtos Vendidos',
+    url: 'report_product_sales',
+  },
   {
     name: 'Vendas (Filtro)',
     url: 'report_sales',

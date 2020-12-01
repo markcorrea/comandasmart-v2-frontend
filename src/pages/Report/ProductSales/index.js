@@ -37,9 +37,9 @@ export const columns = [
 
 const buttonMobileClass = {root: {minWidth: '20px', padding: '10px 15px 9px'}}
 
-const ReportSales = () => {
+const ProductSales = () => {
   const {showMenu, loading} = useStore()
-  const {getSalesReport} = useServices()
+  const {getProductSalesReport} = useServices()
 
   const mediaMD = useMediaQuery('min', mediaQueryMD)
 
@@ -61,15 +61,15 @@ const ReportSales = () => {
 
   const fetchProducts = useCallback(
     async ({start_date, end_date}, page) => {
-      const result = await getSalesReport({start_date, end_date}, page)
+      const result = await getProductSalesReport({start_date, end_date}, page)
       if (result) setProducts(prevProducts => ({...prevProducts, ...result.data}))
     },
-    [getSalesReport, setProducts]
+    [getProductSalesReport, setProducts]
   )
 
   const loadMoreProducts = useCallback(
     async ({start_date, end_date}, page) => {
-      const result = await getSalesReport({start_date, end_date}, page)
+      const result = await getProductSalesReport({start_date, end_date}, page)
       if (result) {
         setProducts(prevProducts => {
           return {
@@ -80,7 +80,7 @@ const ReportSales = () => {
         })
       }
     },
-    [setProducts, getSalesReport]
+    [setProducts, getProductSalesReport]
   )
 
   const handleButtonClick = useCallback(
@@ -149,7 +149,7 @@ const ReportSales = () => {
   return (
     <>
       <header className={styles.header}>
-        <h1>Relatório de Vendas</h1>
+        <h1>Produtos Vendidos</h1>
       </header>
       <Paper className={styles.paper}>
         <div className={styles.search}>
@@ -205,4 +205,4 @@ const ReportSales = () => {
   )
 }
 
-export default memo(ReportSales)
+export default memo(ProductSales)

@@ -64,8 +64,8 @@ const Pagination = ({count, page, onChangePage, loading}) => {
       onChangePage={!loading ? (_, page) => onChangePage(formatZeroBasedPage(page)) : () => {}}
       rowsPerPage={50}
       rowsPerPageOptions={[50]}
-      nextIconButtonProps={{classes: nextIconClasses}}
-      backIconButtonProps={{classes: backIconClasses}}
+      nextIconButtonProps={{classes: nextIconClasses, disabled: loading}}
+      backIconButtonProps={{classes: backIconClasses, disabled: loading}}
     />
   )
 }

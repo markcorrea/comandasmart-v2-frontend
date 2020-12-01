@@ -24,7 +24,7 @@ const CompanyDetails = lazy(() => import(/* webpackChunkName: "CompanyDetails" *
 const ProductList = lazy(() => import(/* webpackChunkName: "ProductList" */ '../pages/Product/List'))
 const ProductDetails = lazy(() => import(/* webpackChunkName: "ProductDetails" */ '../pages/Product/Details'))
 const Reports = lazy(() => import(/* webpackChunkName: "Reports" */ '../pages/Report'))
-const ReportMostSold = lazy(() => import(/* webpackChunkName: "ReportMostSold" */ '../pages/Report/MostSold'))
+const ProductSales = lazy(() => import(/* webpackChunkName: "ProductSales" */ '../pages/Report/ProductSales'))
 const ReportSales = lazy(() => import(/* webpackChunkName: "ReportSales" */ '../pages/Report/Sales'))
 const TerminalList = lazy(() => import(/* webpackChunkName: "TerminalList" */ '../pages/Terminal/List'))
 const TerminalView = lazy(() => import(/* webpackChunkName: "TerminalView" */ '../pages/Terminal/View'))
@@ -65,7 +65,7 @@ const AppRouter = () => {
                     <Route path='/product/:productId' component={ProductDetails} />
                     <Route path='/product' component={ProductDetails} />
                     <Route exact path='/reports' component={Reports} />
-                    <Route exact path='/report_most_sold' component={ReportMostSold} />
+                    <Route exact path='/report_product_sales' component={ProductSales} />
                     <Route exact path='/report_sales' component={ReportSales} />
                     <Route path='/terminals' component={TerminalList} layout={Layout} />
                     <Route exact path='/terminal/:terminalId/view' component={TerminalView} />
