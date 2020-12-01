@@ -14,8 +14,10 @@ import {mediaQueryMD} from 'assets/styles/_mediaQueries.scss'
 
 import styles from './index.module.scss'
 
-const today = new Date(new Date().setHours(12, 0))
-let lastMonth = new Date(new Date().setHours(12, 0))
+// const today = new Date(new Date().setHours(12, 0))
+// let lastMonth = new Date(new Date().setHours(12, 0))
+const today = new Date()
+let lastMonth = new Date()
 lastMonth = new Date(lastMonth.setMonth(today.getMonth() - 1))
 
 export const columns = [
@@ -25,13 +27,9 @@ export const columns = [
     textAlign: 'left',
   },
   {
-    key: 'brand',
-    value: 'Marca',
+    key: 'quantity',
+    value: 'Quantidade',
     textAlign: 'left',
-  },
-  {
-    key: 'stock',
-    value: 'Estoque',
   },
   {
     key: 'price',
@@ -141,10 +139,10 @@ const ReportSales = () => {
 
   const formattedProducts = useMemo(() => {
     if (products && products.results) {
-      return products.results.map(({product}) => ({
-        ...product,
-        brand: product.brand || '-',
-        price: formatMoney(parseFloat(product.price)),
+      return products.results.map(item => ({
+        name: item.product.name,
+        quantity: item.quantity,
+        price: formatMoney(parseFloat(item.price)),
       }))
     }
     return []
