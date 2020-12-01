@@ -92,7 +92,7 @@ const ReportSales = () => {
       setPage(page)
       fetchProducts({start_date, end_date}, page)
     },
-    [setPage, fetchProducts, validation.valid]
+    [setPage, fetchProducts]
   )
 
   const onChangePage = useCallback(
