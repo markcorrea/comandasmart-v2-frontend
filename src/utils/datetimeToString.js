@@ -17,6 +17,17 @@ export const datetimeToString = input => {
   return `${date} às ${time}`
 }
 
+export const dateToString = input => {
+  input = new Date(input)
+  const day = addZero(input.getDate().toString())
+  const month = addZero((input.getMonth() + 1).toString())
+  const year = input.getFullYear().toString()
+
+  const date = `${day}/${month}/${year}`
+
+  return `${date}`
+}
+
 export const datetimeToAmericanDateString = input => {
   const day = addZero(input.getDate().toString())
   const month = addZero((input.getMonth() + 1).toString())

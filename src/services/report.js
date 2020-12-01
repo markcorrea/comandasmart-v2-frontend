@@ -1,44 +1,49 @@
 import {useCallback} from 'react'
-import products from 'mocks/product'
+import axios from 'axios'
+import server from 'services/server'
+import {verifyToken} from 'utils/authentication'
 
 import {useStore} from 'store'
 import {useMessage} from 'components/Message'
+import {useHistory} from 'react-router-dom'
 
-const useProducts = () => {
+const useReports = () => {
   const {setLoading} = useStore()
   const {show} = useMessage()
+  const history = useHistory()
 
-  const getMostSoldProducts = useCallback(
-    search =>
-      new Promise(resolve => {
-        setLoading(true)
-        setTimeout(() => {
-          setLoading(false)
-          show('Relatório encontrado com sucesso!')
-          const result = products.data.map((product, index) => ({...product, sold: products.data.length - index}))
-          resolve({...products, data: result})
-        }, 1000)
-      }),
-    [setLoading, show]
-  )
+  const token = `Token ${verifyToken()}`
 
-  const getSalesByFilter = useCallback(
-    search =>
-      new Promise(resolve => {
-        setLoading(true)
-        setTimeout(() => {
-          setLoading(false)
-          show('Relatório encontrado com sucesso!')
-          resolve(products)
-        }, 1000)
-      }),
-    [setLoading, show]
+  const getSalesReport = useCallback(
+    ({start_date, end_date}, page = null) => {
+      setLoading(true)
+      return axios
+        .post(
+          `${server}/reports/sales/${page ? '?page=' + page : ''}`,
+          {start_date, end_date},
+          {
+            headers: {
+              Authorization: token,
+            },
+          }
+        )
+        .then(response => {
+          return response.data
+        })
+        .catch(error => {
+          if (error.response.status === 401) {
+            history.push('/')
+            show('Usuário não possui permissão', 'error')
+          }
+        })
+        .finally(() => setLoading(false))
+    },
+    [setLoading, token, history, show]
   )
 
   return {
-    getMostSoldProducts,
-    getSalesByFilter,
+    getSalesReport,
   }
 }
 
-export default useProducts
+export default useReports

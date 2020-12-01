@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import {KeyboardDatePicker} from '@material-ui/pickers'
+import {KeyboardDateTimePicker} from '@material-ui/pickers'
 import {makeStyles} from '@material-ui/core/styles'
 
 import {gray} from 'assets/styles/main.module.scss'
@@ -39,12 +39,12 @@ const useStyles = makeStyles(() => ({
   },
 }))
 
-const Datepicker = ({label, value, onChange, disableTyping, className, ...props}) => {
+const Datetimepicker = ({label, value, onChange, disableTyping, className, ...props}) => {
   const classes = useStyles()
 
   return (
     <div className={className}>
-      <KeyboardDatePicker
+      <KeyboardDateTimePicker
         disableToolbar
         format='dd/MM/yyyy'
         label={label}
@@ -66,13 +66,15 @@ const Datepicker = ({label, value, onChange, disableTyping, className, ...props}
             root: classes.labelRoot,
           },
         }}
+        cancelLabel='Cancelar'
+        todayLabel='Hoje'
         {...props}
       />
     </div>
   )
 }
 
-Datepicker.propTypes = {
+Datetimepicker.propTypes = {
   label: PropTypes.string,
   value: PropTypes.any,
   onChange: PropTypes.func,
@@ -80,11 +82,11 @@ Datepicker.propTypes = {
   className: PropTypes.string,
 }
 
-Datepicker.defaultProps = {
+Datetimepicker.defaultProps = {
   label: null,
   value: new Date(),
   disableTyping: false,
   onChange: () => {},
 }
 
-export default Datepicker
+export default Datetimepicker
