@@ -19,6 +19,11 @@ export const columns = [
     textAlign: 'left',
   },
   {
+    key: 'unique_code',
+    value: 'Código Único',
+    textAlign: 'left',
+  },
+  {
     key: 'brand',
     value: 'Marca',
     textAlign: 'left',
