@@ -60,7 +60,7 @@ const ProductDetails = () => {
       const payload = {
         ...body,
         unique_code: ((body.unique_code && body.unique_code !== '') && body.unique_code) || null,
-        bar_code: (body.bar_code && body.bar_code !== '') || null,
+        bar_code: ((body.bar_code && body.bar_code !== '') && body.bar_code) || null,
         ...(productId ? {id: productId} : {}),
       }
       const result = await saveProduct(payload)
