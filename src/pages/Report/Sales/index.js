@@ -36,7 +36,7 @@ export const columns = [
   },
   {
     key: 'price',
-    value: 'Preço',
+    value: 'Total',
   },
 ]
 
