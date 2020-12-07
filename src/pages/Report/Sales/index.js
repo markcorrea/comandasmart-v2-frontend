@@ -7,7 +7,7 @@ import {useStore} from 'store'
 import useServices from 'services'
 
 import formatMoney from 'utils/formatMoney'
-import {dateToString} from 'utils/datetimeToString'
+import {dateToString, datetimeToString} from 'utils/datetimeToString'
 
 import useMediaQuery from 'utils/mediaQuery'
 import {mediaQueryMD} from 'assets/styles/_mediaQueries.scss'
@@ -22,6 +22,11 @@ export const columns = [
   {
     key: 'name',
     value: 'Nome',
+    textAlign: 'left',
+  },
+  {
+    key: 'created',
+    value: 'Data',
     textAlign: 'left',
   },
   {
@@ -139,6 +144,7 @@ const ReportSales = () => {
     if (products && products.results) {
       return products.results.map(item => ({
         name: item.product.name,
+        created: datetimeToString(item.created),
         quantity: item.quantity,
         price: formatMoney(parseFloat(item.price)),
       }))
