@@ -37,7 +37,7 @@ export const columns = [
 
 const buttonMobileClass = {root: {minWidth: '20px', padding: '10px 15px 9px'}}
 
-const ProductSales = () => {
+const SoldProducts = () => {
   const {showMenu, loading} = useStore()
   const {getProductSalesReport} = useServices()
 
@@ -205,4 +205,4 @@ const ProductSales = () => {
   )
 }
 
-export default memo(ProductSales)
+export default memo(SoldProducts)

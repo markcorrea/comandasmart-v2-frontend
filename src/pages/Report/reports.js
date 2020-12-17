@@ -1,7 +1,7 @@
 export default [
   {
     name: 'Produtos Vendidos',
-    url: 'report_product_sales',
+    url: 'report_sold_products',
   },
   {
     name: 'Vendas (Filtro)',
