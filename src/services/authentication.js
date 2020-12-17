@@ -1,5 +1,7 @@
 import {useCallback} from 'react'
 import axios from 'axios'
+import {v4} from 'uuid'
+
 import server from 'services/server'
 import {applyToken, verifyToken} from 'utils/authentication'
 
@@ -8,14 +10,15 @@ import {useMessage} from 'components/Message'
 import {useHistory} from 'react-router-dom'
 
 const useAuthentication = () => {
-  const {setLoading} = useStore()
+  const {addRequestLoading, removeRequestLoading} = useStore()
   const {show} = useMessage()
   const token = `Token ${verifyToken()}`
   const history = useHistory()
 
   const login = useCallback(
     body => {
-      setLoading(true)
+      const uuid = v4()
+      addRequestLoading(uuid)
       return axios
         .post(`${server}/login/`, body, {})
         .then(response => {
@@ -27,13 +30,14 @@ const useAuthentication = () => {
           show('Usuário ou senha não encontrados.', 'error')
           return false
         })
-        .finally(() => setLoading(false))
+        .finally(() => removeRequestLoading(uuid))
     },
-    [setLoading, show]
+    [addRequestLoading, removeRequestLoading, show]
   )
 
   const logout = useCallback(() => {
-    setLoading(true)
+    const uuid = v4()
+    addRequestLoading(uuid)
     return axios
       .get(`${server}/logout/`, {
         headers: {
@@ -50,31 +54,27 @@ const useAuthentication = () => {
         }
         return false
       })
-      .finally(() => setLoading(false))
-  }, [setLoading, token, history, show])
+      .finally(() => removeRequestLoading(uuid))
+  }, [addRequestLoading, removeRequestLoading, token, history, show])
 
   const sendRecoverEmail = useCallback(
     () =>
       new Promise(resolve => {
-        setLoading(true)
         setTimeout(() => {
-          setLoading(false)
           resolve(true)
         }, 1000)
       }),
-    [setLoading]
+    []
   )
 
   const changePassword = useCallback(
     () =>
       new Promise(resolve => {
-        setLoading(true)
         setTimeout(() => {
-          setLoading(false)
           resolve(true)
         }, 1000)
       }),
-    [setLoading]
+    []
   )
 
   return {

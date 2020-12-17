@@ -75,7 +75,7 @@ const ProductForm = ({product, terminals, unitTypes, onSubmit, onCancel, loading
           error={Boolean(errors.unique_code)}
           helperText={getErrorMessage(errors.unique_code)}
         />
-        <Controller as={Input} name='brand' control={control} label={'Marca'} disabled={loading} />
+        <Controller as={Input} name='brand' control={control} label='Marca' disabled={loading} />
         <Controller as={NumberInput} name='bar_code' control={control} label='Código de Barras' disabled={loading} />
         <Controller
           as={Select}

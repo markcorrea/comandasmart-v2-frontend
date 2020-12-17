@@ -1,5 +1,7 @@
 import {useCallback} from 'react'
 import axios from 'axios'
+import {v4} from 'uuid'
+
 import server from 'services/server'
 import {verifyToken} from 'utils/authentication'
 
@@ -8,14 +10,15 @@ import {useMessage} from 'components/Message'
 import {useHistory} from 'react-router-dom'
 
 const useUsers = () => {
-  const {setLoading} = useStore()
+  const {addRequestLoading, removeRequestLoading} = useStore()
   const {show} = useMessage()
   const history = useHistory()
 
   const token = `Token ${verifyToken()}`
 
   const getUsers = useCallback(() => {
-    setLoading(true)
+    const uuid = v4()
+    addRequestLoading(uuid)
     return axios
       .get(`${server}/users/`, {
         headers: {
@@ -31,12 +34,13 @@ const useUsers = () => {
           show('Usuário não possui permissão', 'error')
         }
       })
-      .finally(() => setLoading(false))
-  }, [setLoading, token, show, history])
+      .finally(() => removeRequestLoading(uuid))
+  }, [addRequestLoading, removeRequestLoading, token, show, history])
 
   const getUserById = useCallback(
     id => {
-      setLoading(true)
+      const uuid = v4()
+      addRequestLoading(uuid)
       return axios
         .get(`${server}/users/details/${id}/`, {
           headers: {
@@ -52,13 +56,15 @@ const useUsers = () => {
             show('Usuário não possui permissão', 'error')
           }
         })
-        .finally(() => setLoading(false))
+        .finally(() => removeRequestLoading(uuid))
     },
-    [setLoading, token, history, show]
+    [addRequestLoading, removeRequestLoading, token, history, show]
   )
 
   const getUserInfoByToken = useCallback(() => {
     const refreshedToken = `Token ${verifyToken()}`
+    const uuid = v4()
+    addRequestLoading(uuid)
     return axios
       .get(`${server}/user/`, {
         headers: {
@@ -74,13 +80,15 @@ const useUsers = () => {
           show('Usuário não possui permissão', 'error')
         }
       })
-  }, [history, show])
+      .finally(() => removeRequestLoading(uuid))
+  }, [addRequestLoading, removeRequestLoading, history, show])
 
   const saveUser = useCallback(
     body => {
       // is updating
       if (body.id) {
-        setLoading(true)
+        const uuid = v4()
+        addRequestLoading(uuid)
         return axios
           .patch(`${server}/users/edit/${body.id}/`, body, {
             headers: {
@@ -96,11 +104,12 @@ const useUsers = () => {
               show('Usuário não possui permissão', 'error')
             }
           })
-          .finally(() => setLoading(false))
+          .finally(() => removeRequestLoading(uuid))
       }
 
       // is creating
-      setLoading(true)
+      const uuid = v4()
+      addRequestLoading(uuid)
       return axios
         .post(`${server}/users/create/`, body, {
           headers: {
@@ -116,14 +125,15 @@ const useUsers = () => {
             show('Usuário não possui permissão', 'error')
           }
         })
-        .finally(() => setLoading(false))
+        .finally(() => removeRequestLoading(uuid))
     },
-    [setLoading, token, history, show]
+    [addRequestLoading, removeRequestLoading, token, history, show]
   )
 
   const deleteUserById = useCallback(
     id => {
-      setLoading(true)
+      const uuid = v4()
+      addRequestLoading(uuid)
       return axios
         .delete(`${server}/users/delete/${id}/`, {
           headers: {
@@ -139,9 +149,9 @@ const useUsers = () => {
             show('Usuário não possui permissão', 'error')
           }
         })
-        .finally(() => setLoading(false))
+        .finally(() => removeRequestLoading(uuid))
     },
-    [setLoading, token, history, show]
+    [addRequestLoading, removeRequestLoading, token, history, show]
   )
 
   return {

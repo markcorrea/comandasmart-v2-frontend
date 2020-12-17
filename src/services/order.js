@@ -1,5 +1,7 @@
 import {useCallback} from 'react'
 import axios from 'axios'
+import {v4} from 'uuid'
+
 import server from 'services/server'
 import {verifyToken} from 'utils/authentication'
 
@@ -8,7 +10,7 @@ import {useMessage} from 'components/Message'
 import {useHistory} from 'react-router-dom'
 
 const useOrders = () => {
-  const {setLoading} = useStore()
+  const {addRequestLoading, removeRequestLoading} = useStore()
   const {show} = useMessage()
   const history = useHistory()
 
@@ -16,7 +18,8 @@ const useOrders = () => {
 
   const completeOrderById = useCallback(
     id => {
-      setLoading(true)
+      const uuid = v4()
+      addRequestLoading(uuid)
       return axios
         .post(
           `${server}/orders/complete/${id}/`,
@@ -36,14 +39,15 @@ const useOrders = () => {
             show('Usuário não possui permissão', 'error')
           }
         })
-        .finally(() => setLoading(false))
+        .finally(() => removeRequestLoading(uuid))
     },
-    [setLoading, token, history, show]
+    [addRequestLoading, removeRequestLoading, token, history, show]
   )
 
   const completeAllOrdersByTerminalId = useCallback(
     id => {
-      setLoading(true)
+      const uuid = v4()
+      addRequestLoading(uuid)
       return axios
         .post(
           `${server}/orders/complete-all/${id}/`,
@@ -63,9 +67,9 @@ const useOrders = () => {
             show('Usuário não possui permissão', 'error')
           }
         })
-        .finally(() => setLoading(false))
+        .finally(() => removeRequestLoading(uuid))
     },
-    [setLoading, token, history, show]
+    [addRequestLoading, removeRequestLoading, token, history, show]
   )
 
   return {

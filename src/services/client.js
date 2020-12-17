@@ -1,5 +1,7 @@
 import {useCallback} from 'react'
 import axios from 'axios'
+import {v4} from 'uuid'
+
 import server from 'services/server'
 import {verifyToken} from 'utils/authentication'
 
@@ -8,7 +10,7 @@ import {useMessage} from 'components/Message'
 import {useHistory} from 'react-router-dom'
 
 const useClients = () => {
-  const {setLoading} = useStore()
+  const {addRequestLoading, removeRequestLoading} = useStore()
   const {show} = useMessage()
   const history = useHistory()
 
@@ -16,7 +18,8 @@ const useClients = () => {
 
   const searchClientsByName = useCallback(
     (name = '', page = null) => {
-      setLoading(true)
+      const uuid = v4()
+      addRequestLoading(uuid)
       return axios
         .post(
           `${server}/clients/search/${page ? '?page=' + page : ''}`,
@@ -36,14 +39,15 @@ const useClients = () => {
             show('Usuário não possui permissão', 'error')
           }
         })
-        .finally(() => setLoading(false))
+        .finally(() => removeRequestLoading(uuid))
     },
-    [setLoading, token, history, show]
+    [addRequestLoading, removeRequestLoading, token, history, show]
   )
 
   const getClients = useCallback(
     (page = null) => {
-      setLoading(true)
+      const uuid = v4()
+      addRequestLoading(uuid)
 
       return axios
         .get(`${server}/clients/${page ? '?page=' + page : ''}`, {
@@ -60,14 +64,15 @@ const useClients = () => {
             show('Usuário não possui permissão', 'error')
           }
         })
-        .finally(() => setLoading(false))
+        .finally(() => removeRequestLoading(uuid))
     },
-    [setLoading, token, history, show]
+    [addRequestLoading, removeRequestLoading, token, history, show]
   )
 
   const getClientById = useCallback(
     id => {
-      setLoading(true)
+      const uuid = v4()
+      addRequestLoading(uuid)
       return axios
         .get(`${server}/clients/${id}/`, {
           headers: {
@@ -83,16 +88,17 @@ const useClients = () => {
             show('Usuário não possui permissão', 'error')
           }
         })
-        .finally(() => setLoading(false))
+        .finally(() => removeRequestLoading(uuid))
     },
-    [setLoading, token, history, show]
+    [addRequestLoading, removeRequestLoading, token, history, show]
   )
 
   const saveClient = useCallback(
     body => {
       // is updating
       if (body.id) {
-        setLoading(true)
+        const uuid = v4()
+        addRequestLoading(uuid)
         return axios
           .patch(`${server}/clients/${body.id}/`, body, {
             headers: {
@@ -108,11 +114,12 @@ const useClients = () => {
               show('Usuário não possui permissão', 'error')
             }
           })
-          .finally(() => setLoading(false))
+          .finally(() => removeRequestLoading(uuid))
       }
       // is creating
 
-      setLoading(true)
+      const uuid = v4()
+      addRequestLoading(uuid)
       return axios
         .post(`${server}/clients/create/`, body, {
           headers: {
@@ -128,14 +135,15 @@ const useClients = () => {
             show('Usuário não possui permissão', 'error')
           }
         })
-        .finally(() => setLoading(false))
+        .finally(() => removeRequestLoading(uuid))
     },
-    [setLoading, token, history, show]
+    [addRequestLoading, removeRequestLoading, token, history, show]
   )
 
   const deleteClientById = useCallback(
     id => {
-      setLoading(true)
+      const uuid = v4()
+      addRequestLoading(uuid)
       return axios
         .delete(`${server}/clients/${id}/`, {
           headers: {
@@ -151,9 +159,9 @@ const useClients = () => {
             show('Usuário não possui permissão', 'error')
           }
         })
-        .finally(() => setLoading(false))
+        .finally(() => removeRequestLoading(uuid))
     },
-    [setLoading, token, history, show]
+    [addRequestLoading, removeRequestLoading, token, history, show]
   )
 
   return {

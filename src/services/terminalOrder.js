@@ -1,5 +1,7 @@
 import {useCallback} from 'react'
 import axios from 'axios'
+import {v4} from 'uuid'
+
 import server from 'services/server'
 import {verifyToken} from 'utils/authentication'
 
@@ -8,7 +10,7 @@ import {useMessage} from 'components/Message'
 import {useHistory} from 'react-router-dom'
 
 const useTerminalOrders = () => {
-  const {setLoading} = useStore()
+  const {addRequestLoading, removeRequestLoading} = useStore()
   const {show} = useMessage()
   const history = useHistory()
 
@@ -16,7 +18,8 @@ const useTerminalOrders = () => {
 
   const getOrdersByTerminalId = useCallback(
     id => {
-      setLoading(true)
+      const uuid = v4()
+      addRequestLoading(uuid)
       return axios
         .get(`${server}/orders/terminal/${id}/`, {
           headers: {
@@ -32,9 +35,9 @@ const useTerminalOrders = () => {
             show('Usuário não possui permissão', 'error')
           }
         })
-        .finally(() => setLoading(false))
+        .finally(() => removeRequestLoading(uuid))
     },
-    [setLoading, token, history, show]
+    [addRequestLoading, removeRequestLoading, token, history, show]
   )
 
   return {

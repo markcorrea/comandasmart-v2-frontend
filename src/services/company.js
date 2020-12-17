@@ -1,4 +1,6 @@
 import {useCallback} from 'react'
+import {v4} from 'uuid'
+
 import companies from 'mocks/company'
 import axios from 'axios'
 import server from 'services/server'
@@ -8,12 +10,13 @@ import {useMessage} from 'components/Message'
 import {useHistory} from 'react-router-dom'
 
 const useCompanies = () => {
-  const {setLoading} = useStore()
+  const {addRequestLoading, removeRequestLoading} = useStore()
   const {show} = useMessage()
   const history = useHistory()
 
   const getCompanies = useCallback(() => {
-    setLoading(true)
+    const uuid = v4()
+    addRequestLoading(uuid)
     return axios
       .get(`${server}/companies/`, {})
       .then(response => {
@@ -25,19 +28,17 @@ const useCompanies = () => {
           show('Usuário não possui permissão', 'error')
         }
       })
-      .finally(() => setLoading(false))
-  }, [setLoading, history, show])
+      .finally(() => removeRequestLoading(uuid))
+  }, [addRequestLoading, removeRequestLoading, history, show])
 
   const getCompanyById = useCallback(
     id =>
       new Promise(resolve => {
-        setLoading(true)
         setTimeout(() => {
-          setLoading(false)
           resolve({data: companies.data.find(company => company.id === id)})
         }, 1000)
       }),
-    [setLoading]
+    []
   )
 
   const saveCompany = useCallback(
@@ -45,38 +46,32 @@ const useCompanies = () => {
       if (body.id) {
         // is updating
         return new Promise(resolve => {
-          setLoading(true)
           setTimeout(() => {
             show('Empresa salva com sucesso!')
-            setLoading(false)
             resolve(body)
           }, 1000)
         })
       }
       // is creating
       return new Promise(resolve => {
-        setLoading(true)
         setTimeout(() => {
           show('Empresa criada com sucesso!')
-          setLoading(false)
           resolve(body)
         }, 1000)
       })
     },
-    [setLoading, show]
+    [show]
   )
 
   const deleteCompanyById = useCallback(
     id =>
       new Promise(resolve => {
-        setLoading(true)
         setTimeout(() => {
-          setLoading(false)
           show('Empresa removida com sucesso!')
           resolve({...companies, data: companies.data.filter(company => company.id !== id)})
         }, 1000)
       }),
-    [setLoading, show]
+    [show]
   )
 
   return {

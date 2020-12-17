@@ -1,5 +1,7 @@
 import {useCallback} from 'react'
 import axios from 'axios'
+import {v4} from 'uuid'
+
 import server from 'services/server'
 import {verifyToken} from 'utils/authentication'
 
@@ -8,7 +10,7 @@ import {useMessage} from 'components/Message'
 import {useHistory} from 'react-router-dom'
 
 const useCashiers = () => {
-  const {setLoading} = useStore()
+  const {addRequestLoading, removeRequestLoading} = useStore()
   const {show} = useMessage()
   const history = useHistory()
 
@@ -16,7 +18,8 @@ const useCashiers = () => {
 
   const getCashiers = useCallback(
     (page = null) => {
-      setLoading(true)
+      const uuid = v4()
+      addRequestLoading(uuid)
 
       return axios
         .get(`${server}/cashiers/${page ? '?page=' + page : ''}`, {
@@ -35,13 +38,14 @@ const useCashiers = () => {
           }
           return false
         })
-        .finally(() => setLoading(false))
+        .finally(() => removeRequestLoading(uuid))
     },
-    [setLoading, token, history, show]
+    [addRequestLoading, removeRequestLoading, token, history, show]
   )
 
   const openCashier = useCallback(() => {
-    setLoading(true)
+    const uuid = v4()
+    addRequestLoading(uuid)
     return axios
       .post(
         `${server}/cashiers/create/`,
@@ -62,12 +66,13 @@ const useCashiers = () => {
         }
         return false
       })
-      .finally(() => setLoading(false))
-  }, [setLoading, token, history, show])
+      .finally(() => removeRequestLoading(uuid))
+  }, [addRequestLoading, removeRequestLoading, token, history, show])
 
   const getCashierById = useCallback(
     id => {
-      setLoading(true)
+      const uuid = v4()
+      addRequestLoading(uuid)
       return axios
         .get(`${server}/cashiers/${id}/`, {
           headers: {
@@ -84,14 +89,15 @@ const useCashiers = () => {
           }
           return false
         })
-        .finally(() => setLoading(false))
+        .finally(() => removeRequestLoading(uuid))
     },
-    [setLoading, token, history, show]
+    [addRequestLoading, removeRequestLoading, token, history, show]
   )
 
   const quickSale = useCallback(
     body => {
-      setLoading(true)
+      const uuid = v4()
+      addRequestLoading(uuid)
       return axios
         .post(`${server}/cashiers/quick-sale/`, body, {
           headers: {
@@ -108,14 +114,15 @@ const useCashiers = () => {
           }
           return false
         })
-        .finally(() => setLoading(false))
+        .finally(() => removeRequestLoading(uuid))
     },
-    [setLoading, token, history, show]
+    [addRequestLoading, removeRequestLoading, token, history, show]
   )
 
   const payOrdersByTicketAndCashier = useCallback(
     body => {
-      setLoading(true)
+      const uuid = v4()
+      addRequestLoading(uuid)
       return axios
         .post(`${server}/cashiers/ticket/sell/`, body, {
           headers: {
@@ -132,14 +139,15 @@ const useCashiers = () => {
           }
           return false
         })
-        .finally(() => setLoading(false))
+        .finally(() => removeRequestLoading(uuid))
     },
-    [setLoading, token, history, show]
+    [addRequestLoading, removeRequestLoading, token, history, show]
   )
 
   const removeOrdersByTicketAndCashier = useCallback(
     body => {
-      setLoading(true)
+      const uuid = v4()
+      addRequestLoading(uuid)
       return axios
         .post(`${server}/cashiers/ticket/remove/`, body, {
           headers: {
@@ -156,14 +164,15 @@ const useCashiers = () => {
           }
           return false
         })
-        .finally(() => setLoading(false))
+        .finally(() => removeRequestLoading(uuid))
     },
-    [setLoading, token, history, show]
+    [addRequestLoading, removeRequestLoading, token, history, show]
   )
 
   const payAllOrdersAndCloseTicket = useCallback(
     body => {
-      setLoading(true)
+      const uuid = v4()
+      addRequestLoading(uuid)
       return axios
         .post(`${server}/cashiers/ticket/close/`, body, {
           headers: {
@@ -180,14 +189,15 @@ const useCashiers = () => {
           }
           return false
         })
-        .finally(() => setLoading(false))
+        .finally(() => removeRequestLoading(uuid))
     },
-    [setLoading, token, history, show]
+    [addRequestLoading, removeRequestLoading, token, history, show]
   )
 
   const closeCashierById = useCallback(
     ({id, close_date}) => {
-      setLoading(true)
+      const uuid = v4()
+      addRequestLoading(uuid)
       return axios
         .patch(
           `${server}/cashiers/${id}/`,
@@ -208,9 +218,9 @@ const useCashiers = () => {
           }
           return false
         })
-        .finally(() => setLoading(false))
+        .finally(() => removeRequestLoading(uuid))
     },
-    [setLoading, token, history, show]
+    [addRequestLoading, removeRequestLoading, token, history, show]
   )
 
   return {

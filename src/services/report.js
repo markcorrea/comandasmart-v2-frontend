@@ -1,5 +1,7 @@
 import {useCallback} from 'react'
 import axios from 'axios'
+import {v4} from 'uuid'
+
 import server from 'services/server'
 import {verifyToken} from 'utils/authentication'
 
@@ -8,7 +10,7 @@ import {useMessage} from 'components/Message'
 import {useHistory} from 'react-router-dom'
 
 const useReports = () => {
-  const {setLoading} = useStore()
+  const {addRequestLoading, removeRequestLoading} = useStore()
   const {show} = useMessage()
   const history = useHistory()
 
@@ -16,7 +18,8 @@ const useReports = () => {
 
   const getSalesReport = useCallback(
     ({start_date, end_date}, page = null) => {
-      setLoading(true)
+      const uuid = v4()
+      addRequestLoading(uuid)
       return axios
         .post(
           `${server}/reports/sales/${page ? '?page=' + page : ''}`,
@@ -36,14 +39,15 @@ const useReports = () => {
             show('Usuário não possui permissão', 'error')
           }
         })
-        .finally(() => setLoading(false))
+        .finally(() => removeRequestLoading(uuid))
     },
-    [setLoading, token, history, show]
+    [addRequestLoading, removeRequestLoading, token, history, show]
   )
 
   const getProductSalesReport = useCallback(
     ({start_date, end_date}, page = null) => {
-      setLoading(true)
+      const uuid = v4()
+      addRequestLoading(uuid)
       return axios
         .post(
           `${server}/reports/product-sales/${page ? '?page=' + page : ''}`,
@@ -63,9 +67,9 @@ const useReports = () => {
             show('Usuário não possui permissão', 'error')
           }
         })
-        .finally(() => setLoading(false))
+        .finally(() => removeRequestLoading(uuid))
     },
-    [setLoading, token, history, show]
+    [addRequestLoading, removeRequestLoading, token, history, show]
   )
 
   return {

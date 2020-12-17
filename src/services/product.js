@@ -1,5 +1,7 @@
 import {useCallback} from 'react'
 import axios from 'axios'
+import {v4} from 'uuid'
+
 import server from 'services/server'
 import {verifyToken} from 'utils/authentication'
 
@@ -8,7 +10,7 @@ import {useMessage} from 'components/Message'
 import {useHistory} from 'react-router-dom'
 
 const useProducts = () => {
-  const {setLoading} = useStore()
+  const {addRequestLoading, removeRequestLoading} = useStore()
   const {show} = useMessage()
   const history = useHistory()
 
@@ -16,7 +18,8 @@ const useProducts = () => {
 
   const searchProductsByName = useCallback(
     (name = '', page = null) => {
-      setLoading(true)
+      const uuid = v4()
+      addRequestLoading(uuid)
       return axios
         .post(
           `${server}/products/search/${page ? '?page=' + page : ''}`,
@@ -36,14 +39,15 @@ const useProducts = () => {
             show('Usuário não possui permissão', 'error')
           }
         })
-        .finally(() => setLoading(false))
+        .finally(() => removeRequestLoading(uuid))
     },
-    [setLoading, token, history, show]
+    [addRequestLoading, removeRequestLoading, token, history, show]
   )
 
   const searchProductByCode = useCallback(
     unique_code => {
-      setLoading(true)
+      const uuid = v4()
+      addRequestLoading(uuid)
       return axios
         .post(
           `${server}/products/search/code/`,
@@ -66,14 +70,15 @@ const useProducts = () => {
             show('Houve um erro ao buscar o produto', 'error')
           }
         })
-        .finally(() => setLoading(false))
+        .finally(() => removeRequestLoading(uuid))
     },
-    [setLoading, token, history, show]
+    [addRequestLoading, removeRequestLoading, token, history, show]
   )
 
   const getProducts = useCallback(
     (page = null) => {
-      setLoading(true)
+      const uuid = v4()
+      addRequestLoading(uuid)
       return axios
         .get(`${server}/products/${page ? '?page=' + page : ''}`, {
           headers: {
@@ -89,14 +94,15 @@ const useProducts = () => {
             show('Usuário não possui permissão', 'error')
           }
         })
-        .finally(() => setLoading(false))
+        .finally(() => removeRequestLoading(uuid))
     },
-    [setLoading, token, history, show]
+    [addRequestLoading, removeRequestLoading, token, history, show]
   )
 
   const getProductById = useCallback(
     id => {
-      setLoading(true)
+      const uuid = v4()
+      addRequestLoading(uuid)
       return axios
         .get(`${server}/products/${id}/`, {
           headers: {
@@ -112,9 +118,9 @@ const useProducts = () => {
             show('Usuário não possui permissão', 'error')
           }
         })
-        .finally(() => setLoading(false))
+        .finally(() => removeRequestLoading(uuid))
     },
-    [setLoading, token, history, show]
+    [addRequestLoading, removeRequestLoading, token, history, show]
   )
 
   const saveProduct = useCallback(
@@ -122,7 +128,8 @@ const useProducts = () => {
       body = {...body, terminal: body.terminal !== '' ? body.terminal : null}
       // is updating
       if (body.id) {
-        setLoading(true)
+        const uuid = v4()
+        addRequestLoading(uuid)
         return axios
           .patch(`${server}/products/${body.id}/`, body, {
             headers: {
@@ -138,10 +145,11 @@ const useProducts = () => {
               show('Usuário não possui permissão', 'error')
             }
           })
-          .finally(() => setLoading(false))
+          .finally(() => removeRequestLoading(uuid))
       }
+      const uuid = v4()
+      addRequestLoading(uuid)
       // is creating
-      setLoading(true)
       return axios
         .post(`${server}/products/create/`, body, {
           headers: {
@@ -157,14 +165,15 @@ const useProducts = () => {
             show('Usuário não possui permissão', 'error')
           }
         })
-        .finally(() => setLoading(false))
+        .finally(() => removeRequestLoading(uuid))
     },
-    [setLoading, token, history, show]
+    [addRequestLoading, removeRequestLoading, token, history, show]
   )
 
   const deleteProductById = useCallback(
     id => {
-      setLoading(true)
+      const uuid = v4()
+      addRequestLoading(uuid)
       return axios
         .delete(`${server}/products/${id}/`, {
           headers: {
@@ -180,9 +189,9 @@ const useProducts = () => {
             show('Usuário não possui permissão', 'error')
           }
         })
-        .finally(() => setLoading(false))
+        .finally(() => removeRequestLoading(uuid))
     },
-    [setLoading, token, history, show]
+    [addRequestLoading, removeRequestLoading, token, history, show]
   )
   return {
     searchProductsByName,

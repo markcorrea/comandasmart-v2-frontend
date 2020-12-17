@@ -72,7 +72,7 @@ const UserForm = ({user, groups, onSubmit, onCancel, loading}) => {
           label='Nome'
           error={Boolean(errors.first_name)}
           helperText={getErrorMessage(errors.first_name)}
-          disabled={user?.first_name || loading}
+          disabled={!!user?.first_name || loading}
           isRequired
         />
         <Controller
@@ -82,7 +82,7 @@ const UserForm = ({user, groups, onSubmit, onCancel, loading}) => {
           label='Sobrenome'
           error={Boolean(errors.last_name)}
           helperText={getErrorMessage(errors.last_name)}
-          disabled={user?.last_name || loading}
+          disabled={!!user?.last_name || loading}
           isRequired
         />
         <Controller
@@ -92,7 +92,7 @@ const UserForm = ({user, groups, onSubmit, onCancel, loading}) => {
           label='E-mail'
           error={Boolean(errors.email)}
           helperText={getErrorMessage(errors.email)}
-          disabled={user?.last_name || loading}
+          disabled={!!user?.last_name || loading}
           isRequired
         />
         <Controller
@@ -122,7 +122,7 @@ const UserForm = ({user, groups, onSubmit, onCancel, loading}) => {
           label='CPF'
           error={Boolean(errors.cpf)}
           helperText={getErrorMessage(errors.cpf)}
-          disabled={user?.cpf || loading}
+          disabled={!!user?.cpf || loading}
         />
         <Controller
           as={MaskInput}

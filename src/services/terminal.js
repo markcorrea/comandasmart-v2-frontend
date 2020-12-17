@@ -1,5 +1,7 @@
 import {useCallback} from 'react'
 import axios from 'axios'
+import {v4} from 'uuid'
+
 import server from 'services/server'
 import {verifyToken} from 'utils/authentication'
 
@@ -8,14 +10,15 @@ import {useMessage} from 'components/Message'
 import {useHistory} from 'react-router-dom'
 
 const useTerminals = () => {
-  const {setLoading} = useStore()
+  const {addRequestLoading, removeRequestLoading} = useStore()
   const {show} = useMessage()
   const history = useHistory()
 
   const token = `Token ${verifyToken()}`
 
   const getTerminals = useCallback(() => {
-    setLoading(true)
+    const uuid = v4()
+    addRequestLoading(uuid)
     return axios
       .get(`${server}/terminals/`, {
         headers: {
@@ -31,12 +34,13 @@ const useTerminals = () => {
           show('Usuário não possui permissão', 'error')
         }
       })
-      .finally(() => setLoading(false))
-  }, [setLoading, token, history, show])
+      .finally(() => removeRequestLoading(uuid))
+  }, [addRequestLoading, removeRequestLoading, token, history, show])
 
   const getTerminalById = useCallback(
     id => {
-      setLoading(true)
+      const uuid = v4()
+      addRequestLoading(uuid)
       return axios
         .get(`${server}/terminals/${id}/`, {
           headers: {
@@ -50,16 +54,17 @@ const useTerminals = () => {
           console.log('ERROR', error)
           return false
         })
-        .finally(() => setLoading(false))
+        .finally(() => removeRequestLoading(uuid))
     },
-    [setLoading, token]
+    [addRequestLoading, removeRequestLoading, token]
   )
 
   const saveTerminal = useCallback(
     body => {
       // is updating
       if (body.id) {
-        setLoading(true)
+        const uuid = v4()
+        addRequestLoading(uuid)
         return axios
           .patch(`${server}/terminals/${body.id}/`, body, {
             headers: {
@@ -75,11 +80,12 @@ const useTerminals = () => {
               show('Usuário não possui permissão', 'error')
             }
           })
-          .finally(() => setLoading(false))
+          .finally(() => removeRequestLoading(uuid))
       }
       // is creating
 
-      setLoading(true)
+      const uuid = v4()
+      addRequestLoading(uuid)
       return axios
         .post(`${server}/terminals/create/`, body, {
           headers: {
@@ -95,14 +101,15 @@ const useTerminals = () => {
             show('Usuário não possui permissão', 'error')
           }
         })
-        .finally(() => setLoading(false))
+        .finally(() => removeRequestLoading(uuid))
     },
-    [setLoading, token, history, show]
+    [addRequestLoading, removeRequestLoading, token, history, show]
   )
 
   const deleteTerminalById = useCallback(
     id => {
-      setLoading(true)
+      const uuid = v4()
+      addRequestLoading(uuid)
       return axios
         .delete(`${server}/terminals/${id}/`, {
           headers: {
@@ -118,9 +125,9 @@ const useTerminals = () => {
             show('Usuário não possui permissão', 'error')
           }
         })
-        .finally(() => setLoading(false))
+        .finally(() => removeRequestLoading(uuid))
     },
-    [setLoading, token, history, show]
+    [addRequestLoading, removeRequestLoading, token, history, show]
   )
 
   return {
