@@ -19,7 +19,7 @@ const Modal = ({children, maxWidth, header, onCancel, onConfirm, onUnderstood, o
   const useStyles = makeStyles({
     paper: {
       borderRadius: '5px',
-      overflowY: mediaQuerySmall ? 'unset' : 'auto',
+      overflowY: 'auto',
     },
   })
 
