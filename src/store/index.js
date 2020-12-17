@@ -25,7 +25,6 @@ const Store = ({children}) => {
   const [state, updateState] = useState(initialState)
 
   useEffect(() => {
-    console.log('REQUESTS LOADING', state.requestsLoading)
     if (state.requestsLoading.length > 0 && !state.loading) {
       updateState(prevState => ({...prevState, loading: true}))
     }
