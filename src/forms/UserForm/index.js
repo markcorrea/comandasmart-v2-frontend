@@ -4,7 +4,7 @@ import {useForm, Controller} from 'react-hook-form'
 import {yupResolver} from '@hookform/resolvers'
 import * as yup from 'yup'
 
-import {Button, Input, MaskInput, Select} from 'components'
+import {Button, Input, MaskInput, PasswordInput, Select} from 'components'
 
 import {mediaQuerySM} from 'assets/styles/_mediaQueries.scss'
 
@@ -15,6 +15,8 @@ import styles from './index.module.scss'
 const validationRules = yup.object().shape({
   first_name: yup.string().required('Nome é um campo obrigatório'),
   last_name: yup.string().required('Sobrenome é um campo obrigatório'),
+  password: yup.string(),
+  passwordConfirm: yup.string().oneOf([yup.ref('password'), null], 'Senha e confirmação de senha devem ser iguais.'),
   email: yup
     .string()
     .email('Digite um e-mail válido, ex: john@gmail.com')
@@ -96,12 +98,22 @@ const UserForm = ({user, groups, onSubmit, onCancel, loading}) => {
           isRequired
         />
         <Controller
-          as={Input}
+          as={PasswordInput}
           name='password'
           control={control}
           label='Senha'
           error={Boolean(errors.password)}
           helperText={getErrorMessage(errors.password)}
+          disabled={loading}
+          isRequired={!user?.id}
+        />
+        <Controller
+          as={PasswordInput}
+          name='passwordConfirm'
+          control={control}
+          label='Confirme a Senha'
+          error={Boolean(errors.passwordConfirm)}
+          helperText={getErrorMessage(errors.passwordConfirm)}
           disabled={loading}
           isRequired={!user?.id}
         />
