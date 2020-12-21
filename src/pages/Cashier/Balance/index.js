@@ -67,6 +67,7 @@ const CashierBalance = () => {
   const tableButtons = [
     {
       label: 'Fechar Caixa',
+      disabled: cashier?.close_date,
       onClick: () =>
         confirmationDialog({header: 'Fechar caixa', body: 'Confirma fechamento do caixa atual?', onConfirm: closeCashier}),
     },

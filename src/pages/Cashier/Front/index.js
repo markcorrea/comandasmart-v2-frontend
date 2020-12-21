@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useCallback} from 'react'
 import {useHistory, useParams} from 'react-router-dom'
 
 import {Button, Paper, SpeedDial, TicketCard} from 'components'
@@ -15,22 +15,43 @@ const CashierFront = () => {
   const {showMenu} = useStore()
   const history = useHistory()
   const {cashierId} = useParams()
-  const [tickets, setTickets] = useState([])
   const mediaMD = useMediaQuery('min', mediaQueryMD)
 
-  const {getTickets} = useServices()
+  const [tickets, setTickets] = useState([])
+  const [cashier, setCashier] = useState(null)
+
+  const {getTickets, getCashierById} = useServices()
 
   useEffect(() => {
     showMenu()
   }, [showMenu])
 
-  useEffect(() => {
-    const fetchTickets = async () => {
-      const result = await getTickets()
-      if (result) setTickets(result.data)
-    }
-    fetchTickets()
+  const fetchCashier = useCallback(
+    async id => {
+      const result = await getCashierById(id)
+      if (result) {
+        setCashier(result.data)
+      }
+    },
+    [getCashierById, setCashier]
+  )
+
+  const fetchTickets = useCallback(async () => {
+    const result = await getTickets()
+    if (result) setTickets(result.data)
   }, [getTickets, setTickets])
+
+  useEffect(() => {
+    if (cashierId) {
+      fetchCashier(cashierId)
+    }
+  }, [cashierId, fetchCashier])
+
+  useEffect(() => {
+    if (cashier && !cashier.close_date) {
+      fetchTickets()
+    }
+  }, [cashier, fetchTickets])
 
   const ticketClick = ticket => history.push(`/cashier/${cashierId}/ticket/${ticket.id}`)
 
@@ -54,21 +75,28 @@ const CashierFront = () => {
             <Button className={styles.headerButton} onClick={() => history.push(`/cashier/${cashierId}/balance`)}>
               Controle de Caixa
             </Button>
-            <Button className={styles.headerButton} onClick={() => history.push(`/cashier/${cashierId}/sale`)}>
+            <Button
+              className={styles.headerButton}
+              onClick={() => history.push(`/cashier/${cashierId}/sale`)}
+              disabled={cashier?.close_date}>
               Registrar Venda
             </Button>
           </>
         )}
       </header>
       <Paper className={styles.paper}>
-        {tickets.length ? (
-          tickets.map((ticket, index) => (
-            <div key={`ticket_${index}`} className={styles.flexCell}>
-              <TicketCard ticket={ticket} onClick={ticketClick} />
-            </div>
-          ))
+        {!cashier?.close_date ? (
+          tickets.length ? (
+            tickets.map((ticket, index) => (
+              <div key={`ticket_${index}`} className={styles.flexCell}>
+                <TicketCard ticket={ticket} onClick={ticketClick} />
+              </div>
+            ))
+          ) : (
+            <div className={styles.noTickets}>Não há comandas abertas.</div>
+          )
         ) : (
-          <div className={styles.noTickets}>Não há comandas abertas.</div>
+          <div className={styles.noTickets}>Caixa fechado. Não há comandas para exibir.</div>
         )}
       </Paper>
       {!mediaMD && (
