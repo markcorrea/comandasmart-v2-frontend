@@ -10,6 +10,8 @@ import useServices from 'services'
 import useMediaQuery from 'utils/mediaQuery'
 import {mediaQueryMD} from 'assets/styles/_mediaQueries.scss'
 
+import formatMoney from 'utils/formatMoney'
+
 import NewClientModalBody from './NewClientModalBody'
 
 import styles from './index.module.scss'
@@ -170,20 +172,29 @@ const TicketDetails = () => {
         )}
       </header>
       <Paper className={styles.paper}>
-        <ProductSearch
-          searchProductsByName={searchProductsByName}
-          onEnterPress={(uniqueCode, inputToFocus) => addProductByCode(uniqueCode, inputToFocus)}
-          onConfirm={(productData, inputToFocus) => addProductByClick(productData, inputToFocus)}
-        />
-        {ticket && ticket.orders.length ? (
-          ticket.orders.map((order, index) => (
-            <div key={`item_${index}`} className={styles.flexCell}>
-              <ProductCard order={order} />
-            </div>
-          ))
-        ) : (
-          <div className={styles.emptyTicket}>Não há itens na comanda atual.</div>
-        )}
+        <div className={styles.total}>
+          Total: <span>{formatMoney(parseFloat(ticket?.total_price || 0))}</span>
+        </div>
+        <div className={styles.infoContainer}>
+          <div className={styles.searchContainer}>
+            <ProductSearch
+              searchProductsByName={searchProductsByName}
+              onEnterPress={(uniqueCode, inputToFocus) => addProductByCode(uniqueCode, inputToFocus)}
+              onConfirm={(productData, inputToFocus) => addProductByClick(productData, inputToFocus)}
+            />
+          </div>
+          <div className={styles.ticketsContainer}>
+            {ticket && ticket.orders.length ? (
+              ticket.orders.map((order, index) => (
+                <div key={`item_${index}`} className={styles.flexCell}>
+                  <ProductCard order={order} />
+                </div>
+              ))
+            ) : (
+              <div className={styles.emptyTicket}>Não há itens na comanda atual.</div>
+            )}
+          </div>
+        </div>
       </Paper>
       {!mediaMD && (
         <div className={styles.speedDialContainer}>
