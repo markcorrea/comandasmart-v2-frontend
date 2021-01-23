@@ -59,11 +59,11 @@ const UserDetails = () => {
       const payload = {
         ...(userId ? {id: userId} : {}),
         user: {
+          first_name: data.first_name,
+          last_name: data.last_name,
+          email: data.email,
+          username: data.email,
           ...(data.password.length ? {password: data.password} : ''),
-          ...(data.email ? {username: data.email} : {}),
-          ...(data.email ? {email: data.email} : {}),
-          ...(data.first_name ? {first_name: data.first_name} : {}),
-          ...(data.last_name ? {last_name: data.last_name} : {}),
         },
         user_profile: {
           ...(data.cpf ? {cpf: data.cpf} : {}),

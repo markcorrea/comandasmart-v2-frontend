@@ -98,6 +98,16 @@ const UserForm = ({user, groups, onSubmit, onCancel, loading}) => {
           isRequired
         />
         <Controller
+          as={Select}
+          name='group'
+          items={groups}
+          control={control}
+          label='Nível de Acesso'
+          showEmptyOption
+          disabled={loading}
+          isRequired
+        />
+        <Controller
           as={PasswordInput}
           name='password'
           control={control}
@@ -116,16 +126,6 @@ const UserForm = ({user, groups, onSubmit, onCancel, loading}) => {
           helperText={getErrorMessage(errors.passwordConfirm)}
           disabled={loading}
           isRequired={!user?.id}
-        />
-        <Controller
-          as={Select}
-          name='group'
-          items={groups}
-          control={control}
-          label='Nível de Acesso'
-          showEmptyOption
-          disabled={loading}
-          isRequired
         />
         <Controller
           as={Input}
