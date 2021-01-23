@@ -7,6 +7,8 @@ import {useStore} from 'store'
 
 import UserForm from 'forms/UserForm'
 
+import {unformatCPF, formatCPF} from 'utils/cpf'
+
 import useServices from 'services'
 
 import styles from './index.module.scss'
@@ -37,7 +39,13 @@ const UserDetails = () => {
 
   const fetchUser = useCallback(async () => {
     const result = await getUserById(userId)
-    if (result) setUser(result.data)
+    if (result) {
+      const newResult = {
+        ...result.data,
+        cpf: result.data.cpf ? formatCPF(result.data.cpf) : '',
+      }
+      setUser(newResult)
+    }
   }, [getUserById, userId, setUser])
 
   useEffect(() => {
@@ -66,12 +74,12 @@ const UserDetails = () => {
           ...(data.password.length ? {password: data.password} : ''),
         },
         user_profile: {
-          ...(data.cpf ? {cpf: data.cpf} : {}),
+          ...(data.cpf ? {cpf: unformatCPF(data.cpf)} : {}),
           ...(data.phone ? {phone: data.phone} : {}),
           ...(data.address ? {address: data.address} : {}),
           ...(data.city ? {city: data.city} : {}),
           ...(data.state ? {state: data.state} : {}),
-          ...(data.country ? {country: data.country} : {}),
+          ...(data.country ? {country: data.country} : {country: 'Brasil'}),
         },
         group: data.group,
       }

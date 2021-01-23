@@ -75,12 +75,13 @@ const ClientForm = ({client, onSubmit, onCancel, loading}) => {
           disabled={loading}
         />
         <Controller
-          as={Input}
+          as={MaskInput}
           name='cpf'
           control={control}
           label='CPF'
           error={Boolean(errors.cpf)}
           helperText={getErrorMessage(errors.cpf)}
+          mask={[/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/]}
           disabled={loading}
         />
         <Controller

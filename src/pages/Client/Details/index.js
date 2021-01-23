@@ -5,6 +5,8 @@ import {Paper} from 'components'
 import {useStore} from 'store'
 import ClientForm from 'forms/ClientForm'
 
+import {unformatCPF, formatCPF} from 'utils/cpf'
+
 import useServices from 'services'
 
 import styles from './index.module.scss'
@@ -20,7 +22,13 @@ const ClientDetails = () => {
   useEffect(() => {
     const fetchClient = async () => {
       const result = await getClientById(clientId)
-      if (result) setClient(result.data)
+      if (result) {
+        const newResult = {
+          ...result.data,
+          cpf: result.data.cpf ? formatCPF(result.data.cpf) : '',
+        }
+        setClient(newResult)
+      }
     }
 
     if (clientId) fetchClient()
@@ -44,6 +52,7 @@ const ClientDetails = () => {
         ...body,
         ...(body.birth_date ? {birth_date: new Date(body.birth_date)} : {}),
         ...(body.phone ? {phone: clearPhoneMask(body.phone)} : {}),
+        ...(body.cpf ? {cpf: unformatCPF(body.cpf)} : {}),
         ...(clientId ? {id: clientId} : {}),
       }
 

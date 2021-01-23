@@ -128,12 +128,13 @@ const UserForm = ({user, groups, onSubmit, onCancel, loading}) => {
           isRequired={!user?.id}
         />
         <Controller
-          as={Input}
+          as={MaskInput}
           name='cpf'
           control={control}
           label='CPF'
           error={Boolean(errors.cpf)}
           helperText={getErrorMessage(errors.cpf)}
+          mask={[/\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '.', /\d/, /\d/, /\d/, '-', /\d/, /\d/]}
           disabled={!!user?.cpf || loading}
         />
         <Controller
