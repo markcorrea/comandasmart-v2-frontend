@@ -11,6 +11,13 @@ import useServices from 'services'
 
 import styles from './index.module.scss'
 
+const groupsTranslation = {
+  waiter: 'Garçom',
+  terminal: 'Terminal',
+  cashier: 'Caixa',
+  manager: 'Gerente',
+}
+
 const UserDetails = () => {
   const {showMenu, loading} = useStore()
   const {userId} = useParams()
@@ -23,7 +30,7 @@ const UserDetails = () => {
   const fetchGroups = useCallback(async () => {
     const result = await getGroups()
     if (result) {
-      const adjustedGroups = result.data.map(item => ({...item, value: item.id}))
+      const adjustedGroups = result.data.map(item => ({...item, name: groupsTranslation[item.name], value: item.id}))
       setGroups(adjustedGroups)
     }
   }, [getGroups, setGroups])
@@ -53,10 +60,10 @@ const UserDetails = () => {
         ...(userId ? {id: userId} : {}),
         user: {
           ...(data.password.length ? {password: data.password} : ''),
-          ...(userId ? {username: data.email} : {}),
-          ...(userId ? {email: data.email} : {}),
-          ...(userId ? {first_name: data.first_name} : {}),
-          ...(userId ? {last_name: data.last_name} : {}),
+          ...(data.email ? {username: data.email} : {}),
+          ...(data.email ? {email: data.email} : {}),
+          ...(data.first_name ? {first_name: data.first_name} : {}),
+          ...(data.last_name ? {last_name: data.last_name} : {}),
         },
         user_profile: {
           ...(data.cpf ? {cpf: data.cpf} : {}),
