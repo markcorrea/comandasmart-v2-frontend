@@ -9,6 +9,7 @@ import {Button, Input, MaskInput, PasswordInput, Select} from 'components'
 import {mediaQuerySM} from 'assets/styles/_mediaQueries.scss'
 
 import useMediaQuery from 'utils/mediaQuery'
+import {states} from 'utils/states'
 
 import styles from './index.module.scss'
 
@@ -41,7 +42,7 @@ const defaultValues = {
   address: '',
   city: '',
   state: '',
-  country: '',
+  country: 'Brasil',
 }
 
 const UserForm = ({user, groups, onSubmit, onCancel, loading}) => {
@@ -166,13 +167,14 @@ const UserForm = ({user, groups, onSubmit, onCancel, loading}) => {
           disabled={loading}
         />
         <Controller
-          as={Input}
+          as={Select}
           name='state'
+          items={states.map(item => ({name: item.name, value: item.initial}))}
           control={control}
           label='Estado'
-          error={Boolean(errors.state)}
-          helperText={getErrorMessage(errors.state)}
+          showEmptyOption
           disabled={loading}
+          isRequired
         />
         <Controller
           as={Input}
@@ -181,7 +183,7 @@ const UserForm = ({user, groups, onSubmit, onCancel, loading}) => {
           label='País'
           error={Boolean(errors.country)}
           helperText={getErrorMessage(errors.country)}
-          disabled={loading}
+          disabled
         />
       </div>
       <div className={styles.buttons}>

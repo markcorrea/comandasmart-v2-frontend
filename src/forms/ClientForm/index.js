@@ -4,11 +4,12 @@ import {useForm, Controller} from 'react-hook-form'
 import {yupResolver} from '@hookform/resolvers'
 import * as yup from 'yup'
 
-import {Button, Datepicker, Input, MaskInput} from 'components'
+import {Button, Datepicker, Input, MaskInput, Select} from 'components'
 
 import {mediaQuerySM} from 'assets/styles/_mediaQueries.scss'
 
 import useMediaQuery from 'utils/mediaQuery'
+import {states} from 'utils/states'
 
 import styles from './index.module.scss'
 
@@ -122,13 +123,14 @@ const ClientForm = ({client, onSubmit, onCancel, loading}) => {
           disabled={loading}
         />
         <Controller
-          as={Input}
+          as={Select}
           name='state'
+          items={states.map(item => ({name: item.name, value: item.initial}))}
           control={control}
           label='Estado'
-          error={Boolean(errors.state)}
-          helperText={getErrorMessage(errors.state)}
+          showEmptyOption
           disabled={loading}
+          isRequired
         />
       </div>
       <div className={styles.buttons}>
