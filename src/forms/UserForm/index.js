@@ -10,6 +10,7 @@ import {mediaQuerySM} from 'assets/styles/_mediaQueries.scss'
 
 import useMediaQuery from 'utils/mediaQuery'
 import {states} from 'utils/states'
+import {countries} from 'utils/countries'
 
 import styles from './index.module.scss'
 
@@ -42,7 +43,7 @@ const defaultValues = {
   address: '',
   city: '',
   state: '',
-  country: 'Brasil',
+  country: 'BR',
 }
 
 const UserForm = ({user, groups, onSubmit, onCancel, loading}) => {
@@ -177,8 +178,9 @@ const UserForm = ({user, groups, onSubmit, onCancel, loading}) => {
           isRequired
         />
         <Controller
-          as={Input}
+          as={Select}
           name='country'
+          items={countries.map(item => ({name: item.name, value: item.initial}))}
           control={control}
           label='País'
           error={Boolean(errors.country)}

@@ -79,7 +79,7 @@ const UserDetails = () => {
           ...(data.address ? {address: data.address} : {}),
           ...(data.city ? {city: data.city} : {}),
           ...(data.state ? {state: data.state} : {}),
-          ...(data.country ? {country: data.country} : {country: 'Brasil'}),
+          ...(data.country ? {country: data.country} : {country: 'BR'}),
         },
         group: data.group,
       }
