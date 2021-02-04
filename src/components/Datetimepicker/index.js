@@ -45,8 +45,9 @@ const Datetimepicker = ({label, value, onChange, disableTyping, className, ...pr
   return (
     <div className={className}>
       <KeyboardDateTimePicker
+        ampm={false}
         disableToolbar
-        format='dd/MM/yyyy'
+        format='dd/MM/yyyy HH:mm'
         label={label}
         value={value}
         onChange={onChange}
@@ -66,8 +67,6 @@ const Datetimepicker = ({label, value, onChange, disableTyping, className, ...pr
             root: classes.labelRoot,
           },
         }}
-        cancelLabel='Cancelar'
-        todayLabel='Hoje'
         {...props}
       />
     </div>

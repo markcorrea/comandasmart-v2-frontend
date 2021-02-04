@@ -130,7 +130,6 @@ const ClientForm = ({client, onSubmit, onCancel, loading}) => {
           label='Estado'
           showEmptyOption
           disabled={loading}
-          isRequired
         />
       </div>
       <div className={styles.buttons}>

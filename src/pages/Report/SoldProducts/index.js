@@ -1,13 +1,13 @@
 import React, {useState, useEffect, useCallback, useMemo, memo} from 'react'
 
-import {Button, Datepicker, Paper, ResponsiveTable} from 'components'
+import {Button, Datetimepicker, Paper, ResponsiveTable} from 'components'
 
 import {useStore} from 'store'
 
 import useServices from 'services'
 
 import formatMoney from 'utils/formatMoney'
-import {dateToString} from 'utils/datetimeToString'
+import {datetimeToString} from 'utils/datetimeToString'
 
 import useMediaQuery from 'utils/mediaQuery'
 import {mediaQueryMD} from 'assets/styles/_mediaQueries.scss'
@@ -154,7 +154,7 @@ const SoldProducts = () => {
       <Paper className={styles.paper}>
         <div className={styles.search}>
           <div className={styles.datepickers}>
-            <Datepicker
+            <Datetimepicker
               error={!validation.valid}
               className={styles.datepicker}
               label='Início'
@@ -162,7 +162,7 @@ const SoldProducts = () => {
               helperText=''
               onChange={value => setDates(prevDates => ({...prevDates, start_date: value}))}
             />
-            <Datepicker
+            <Datetimepicker
               error={!validation.valid}
               className={styles.datepicker}
               label='Fim'
@@ -184,10 +184,10 @@ const SoldProducts = () => {
           ) : (
             <div className={styles.searchText}>
               Data inicial:
-              <span className={styles.searchTerm}>&nbsp;{dateToString(dates.start_date)}</span>
+              <span className={styles.searchTerm}>&nbsp;{datetimeToString(dates.start_date)}</span>
               <br />
               Data final:
-              <span className={styles.searchTerm}>&nbsp;{dateToString(dates.end_date)}</span>
+              <span className={styles.searchTerm}>&nbsp;{datetimeToString(dates.end_date)}</span>
             </div>
           )}
         </div>
