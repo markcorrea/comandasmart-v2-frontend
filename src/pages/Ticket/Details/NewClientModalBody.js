@@ -4,6 +4,8 @@ import PropTypes from 'prop-types'
 import {useStore} from 'store'
 import ClientForm from 'forms/ClientForm'
 
+import {unformatCPF} from 'utils/cpf'
+
 import useServices from 'services'
 
 const clearPhoneMask = phone =>
@@ -24,6 +26,7 @@ const NewClientModalBody = ({onConfirm, closeModal}) => {
         ...body,
         ...(body.birth_date ? {birth_date: new Date(body.birth_date)} : {}),
         ...(body.phone ? {phone: clearPhoneMask(body.phone)} : {}),
+        ...(body.cpf ? {cpf: unformatCPF(body.cpf)} : {}),
       }
 
       const result = await saveClient(payload)
