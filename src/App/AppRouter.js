@@ -5,7 +5,7 @@ import ErrorBoundary from 'utils/routeHelpers/ErrorBoundary'
 import DelayedFallback from 'utils/routeHelpers/DelayedFallback'
 
 import Layout from 'layouts/Layout'
-import {ConfirmDialog} from 'components'
+import {Dialog} from 'components'
 import Store from 'store'
 
 const Login = lazy(() => import(/* webpackChunkName: "Login" */ '../pages/Login'))
@@ -42,7 +42,7 @@ const AppRouter = () => {
         <ErrorBoundary>
           <Layout>
             <>
-              <ConfirmDialog />
+              <Dialog />
               <ErrorBoundary>
                 <Suspense fallback={<DelayedFallback />}>
                   <Switch>

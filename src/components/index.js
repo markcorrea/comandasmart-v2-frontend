@@ -1,7 +1,7 @@
 export {default as Button} from './Button'
 export {default as CardList} from './CardList'
 export {default as ClientSearch} from './ClientSearch'
-export {default as ConfirmDialog} from './ConfirmDialog'
+export {default as Dialog} from './Dialog'
 export {default as Datepicker} from './Datepicker'
 export {default as Datetimepicker} from './Datetimepicker'
 export {default as Drawer} from './Drawer'

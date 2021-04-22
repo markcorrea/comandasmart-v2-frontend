@@ -39,7 +39,7 @@ export const columns = [
 ]
 
 const ProductList = () => {
-  const {showMenu, loading, confirmationDialog} = useStore()
+  const {showMenu, loading, confirmationDialog, infoDialog} = useStore()
   const history = useHistory()
   const {searchProductsByName, deleteProductById} = useServices()
 
@@ -83,12 +83,34 @@ const ProductList = () => {
   const deleteProduct = useCallback(
     async id => {
       const result = await deleteProductById(id)
-      if (result) {
+      if (result.success) {
         searchProducts(search.currentSearch, 1)
         setPage(1)
+        return
       }
+
+      const pendingOrders = result.orders.reduce((result, item, index) => {
+        if (index > 0) {
+          result += ', '
+        }
+        result += item.ticket.unique_code
+        return result
+      }, '')
+
+      infoDialog({
+        header: 'Operação não permitida',
+        body: (
+          <span>
+            Existem comandas em aberto contendo este produto. Remova-os ou encerre estas comandas e tente novamente.
+            <br />
+            <br />
+            Números das Comandas:&nbsp;
+            {pendingOrders}
+          </span>
+        ),
+      })
     },
-    [deleteProductById, searchProducts, setPage, search.currentSearch]
+    [deleteProductById, searchProducts, setPage, search.currentSearch, infoDialog]
   )
 
   const onChangePage = useCallback(

@@ -181,13 +181,15 @@ const useProducts = () => {
           },
         })
         .then(response => {
-          return response.data
+          return {success: true, data: response.data}
         })
         .catch(error => {
           if (error.response.status === 401) {
             history.push('/')
             show('Usuário não possui permissão', 'error')
+            return
           }
+          return error.response.data
         })
         .finally(() => removeRequestLoading(uuid))
     },

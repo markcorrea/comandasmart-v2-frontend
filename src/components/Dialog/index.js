@@ -3,7 +3,7 @@ import React, {useCallback} from 'react'
 import {Button, Paper} from 'components'
 
 import {makeStyles} from '@material-ui/core/styles'
-import Dialog from '@material-ui/core/Dialog'
+import UIDialog from '@material-ui/core/Dialog'
 
 import {useStore} from 'store'
 
@@ -18,7 +18,7 @@ const useStyles = makeStyles({
   },
 })
 
-const ConfirmDialog = () => {
+const Dialog = () => {
   const classes = useStyles()
   const mediaQuerySmall = useMediaQuery('min', mediaQuerySM)
 
@@ -42,21 +42,29 @@ const ConfirmDialog = () => {
   }, [onConfirm, closeDialog])
 
   return (
-    <Dialog classes={classes} open={open} maxWidth='sm' fullWidth onBackdropClick={closeDialog} onEscapeKeyDown={closeDialog}>
+    <UIDialog classes={classes} open={open} maxWidth='sm' fullWidth onBackdropClick={closeDialog} onEscapeKeyDown={closeDialog}>
       <Paper className={styles.container}>
         <div className={styles.header}>{header}</div>
         <div className={styles.body}>{body}</div>
         <div className={styles.buttons}>
-          <Button classes={rightButton} onClick={confirm}>
-            Confirmar
-          </Button>
-          <Button color='cancel' classes={rightButton} onClick={closeDialog}>
-            Cancelar
-          </Button>
+          {onConfirm ? (
+            <>
+              <Button classes={rightButton} onClick={confirm}>
+                Confirmar
+              </Button>
+              <Button color='cancel' classes={rightButton} onClick={closeDialog}>
+                Cancelar
+              </Button>
+            </>
+          ) : (
+            <Button classes={rightButton} onClick={closeDialog}>
+              Fechar
+            </Button>
+          )}
         </div>
       </Paper>
-    </Dialog>
+    </UIDialog>
   )
 }
 
-export default ConfirmDialog
+export default Dialog

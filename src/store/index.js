@@ -81,6 +81,11 @@ const Store = ({children}) => {
     [updateState]
   )
 
+  const infoDialog = useCallback(
+    ({header, body}) => updateState(prevState => ({...prevState, dialog: {open: true, header, body}})),
+    [updateState]
+  )
+
   const closeDialog = useCallback(() => {
     updateState(prevState => ({...prevState, dialog: {open: false, header: '', body: '', onConfirm: null}}))
   }, [updateState])
@@ -111,6 +116,7 @@ const Store = ({children}) => {
         hideMenu,
         setLoading,
         confirmationDialog,
+        infoDialog,
         closeDialog,
         setLoggedUser,
         unsetLoggedUser,
