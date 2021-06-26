@@ -12,6 +12,7 @@ const Login = lazy(() => import(/* webpackChunkName: "Login" */ '../pages/Login'
 
 const ForgotPassword = lazy(() => import(/* webpackChunkName: "ForgotPassword" */ '../pages/Password/ForgotPassword'))
 const RedefinePassweord = lazy(() => import(/* webpackChunkName: "RedefinePassword" */ '../pages/Password/RedefinePassword'))
+const Calendar = lazy(() => import(/* webpackChunkName: "Calendar" */ '../pages/Calendar'))
 const CashierList = lazy(() => import(/* webpackChunkName: "CashierList" */ '../pages/Cashier/List'))
 const CashierBalance = lazy(() => import(/* webpackChunkName: "CashierBalance" */ '../pages/Cashier/Balance'))
 const CashierFront = lazy(() => import(/* webpackChunkName: "CashierFront" */ '../pages/Cashier/Front'))
@@ -50,6 +51,7 @@ const AppRouter = () => {
                     <Route path='/login' component={Login} />
                     <Route path='/forgot_password' component={ForgotPassword} />
                     <Route path='/redefine_password' component={RedefinePassweord} />
+                    <Route path='/calendar' component={Calendar} layout={Layout} />
                     <Route path='/cashiers' component={CashierList} layout={Layout} />
                     <Route exact path='/cashier/:cashierId' component={CashierFront} />
                     <Route exact path='/cashier/:cashierId/ticket/:ticketId' component={CashierTicket} />
